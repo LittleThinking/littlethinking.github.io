@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>奇异点 on 小虎 - Mechanical student,Robot enthusiast</title>
+    <link>https://littlethinking.cn/tags/%E5%A5%87%E5%BC%82%E7%82%B9/</link>
+    <description>Recent content in 奇异点 on 小虎 - Mechanical student,Robot enthusiast</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Fri, 03 Jan 2020 16:01:23 +0800</lastBuildDate><atom:link href="https://littlethinking.cn/tags/%E5%A5%87%E5%BC%82%E7%82%B9/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>【机器人学基础知识】1、从RP关节入门机器人学</title>
+      <link>https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_01%E4%BB%8Erp%E5%85%B3%E8%8A%82%E5%85%A5%E9%97%A8%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%AD%A6/</link>
+      <pubDate>Fri, 03 Jan 2020 16:01:23 +0800</pubDate>
+      
+      <guid>https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_01%E4%BB%8Erp%E5%85%B3%E8%8A%82%E5%85%A5%E9%97%A8%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%AD%A6/</guid>
+      <description>本科阶段的机器人竞赛制作的机器人、生活中见到的扫地机器人，它们基本都是轮式的移动机器人；移动机器人本身运动控制比较简单，难点在于对外界的感知</description>
+    </item>
+    
+  </channel>
+</rss>

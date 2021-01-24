@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>算法 on 小虎 - Mechanical student,Robot enthusiast</title>
+    <link>https://littlethinking.cn/categories/%E7%AE%97%E6%B3%95/</link>
+    <description>Recent content in 算法 on 小虎 - Mechanical student,Robot enthusiast</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Thu, 19 Dec 2019 16:01:23 +0800</lastBuildDate><atom:link href="https://littlethinking.cn/categories/%E7%AE%97%E6%B3%95/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>B样条曲线</title>
+      <link>https://littlethinking.cn/post/robotics/b%E6%A0%B7%E6%9D%A1%E6%9B%B2%E7%BA%BF/</link>
+      <pubDate>Thu, 19 Dec 2019 16:01:23 +0800</pubDate>
+      
+      <guid>https://littlethinking.cn/post/robotics/b%E6%A0%B7%E6%9D%A1%E6%9B%B2%E7%BA%BF/</guid>
+      <description>B 样条曲线是在 Bezier 曲线基础上发展起来的一类曲线，它客服了 Bezier 曲线整体控制性所带来的不便，最常用的是二次与三次 B 样条曲线。 1 什么是样条 样条（spl</description>
+    </item>
+    
+  </channel>
+</rss>

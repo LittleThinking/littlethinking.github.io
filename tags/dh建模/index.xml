@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>DH建模 on 小虎 - Mechanical student,Robot enthusiast</title>
+    <link>https://littlethinking.cn/tags/dh%E5%BB%BA%E6%A8%A1/</link>
+    <description>Recent content in DH建模 on 小虎 - Mechanical student,Robot enthusiast</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sun, 03 Jan 2021 16:01:23 +0800</lastBuildDate><atom:link href="https://littlethinking.cn/tags/dh%E5%BB%BA%E6%A8%A1/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>【机器人学基础知识】3、机械臂的坐标系与数学模型：传说中的DH参数</title>
+      <link>https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_03dh%E5%BB%BA%E6%A8%A1/</link>
+      <pubDate>Sun, 03 Jan 2021 16:01:23 +0800</pubDate>
+      
+      <guid>https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_03dh%E5%BB%BA%E6%A8%A1/</guid>
+      <description>今天，我们要把目光收回到机器人身上，看看我们怎样用一系列坐标系来描述一个链式机械臂，机器人学常说的DH参数（Denavit–Hartenbe</description>
+    </item>
+    
+  </channel>
+</rss>

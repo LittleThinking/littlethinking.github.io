@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>机器人学基础知识 on 小虎 - Mechanical student,Robot enthusiast</title>
+    <link>https://littlethinking.cn/categories/%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%AD%A6%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</link>
+    <description>Recent content in 机器人学基础知识 on 小虎 - Mechanical student,Robot enthusiast</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sun, 24 Jan 2021 14:03:23 +0800</lastBuildDate><atom:link href="https://littlethinking.cn/categories/%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%AD%A6%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>【机器人学基础知识】10、运动学已经够用，为什么还要动力学</title>
+      <link>https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_10%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%8A%A8%E5%8A%9B%E5%AD%A6/</link>
+      <pubDate>Sun, 24 Jan 2021 14:03:23 +0800</pubDate>
+      
+      <guid>https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_10%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%8A%A8%E5%8A%9B%E5%AD%A6/</guid>
+      <description>本文为承上启下的一篇文章：一方面，我们很有必要把之前讲过的东西串起来过一遍；另一方面，在我们开始啃机械臂的动力学（dynamics）这块硬骨</description>
+    </item>
+    
+    <item>
+      <title>【机器人学基础知识】7、力的传递关系、奇异、冗余——从雅可比矩阵你还能得到什么？(雅可比矩阵下篇)</title>
+      <link>https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_07%E9%9B%85%E5%8F%AF%E6%AF%94%E7%9F%A9%E9%98%B5%E7%BB%88%E7%AF%87/</link>
+      <pubDate>Sun, 17 Jan 2021 14:03:23 +0800</pubDate>
+      
+      <guid>https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_07%E9%9B%85%E5%8F%AF%E6%AF%94%E7%9F%A9%E9%98%B5%E7%BB%88%E7%AF%87/</guid>
+      <description>0 回顾 这是关于雅可比矩阵的第三篇文章。我们回顾下前面的内容，雅可比矩阵从何而来、如何求之。 首先我们在学习正运动学——即如何将关节空间的位置映</description>
+    </item>
+    
+    <item>
+      <title>【机器人学基础知识】6、机械臂的雅可比矩阵这么厉害，怎么把它求出来呢？</title>
+      <link>https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_06%E6%80%8E%E4%B9%88%E6%B1%82%E9%9B%85%E5%8F%AF%E6%AF%94%E7%9F%A9%E9%98%B5/</link>
+      <pubDate>Thu, 14 Jan 2021 16:01:23 +0800</pubDate>
+      
+      <guid>https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_06%E6%80%8E%E4%B9%88%E6%B1%82%E9%9B%85%E5%8F%AF%E6%AF%94%E7%9F%A9%E9%98%B5/</guid>
+      <description>上一篇文章我们从正运动学公式推导出瞬时运动学公式，推出著名的雅可比矩阵，并例举出了一个特别简单的例子以提供直观印象。简单回顾一下—— 瞬时运动</description>
+    </item>
+    
+    <item>
+      <title>【机器人学基础知识】5、“瞬时运动学”——还是从关节空间到操作空间</title>
+      <link>https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_05%E7%9E%AC%E6%97%B6%E8%BF%90%E5%8A%A8%E5%AD%A6/</link>
+      <pubDate>Wed, 13 Jan 2021 16:01:23 +0800</pubDate>
+      
+      <guid>https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_05%E7%9E%AC%E6%97%B6%E8%BF%90%E5%8A%A8%E5%AD%A6/</guid>
+      <description>看懂本文，除了了解矩阵、向量、向量点乘、矩阵向量相乘等内容，以及看明白我们该系列的前四篇文章外，你还需要懂得简单的向量求导运算——其实很简单</description>
+    </item>
+    
+    <item>
+      <title>【机器人学基础知识】4、“正运动学”-从关节到操作空间</title>
+      <link>https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_04%E6%AD%A3%E8%BF%90%E5%8A%A8%E5%AD%A6-%E4%BB%8E%E5%85%B3%E8%8A%82%E7%A9%BA%E9%97%B4%E5%88%B0%E6%93%8D%E4%BD%9C%E7%A9%BA%E9%97%B4/</link>
+      <pubDate>Mon, 04 Jan 2021 16:01:23 +0800</pubDate>
+      
+      <guid>https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_04%E6%AD%A3%E8%BF%90%E5%8A%A8%E5%AD%A6-%E4%BB%8E%E5%85%B3%E8%8A%82%E7%A9%BA%E9%97%B4%E5%88%B0%E6%93%8D%E4%BD%9C%E7%A9%BA%E9%97%B4/</guid>
+      <description>所谓的正运动学，英文叫Forward Kinematics或Direct Kinematics，简单来说，就是你知道每个关节的位置（关节位置指平</description>
+    </item>
+    
+    <item>
+      <title>【机器人学基础知识】3、机械臂的坐标系与数学模型：传说中的DH参数</title>
+      <link>https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_03dh%E5%BB%BA%E6%A8%A1/</link>
+      <pubDate>Sun, 03 Jan 2021 16:01:23 +0800</pubDate>
+      
+      <guid>https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_03dh%E5%BB%BA%E6%A8%A1/</guid>
+      <description>今天，我们要把目光收回到机器人身上，看看我们怎样用一系列坐标系来描述一个链式机械臂，机器人学常说的DH参数（Denavit–Hartenbe</description>
+    </item>
+    
+    <item>
+      <title>【机器人学基础知识】2、位置角度平移旋转，“乱七八糟”的坐标变换</title>
+      <link>https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_02%E4%BD%8D%E7%BD%AE%E8%A7%92%E5%BA%A6%E5%B9%B3%E7%A7%BB%E6%97%8B%E8%BD%AC%E4%BB%A5%E5%8F%8A%E5%9D%90%E6%A0%87%E5%8F%98%E6%8D%A2/</link>
+      <pubDate>Tue, 07 Jan 2020 14:03:23 +0800</pubDate>
+      
+      <guid>https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_02%E4%BD%8D%E7%BD%AE%E8%A7%92%E5%BA%A6%E5%B9%B3%E7%A7%BB%E6%97%8B%E8%BD%AC%E4%BB%A5%E5%8F%8A%E5%9D%90%E6%A0%87%E5%8F%98%E6%8D%A2/</guid>
+      <description>今天我们要讲所有学习机器人学的人都需要具备的一项基本技能——坐标变换。看明白这篇文章，你需要一点基础的向量和矩阵知识，不用多，只要知道向量的</description>
+    </item>
+    
+    <item>
+      <title>【机器人学基础知识】1、从RP关节入门机器人学</title>
+      <link>https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_01%E4%BB%8Erp%E5%85%B3%E8%8A%82%E5%85%A5%E9%97%A8%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%AD%A6/</link>
+      <pubDate>Fri, 03 Jan 2020 16:01:23 +0800</pubDate>
+      
+      <guid>https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_01%E4%BB%8Erp%E5%85%B3%E8%8A%82%E5%85%A5%E9%97%A8%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%AD%A6/</guid>
+      <description>本科阶段的机器人竞赛制作的机器人、生活中见到的扫地机器人，它们基本都是轮式的移动机器人；移动机器人本身运动控制比较简单，难点在于对外界的感知</description>
+    </item>
+    
+  </channel>
+</rss>

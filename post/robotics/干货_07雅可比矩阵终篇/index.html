@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="zh-cn" itemscope itemtype="http://schema.org/WebPage">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>【机器人学基础知识】7、力的传递关系、奇异、冗余——从雅可比矩阵你还能得到什么？(雅可比矩阵下篇) - 小虎 - Mechanical student,Robot enthusiast</title>
+  
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes"/>
+
+<meta name="MobileOptimized" content="width"/>
+<meta name="HandheldFriendly" content="true"/>
+
+
+<meta name="applicable-device" content="pc,mobile">
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+<meta name="author" content="xiaohu" />
+  <meta name="description" content="0 回顾 这是关于雅可比矩阵的第三篇文章。我们回顾下前面的内容，雅可比矩阵从何而来、如何求之。 首先我们在学习正运动学——即如何将关节空间的位置映" />
+
+  <meta name="keywords" content="ROS, algorithm, 小虎, 博客, 笔记" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.80.0" />
+
+
+<link rel="canonical" href="https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_07%E9%9B%85%E5%8F%AF%E6%AF%94%E7%9F%A9%E9%98%B5%E7%BB%88%E7%AF%87/" />
+
+
+
+
+
+<link rel="icon" href="/favicon.ico" />
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/sass/jane.min.b3a8813c06e6d785beba22bf8264e174fa2cb3a396b22f9ba24e2c00c18aaf7f.css" integrity="sha256-s6iBPAbm14W&#43;uiK/gmThdPoss6OWsi&#43;bok4sAMGKr38=" media="screen" crossorigin="anonymous">
+
+
+
+
+
+<meta property="og:title" content="【机器人学基础知识】7、力的传递关系、奇异、冗余——从雅可比矩阵你还能得到什么？(雅可比矩阵下篇)" />
+<meta property="og:description" content="0 回顾 这是关于雅可比矩阵的第三篇文章。我们回顾下前面的内容，雅可比矩阵从何而来、如何求之。 首先我们在学习正运动学——即如何将关节空间的位置映" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_07%E9%9B%85%E5%8F%AF%E6%AF%94%E7%9F%A9%E9%98%B5%E7%BB%88%E7%AF%87/" />
+<meta property="article:published_time" content="2021-01-17T14:03:23+08:00" />
+<meta property="article:modified_time" content="2021-01-17T14:05:23+08:00" />
+<meta itemprop="name" content="【机器人学基础知识】7、力的传递关系、奇异、冗余——从雅可比矩阵你还能得到什么？(雅可比矩阵下篇)">
+<meta itemprop="description" content="0 回顾 这是关于雅可比矩阵的第三篇文章。我们回顾下前面的内容，雅可比矩阵从何而来、如何求之。 首先我们在学习正运动学——即如何将关节空间的位置映">
+<meta itemprop="datePublished" content="2021-01-17T14:03:23+08:00" />
+<meta itemprop="dateModified" content="2021-01-17T14:05:23+08:00" />
+<meta itemprop="wordCount" content="3034">
+
+
+
+<meta itemprop="keywords" content="机器人学,雅可比矩阵矩阵," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="【机器人学基础知识】7、力的传递关系、奇异、冗余——从雅可比矩阵你还能得到什么？(雅可比矩阵下篇)"/>
+<meta name="twitter:description" content="0 回顾 这是关于雅可比矩阵的第三篇文章。我们回顾下前面的内容，雅可比矩阵从何而来、如何求之。 首先我们在学习正运动学——即如何将关节空间的位置映"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+</script>
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">小虎</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <li class="mobile-menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://littlethinking.cn/">主页</a>
+          
+        
+      </li><li class="mobile-menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://littlethinking.cn/post/">归档</a>
+          
+        
+      </li><li class="mobile-menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://littlethinking.cn/tags/">标签</a>
+          
+        
+      </li><li class="mobile-menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://littlethinking.cn/categories/">分类</a>
+          
+        
+      </li><li class="mobile-menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://littlethinking.cn/about/">关于</a>
+          
+        
+      </li>
+    
+
+    
+  </ul>
+</nav>
+
+
+  
+    
+
+
+
+
+
+
+  <link rel="stylesheet" href="/lib/photoswipe/photoswipe.min.css" />
+  <link rel="stylesheet" href="/lib/photoswipe/default-skin/default-skin.min.css" />
+
+
+
+
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+<div class="pswp__bg"></div>
+
+<div class="pswp__scroll-wrap">
+    
+    <div class="pswp__container">
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+    </div>
+    
+    <div class="pswp__ui pswp__ui--hidden">
+    <div class="pswp__top-bar">
+      
+      <div class="pswp__counter"></div>
+      <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+      <button class="pswp__button pswp__button--share" title="Share"></button>
+      <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+      <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+      
+      
+      <div class="pswp__preloader">
+        <div class="pswp__preloader__icn">
+          <div class="pswp__preloader__cut">
+            <div class="pswp__preloader__donut"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+      <div class="pswp__share-tooltip"></div>
+    </div>
+    <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+    </button>
+    <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+    </button>
+    <div class="pswp__caption">
+      <div class="pswp__caption__center"></div>
+    </div>
+    </div>
+    </div>
+</div>
+
+  
+
+  
+
+  
+
+  <header id="header" class="header container">
+    <div class="logo-wrapper">
+  <a href="/" class="logo">
+    
+      小虎
+    
+  </a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    
+    
+        <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://littlethinking.cn/">主页</a>
+          
+
+        
+
+      </li>
+    
+        <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://littlethinking.cn/post/">归档</a>
+          
+
+        
+
+      </li>
+    
+        <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://littlethinking.cn/tags/">标签</a>
+          
+
+        
+
+      </li>
+    
+        <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://littlethinking.cn/categories/">分类</a>
+          
+
+        
+
+      </li>
+    
+        <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://littlethinking.cn/about/">关于</a>
+          
+
+        
+
+      </li>
+    
+
+    
+    
+
+    
+  </ul>
+</nav>
+
+  </header>
+
+  <div id="mobile-panel">
+    <main id="main" class="main bg-llight">
+      <div class="content-wrapper">
+        <div id="content" class="content container">
+          <article class="post bg-white">
+    
+    <header class="post-header">
+      <h1 class="post-title">【机器人学基础知识】7、力的传递关系、奇异、冗余——从雅可比矩阵你还能得到什么？(雅可比矩阵下篇)</h1>
+      
+      <div class="post-meta">
+        <time datetime="2021-01-17" class="post-time">
+          2021-01-17
+        </time>
+        <div class="post-category">
+            <a href="https://littlethinking.cn/categories/%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%AD%A6%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/"> 机器人学基础知识 </a>
+            
+          </div>
+        <span class="more-meta"> 约 3034 字 </span>
+          <span class="more-meta"> 预计阅读 7 分钟 </span>
+
+        
+        
+
+        
+        
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#0-回顾">0 回顾</a></li>
+        <li><a href="#1-力传递force-relationship">1 力传递（Force relationship）</a></li>
+        <li><a href="#2-奇异singularity">2 奇异（Singularity）</a></li>
+        <li><a href="#3-冗余redundancy">3 冗余（Redundancy）</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+
+    
+    <div class="post-content">
+      <h3 id="0-回顾">0 回顾</h3>
+<p>这是关于雅可比矩阵的第三篇文章。我们回顾下前面的内容，雅可比矩阵从何而来、如何求之。</p>
+<p>首先我们在学习<strong>正运动学</strong>——即如何<strong>将关节空间的位置映射到操作空间的位置及朝向</strong>这个问题之后，第二个问题就是瞬时运动学——<strong>如何将关节空间的速度映射到操作空间的速度</strong>。经过推导，我们发现，雅可比矩阵就是解出这个映射的关键:
+$$
+\dot{x} = J \dot{q}
+$$
+其中，
+$$
+J = \begin{bmatrix}
+\frac{dx_1}{dq_1} &amp; \dots &amp; \frac{dx_1}{dq_n} \\<br>
+\vdots &amp; \ddots &amp; \vdots \\ 
+\frac{dx_m}{dq_1} &amp; \dots &amp; \frac{dx_m}{dq_n} 
+\end{bmatrix}
+$$
+雅可比矩阵有m行n列:<strong>m为操作空间的自由度，n为关节空间的自由度</strong>（或说关节数量）。</p>
+<p>基本雅可比矩阵（Basic Jacobian）是<strong>由笛卡尔坐标描述操作空间线速度及角速度求得</strong>，可分为两部分：线速度雅可比矩阵$J_v$和角速度雅可比矩阵$J_w$，分别求解。
+$$
+J = \begin{bmatrix}
+J_v \\<br>
+J_w
+\end{bmatrix}
+$$
+求解基本雅可比矩阵需要先求解正运动学。一个链式机械臂的$J_v$由end effector的位置对关节位置求导得到；$J_v$由每一个旋转关节的旋转轴单位向量得到——具体求解方法请复习上一篇。理解这个简单的求解方法对理解雅可比矩阵大有益处！</p>
+<p>回顾完毕，现在我们可以来和雅可比矩阵进行一场更深入的交流……</p>
+<h3 id="1-力传递force-relationship">1 力传递（Force relationship）</h3>
+<p>在研究了关节空间与操作空间的位置映射关系和速度关系以后，我们继续思考：那么它们的<strong>力/扭矩映射关系</strong>又如何？举例说明——如果别人抓着你的手用力想把它从你戳红包的屏幕上移开，你的肩膀、手肘、手腕等各处关节（这里假设身体的其他部分没有作用且固定了）各自需要输出多大的力矩才能让你的手保持不动呢？如果你要锤击一个沙包，它们又需要输出多大的扭矩呢？</p>
+<p>很神奇的是，<strong>雅可比矩阵同样也是连接关节空间与操作空间力/扭矩映射关系的纽带。</strong></p>
+<p>现在我们设在关节空间，关节输出的力/扭矩为:
+$$
+\tau = {[\tau_1 \quad \tau_2 \quad \dots \quad \tau_n]}^T
+$$
+关节运动速度为
+$$
+\dot{q} =  {[\dot{q}_1 \quad \dot{q}_2 \quad \dots \quad \dot{q}_n]}^T
+$$
+注意我们使用的始终是列向量（这是在第二篇文章中就约好了的^o^）。</p>
+<p>那么整个系统输出的功率（等于力乘速度）在关节空间即表示为
+$$
+P = {\tau}^T \dot{q}
+$$
+希望你一眼就明白这是个<strong>向量点乘</strong>，P显然是一个标量……</p>
+<p>现在从操作空间的角度看，设此时end effector能够对外界输出的力/扭矩（或说为了<strong>维持整个系统的静态平衡</strong>，外界对end effector的作用力/扭矩）为
+$$
+F = {[f_1 \quad f_2 \quad f_3 \quad n_1 \quad n_2 \quad n_3]}^T
+$$
+其中f表示力，n表示扭矩。</p>
+<p>end effector的速度则为
+$$
+\dot{x} = {[\dot{x}_1 \quad \dot{x}_2 \quad \dots \quad \dot{x}_n]}^T
+$$
+那么施加在end effector上的外力对整个系统做功的功率即为
+$$
+P = F^T \dot{x}
+$$
+由能量守恒定律，我们必须有
+$$
+P = {\tau}^T \dot{q} = F^T \dot{x}
+$$
+带入瞬时运动学的式子：
+$$
+{\tau}^T \dot{q} = F^T \dot{x} \\<br>
+\tau^T = F^TJ = (J^TF)^T \\<br>
+\tau = J^TF
+$$
+注：$(AB)^T = B^TA^T$</p>
+<p>经过漫长的推导，我们得到雅可比矩阵的另一个重要用途：J的转置乘以操作空间的力/扭矩就可得到关节空间输出的力/扭矩！这是一个<strong>从操作空间到关节空间的映射</strong>，与我们之前讲到的正运动学、瞬时运动学方向正好相反。</p>
+<p>应该庆幸，当别人试图把你的手掰到别处时，你的大脑已经把测量你的手受到的外力（F）、计算你手臂的雅可比矩阵的转置、求出每个关节需要输出的力并执行这整个过程，在你完全不知道的情况下完成了。</p>
+<p>那么对于真正的机械臂而言，学习这个力映射关系又有什么意义呢？对于最传统的位置控制机器人，依赖对位置精确的传感，基于一种不达目的地绝不罢休的精神运动，这个式子可能确实没什么用。但是，越来越多的应用场景要求机器人能够在某一位置/某一方向维持特定的力（比如抓握一个物体、擦玻璃）、或者在一个复杂环境中安全工作（保证不会在碰到障碍物时对物体施加过大的作用力）；要实现这样的控制，这个映射关系必不可少——我们以后会更详细地讲解这个式子的应用。</p>
+<h3 id="2-奇异singularity">2 奇异（Singularity）</h3>
+<p>我们在《从RP入门机器人学》中提到了Singularity这个问题，简单地说，Singularity就是<strong>机械臂处在某一个configuration（即特定的关节位置组合）时，end effector失去某个方向的自由度</strong>——你手臂伸直的那一刻，你的手绝无法沿着你手臂的方向运动。</p>
+<p>现在有了雅可比矩阵，我们可以从数学的角度重新来认识Singularity。为什么呢？不要忘了雅可比矩阵的用处：关节的运动速度乘以雅可比矩阵即得到end effector的运动速度。而end effector失去某个方向的自由度即意味着<strong>在机械臂到达那个configuration的瞬间，不管关节怎么运动，end effector在这个方向的速度总为0</strong>。</p>
+<p>从线性代数的角度来说，此时的J矩阵有这样的特性：对所有任意向量a，$J_a$相乘得到向量b，则所有向量b组成的线性空间维度将比正常情况下少至少一个自由度——这说明什么？说明这个时候的雅可比矩阵<strong>遭遇了降维攻击</strong>，被<strong>降秩</strong>了啊！</p>
+<p>我们以RR平面机械臂举例：</p>
+<p><img src="/images/robotics/%E5%B9%B2%E8%B4%A7_07%E9%9B%85%E5%8F%AF%E6%AF%94%E7%9F%A9%E9%98%B5%E7%BB%88%E7%AF%87/7_01RR%E6%9C%BA%E6%A2%B0%E8%87%82.jpg" alt=""></p>
+<p>这个机械臂的雅可比矩阵为：
+$$
+J = \begin{bmatrix}
+\frac{dx_e}{d\theta_1} &amp;  \frac{dx_e}{d\theta_2} \\<br>
+\frac{dy_e}{d\theta_1} &amp;  \frac{dy_e}{d\theta_2} 
+\end{bmatrix}
+= \begin{bmatrix}
+-\sin(\theta_1 + \theta_2) - \sin\theta_1 &amp; -\sin(\theta_1 + \theta_2) \\<br>
+\cos(\theta_1 + \theta_2) + \cos\theta_1 &amp;  \cos(\theta_1 + \theta_2) 
+\end{bmatrix}
+$$
+现在，为了求出在什么configuration下机械臂会遇到奇异点，即求这个雅可比矩阵什么时候<strong>不是满秩矩阵</strong>，我们可以直接利用<strong>此时J的特征值为0</strong>（即此时J是一个奇异矩阵）求得：
+$$
+det(J) = -\cos(\theta_1 + \theta_2) (\sin(\theta_1 + \theta_2)+\sin\theta_1) + \sin(\theta_1 + \theta_2)(\cos(\theta_1 + \theta_2)+\cos\theta_1) = 0
+$$
+稍微计算一下（三角恒等式什么的也是要很熟的！）可得：
+$$
+\sin(\theta_1 + \theta_2)\cos\theta_1 - \cos(\theta_1 + \theta_2)\sin\theta_1 = 0 \\<br>
+\sin(\theta_1 + \theta_2 - \theta_1) = \sin\theta_2 = 0
+$$
+所以singular configuration是$\theta_2=0$！此时，机械臂“伸直”，end effector无法在沿机械臂link的方向上运动。将这个值代入原矩阵，会发现J的行/列向量不是线性独立，它的秩为1。</p>
+<p>在数学上，奇异矩阵的说法只对方阵有效，求特征值也是只对方阵有效。对于机器人来说，（Kinematic）Singularity是机器人在某一个configuration时end effector运动空间的降维，与雅可比矩阵的形状并无关——只是当雅可比矩阵不是方阵时，我们需要先把冗余自由度去掉再求解。</p>
+<h3 id="3-冗余redundancy">3 冗余（Redundancy）</h3>
+<p>说到冗余自由度，相信你已经可以想到如何从雅可比矩阵看出冗余了——当它<strong>又矮又胖</strong>的时候就是啦。在第一篇文章中也曾用你的手举例，因为人的手在关节空间有七个自由度，所以你能够在手部固定的情况下移动你的手肘。从数学的角度上，这意味着
+$$
+\exists \dot{q},J\dot{q} = 0
+$$
+不得不感叹数学语言真的是简洁优美……</p>
+<p>我们知道，假如A是一个方阵，那么Ax=0有非零解的充分必要条件是A是一个奇异矩阵——也就是说，如果没有冗余自由度，一个机械臂关节运动而end effector不动的情况只有在它处于singularity时才能出现。但是，如果A是一个矮胖矩阵，那么Ax=0必然有无数个非零解，这些解组成的空间即称为“零空间”（nullspace）。</p>
+<p>简单地提一下：对于一个有冗余自由度的机器人，假设你除了要控制end effector运动到某一位置，还要保证过程中它的手肘不碰到障碍物，那你<strong>总是可以在nullspace中找到一组解满足你的要求</strong>：在不改变end effector轨迹的同时避开障碍物。这样的方法称为null space control，我们以后有机会会详细展开。</p>
+<p>希望今天这篇文章能让你对雅可比矩阵在机器人学中的重要地位有更强烈的认识，对这个系列一开始提到的机器人的奇异、冗余等问题有更深刻的理解。当然了，希望至少也帮你复习了一下线性代数吧。</p>
+<p>三篇关于雅可比矩阵的文章终于写完了，但是它仍然会不停地出现在以后的文章中——逆运动学、动力学、机器人控制，哪里都有它的影子。在我看来，它是连接机械、物理与数学的桥梁，优美得无与伦比呢。</p>
+
+    </div>
+
+    
+    
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">xiaohu</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+      2021-01-17
+      
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content">本文转载自微信公众号ROBOTICS，原作者CC</span>
+  </p>
+</div>
+
+
+    
+    
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          <a href="https://littlethinking.cn/tags/%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%AD%A6/">机器人学</a>
+          <a href="https://littlethinking.cn/tags/%E9%9B%85%E5%8F%AF%E6%AF%94%E7%9F%A9%E9%98%B5%E7%9F%A9%E9%98%B5/">雅可比矩阵矩阵</a>
+          
+        </div>
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/robotics/%E5%B9%B2%E8%B4%A7_10%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%8A%A8%E5%8A%9B%E5%AD%A6/">
+            
+            <i class="iconfont">
+              <svg  class="icon" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="18" height="18">
+  <path d="M691.908486 949.511495l75.369571-89.491197c10.963703-12.998035 10.285251-32.864502-1.499144-44.378743L479.499795 515.267417 757.434875 204.940602c11.338233-12.190647 11.035334-32.285311-0.638543-44.850487l-80.46666-86.564541c-11.680017-12.583596-30.356378-12.893658-41.662889-0.716314L257.233596 494.235404c-11.332093 12.183484-11.041474 32.266891 0.657986 44.844348l80.46666 86.564541c1.772366 1.910513 3.706415 3.533476 5.750981 4.877077l306.620399 321.703933C662.505829 963.726242 680.945807 962.528973 691.908486 949.511495z"></path>
+</svg>
+
+            </i>
+            <span class="prev-text nav-default">【机器人学基础知识】10、运动学已经够用，为什么还要动力学</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        
+          <a class="next" href="/post/robotics/%E5%B9%B2%E8%B4%A7_06%E6%80%8E%E4%B9%88%E6%B1%82%E9%9B%85%E5%8F%AF%E6%AF%94%E7%9F%A9%E9%98%B5/">
+            <span class="next-text nav-default">【机器人学基础知识】6、机械臂的雅可比矩阵这么厉害，怎么把它求出来呢？</span>
+            <span class="prev-text nav-mobile">下一篇</span>
+            
+            <i class="iconfont">
+              <svg class="icon" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="18" height="18">
+  <path d="M332.091514 74.487481l-75.369571 89.491197c-10.963703 12.998035-10.285251 32.864502 1.499144 44.378743l286.278095 300.375162L266.565125 819.058374c-11.338233 12.190647-11.035334 32.285311 0.638543 44.850487l80.46666 86.564541c11.680017 12.583596 30.356378 12.893658 41.662889 0.716314l377.434212-421.426145c11.332093-12.183484 11.041474-32.266891-0.657986-44.844348l-80.46666-86.564541c-1.772366-1.910513-3.706415-3.533476-5.750981-4.877077L373.270379 71.774697C361.493148 60.273758 343.054193 61.470003 332.091514 74.487481z"></path>
+</svg>
+
+            </i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+
+  
+  
+
+  
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+    
+
+  
+
+        </div>
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="icon-links">
+  
+  
+    <a href="mailto:hust.chen@foxmail.com" rel="me noopener" class="iconfont"
+      title="email" >
+      <svg class="icon" viewBox="0 0 1451 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="36" height="36">
+  <path d="M664.781909 681.472759 0 97.881301C0 3.997201 71.046997 0 71.046997 0L474.477909 0 961.649408 0 1361.641813 0C1361.641813 0 1432.688811 3.997201 1432.688811 97.881301L771.345323 681.472759C771.345323 681.472759 764.482731 685.154773 753.594283 688.65053L753.594283 688.664858C741.602731 693.493018 729.424896 695.068979 718.077952 694.839748 706.731093 695.068979 694.553173 693.493018 682.561621 688.664858L682.561621 688.65053C671.644501 685.140446 664.781909 681.472759 664.781909 681.472759L664.781909 681.472759ZM718.063616 811.603883C693.779541 811.016482 658.879232 802.205449 619.10784 767.734955 542.989056 701.759633 0 212.052267 0 212.052267L0 942.809523C0 942.809523 0 1024 83.726336 1024L682.532949 1024 753.579947 1024 1348.948139 1024C1432.688811 1024 1432.688811 942.809523 1432.688811 942.809523L1432.688811 212.052267C1432.688811 212.052267 893.138176 701.759633 817.019477 767.734955 777.248 802.205449 742.347691 811.03081 718.063616 811.603883L718.063616 811.603883Z"></path>
+</svg>
+
+    </a>
+  
+    <a href="https://github.com/LittleThinking" rel="me noopener" class="iconfont"
+      title="github"  target="_blank"
+      >
+      <svg class="icon" style="" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="36" height="36">
+  <path d="M512 12.672c-282.88 0-512 229.248-512 512 0 226.261333 146.688 418.133333 350.08 485.76 25.6 4.821333 34.986667-11.008 34.986667-24.618667 0-12.16-0.426667-44.373333-0.64-87.04-142.421333 30.890667-172.458667-68.693333-172.458667-68.693333C188.672 770.986667 155.008 755.2 155.008 755.2c-46.378667-31.744 3.584-31.104 3.584-31.104 51.413333 3.584 78.421333 52.736 78.421333 52.736 45.653333 78.293333 119.850667 55.68 149.12 42.581333 4.608-33.109333 17.792-55.68 32.426667-68.48-113.706667-12.8-233.216-56.832-233.216-253.013333 0-55.893333 19.84-101.546667 52.693333-137.386667-5.76-12.928-23.04-64.981333 4.48-135.509333 0 0 42.88-13.738667 140.8 52.48 40.96-11.392 84.48-17.024 128-17.28 43.52 0.256 87.04 5.888 128 17.28 97.28-66.218667 140.16-52.48 140.16-52.48 27.52 70.528 10.24 122.581333 5.12 135.509333 32.64 35.84 52.48 81.493333 52.48 137.386667 0 196.693333-119.68 240-233.6 252.586667 17.92 15.36 34.56 46.762667 34.56 94.72 0 68.522667-0.64 123.562667-0.64 140.202666 0 13.44 8.96 29.44 35.2 24.32C877.44 942.592 1024 750.592 1024 524.672c0-282.752-229.248-512-512-512"></path>
+</svg>
+
+    </a>
+  
+    <a href="https://weibo.com/5287489047/" rel="me noopener" class="iconfont"
+      title="weibo"  target="_blank"
+      >
+      <svg class="icon" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="36" height="36">
+  <path d="M385.714286 733.714286q12-19.428571 6.285714-39.428571t-25.714286-28.571429q-19.428571-8-41.714286-0.571429t-34.285714 26.285714q-12.571429 19.428571-7.428571 39.142857t24.571429 28.857143 42.571429 1.428571 35.714286-27.142857zm53.714286-69.142857q4.571429-7.428571 2-15.142857t-10-10.571429q-8-2.857143-16.285714 2.857143t-12.285714 10.571429q-9.714286 17.714286 7.428571 25.714286 8 2.857143 16.571429 2.857143t12.571429-10.571429zm99.428571 61.142857q-25.714286 58.285714-90.285714 85.714286t-128 6.857143q-61.142857-19.428571-84.285714-72.285714t3.714286-107.142857q26.857143-53.142857 86.571429-79.428571t120.285714-10.857143q63.428571 16.571429 90.571429 68.285714t1.428571 108.857143zm178.285714-91.428571q-5.142857-54.857143-50.857143-97.142857t-119.142857-62.285714-156.857143-12q-127.428571 13.142857-211.142857 80.857143t-75.714286 151.142857q5.142857 54.857143 50.857143 97.142857t119.142857 62.285714 156.857143 12q127.428571-13.142857 211.142857-80.857143t75.714286-151.142857zm176 2.285714q0 38.857143-21.142857 79.714286t-62.285714 78.285714-96.285714 67.142857-129.142857 47.428571-154.571429 17.714286-157.142857-19.142857-137.428571-53.142857-98-86.285714-37.142857-114q0-65.714286 39.714286-140t112.857143-147.428571q96.571429-96.571429 195.142857-134.857143t140.857143 4q37.142857 36.571429 11.428571 119.428571-2.285714 8-0.571429 11.428571t5.714286 4 8.285714 2.857143 7.714286-2l3.428571-1.142857q79.428571-33.714286 140.571429-33.714286t87.428571 34.857143q25.714286 36 0 101.714286-1.142857 7.428571-2.571429 11.428571t2.571429 7.142857 6.857143 4.285714 9.714286 3.428571q32.571429 10.285714 58.857143 26.857143t45.714286 46.571429 19.428571 66.571429zm-42.285714-356.571429q24 26.857143 31.142857 62t-3.714286 67.142857q-4.571429 13.142857-16.857143 19.428571t-25.428571 2.285714q-13.142857-4.571429-19.428571-16.857143t-2.285714-25.428571q11.428571-36-13.714286-63.428571t-61.142857-20q-13.714286 2.857143-25.714286-4.571429t-14.285714-21.142857q-2.857143-13.714286 4.571429-25.428571t21.142857-14.571429q34.285714-7.428571 68 3.142857t57.714286 37.428571zm103.428571-93.142857q49.714286 54.857143 64.285714 127.142857t-7.714286 138q-5.142857 15.428571-19.428571 22.857143t-29.714286 2.285714-22.857143-19.428571-2.857143-29.714286q16-46.857143 5.714286-98.285714t-45.714286-90.285714q-35.428571-39.428571-84.571429-54.571429t-98.857143-4.857143q-16 3.428571-29.714286-5.428571t-17.142857-24.857143 5.428571-29.428571 24.857143-16.857143q70.285714-14.857143 139.428571 6.571429t118.857143 76.857143z"></path>
+</svg>
+
+    </a>
+  
+    <a href="https://www.zhihu.com/people/littlethink" rel="me noopener" class="iconfont"
+      title="zhihu"  target="_blank"
+      >
+      <svg class="icon" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="36" height="36">
+  <path d="M351.791182 562.469462l192.945407 0c0-45.367257-21.3871-71.939449-21.3871-71.939449L355.897709 490.530013c3.977591-82.182744 7.541767-187.659007 8.816806-226.835262l159.282726 0c0 0-0.86367-67.402109-18.578124-67.402109s-279.979646 0-279.979646 0 16.850783-88.141456 39.318494-127.053698c0 0-83.60514-4.510734-112.121614 106.962104S81.344656 355.077018 76.80834 367.390461c-4.536316 12.313443 24.62791 5.832845 36.941354 0 12.313443-5.832845 68.050885-25.924439 84.252893-103.69571l86.570681 0c1.165546 49.28652 4.596691 200.335724 3.515057 226.835262L109.86113 490.530013c-25.275663 18.147312-33.701566 71.939449-33.701566 71.939449L279.868105 562.469462c-8.497535 56.255235-23.417339 128.763642-44.275389 167.210279-33.05279 60.921511-50.55235 116.65793-169.802314 212.576513 0 0-19.442818 14.257725 40.829917 9.073656 60.273758-5.185093 117.305683-20.739347 156.840094-99.807147 20.553105-41.107233 41.805128-93.250824 58.386782-146.138358l-0.055259 0.185218 167.855986 193.263655c0 0 22.035876-51.847855 5.832845-108.880803L371.045711 650.610918l-42.1244 31.157627-0.045025 0.151449c11.69946-41.020252 20.11206-81.5749 22.726607-116.858498C351.665315 564.212152 351.72876 563.345412 351.791182 562.469462z"></path>
+  <path d="M584.918753 182.033893l0 668.840094 70.318532 0 28.807093 80.512708 121.875768-80.512708 153.600307 0L959.520453 182.033893 584.918753 182.033893zM887.150192 778.934538l-79.837326 0-99.578949 65.782216-23.537066-65.782216-24.855084 0L659.341766 256.673847l227.807403 0L887.149169 778.934538z"></path>
+</svg>
+
+    </a>
+
+
+<a href="https://littlethinking.cn/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+    class="iconfont" title="rss" target="_blank">
+    <svg class="icon" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="30" height="30">
+  <path d="M819.157333 1024C819.157333 574.592 449.408 204.8 0 204.8V0c561.706667 0 1024 462.293333 1024 1024h-204.842667zM140.416 743.04a140.8 140.8 0 0 1 140.501333 140.586667A140.928 140.928 0 0 1 140.074667 1024C62.72 1024 0 961.109333 0 883.626667s62.933333-140.544 140.416-140.586667zM678.784 1024h-199.04c0-263.210667-216.533333-479.786667-479.744-479.786667V345.173333c372.352 0 678.784 306.517333 678.784 678.826667z"></path>
+</svg>
+
+  </a>
+   
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy;
+    
+      2019 -
+    2021
+    <span class="heart">
+      
+      <i class="iconfont">
+        <svg class="icon" viewBox="0 0 1025 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="14" height="14">
+  <path d="M1000.1 247.9c-15.5-37.3-37.6-70.6-65.7-98.9-54.4-54.8-125.8-85-201-85-85.7 0-166 39-221.4 107.4C456.6 103 376.3 64 290.6 64c-75.1 0-146.5 30.4-201.1 85.6-28.2 28.5-50.4 61.9-65.8 99.3-16 38.8-24 79.9-23.6 122.2 0.7 91.7 40.1 177.2 108.1 234.8 3.1 2.6 6 5.1 8.9 7.8 14.9 13.4 58 52.8 112.6 102.7 93.5 85.5 209.9 191.9 257.5 234.2 7 6.1 15.8 9.5 24.9 9.5 9.2 0 18.1-3.4 24.9-9.5 34.5-30.7 105.8-95.9 181.4-165 74.2-67.8 150.9-138 195.8-178.2 69.5-57.9 109.6-144.4 109.9-237.3 0.1-42.5-8-83.6-24-122.2z"
+   fill="#8a8a8a"></path>
+</svg>
+
+      </i>
+    </span><span class="author">
+        xiaohu
+        
+      </span></span>
+
+  
+  
+
+  
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont">
+        
+        <svg class="icon" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="35" height="35">
+  <path d="M510.866688 227.694839 95.449397 629.218702l235.761562 0-2.057869 328.796468 362.40389 0L691.55698 628.188232l241.942331-3.089361L510.866688 227.694839zM63.840492 63.962777l894.052392 0 0 131.813095L63.840492 195.775872 63.840492 63.962777 63.840492 63.962777zM63.840492 63.962777"></path>
+</svg>
+
+      </i>
+    </div>
+  </div>
+  
+<script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+
+
+
+
+<script type="text/javascript" src="/js/main.dee43230127a73d039a734510fa896c89c3c7ce0cf0be0c7a7433f8fd69b76dc.js" integrity="sha256-3uQyMBJ6c9A5pzRRD6iWyJw8fODPC&#43;DHp0M/j9abdtw=" crossorigin="anonymous"></script>
+
+
+
+  <script type="text/javascript">
+    window.MathJax = {
+      showProcessingMessages: false,
+      messageStyle: 'none'
+    };
+  </script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
+
+
+
+
+
+
+
+
+
+  
+    <script type="text/javascript" src="/js/load-photoswipe.js"></script>
+    <script type="text/javascript" src="/lib/photoswipe/photoswipe.min.js"></script>
+    <script type="text/javascript" src="/lib/photoswipe/photoswipe-ui-default.min.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

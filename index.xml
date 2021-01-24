@@ -1,0 +1,1274 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>小虎 - Mechanical student,Robot enthusiast</title>
+    <link>https://littlethinking.cn/</link>
+    <description>Recent content on 小虎 - Mechanical student,Robot enthusiast</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sun, 24 Jan 2021 14:03:23 +0800</lastBuildDate>
+    
+        <atom:link href="https://littlethinking.cn/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>【机器人学基础知识】10、运动学已经够用，为什么还要动力学</title>
+      <link>https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_10%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%8A%A8%E5%8A%9B%E5%AD%A6/</link>
+      <pubDate>Sun, 24 Jan 2021 14:03:23 +0800</pubDate>
+      
+      <guid>https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_10%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%8A%A8%E5%8A%9B%E5%AD%A6/</guid>
+      
+        <description>&lt;blockquote&gt;
+&lt;p&gt;本文为承上启下的一篇文章：一方面，我们很有必要把之前讲过的东西串起来过一遍；另一方面，在我们开始啃机械臂的动力学（dynamics）这块硬骨头之前，我们也很有必要弄明白“为什么需要研究机械臂的动力学？”这样一个问题。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;我们来看一个显示中的机器人，为了赏心悦目的需要，选择机械臂中的颜值担当UR5。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/robotics/%E5%B9%B2%E8%B4%A7_10%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%8A%A8%E5%8A%9B%E5%AD%A6/10_01UR5.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;从上图可以看到，UR5一共有六个R（旋转）关节，其中基座两个，肘部一个，腕部三个。现在如果需要写一段程序，完成两个任务：一个是&lt;strong&gt;把位于A点的物体捡起来并移动到B点&lt;/strong&gt;；二是&lt;strong&gt;在空中以一定的速度画圆&lt;/strong&gt;。假设我们能准确控制每个关节的位置，应当怎么做？&lt;/p&gt;
+&lt;p&gt;我们需要做的第一件事情，就是&lt;strong&gt;确定关节零位，求正运动学解&lt;/strong&gt;。做该步骤的原因是，这是机械臂&lt;strong&gt;数字化、可编程化&lt;/strong&gt;的第一步。这一步，我们可以采用传统的DH参数法。关于采用DH参数法如何确定坐标系（frame attachment），请看文章《》。总之，在确定原点、确定Z轴、确定X轴等一系列步骤之后，我们得到类似下图的关节坐标系。（hint:RGB/红绿蓝对应XYZ）&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/robotics/%E5%B9%B2%E8%B4%A7_10%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%8A%A8%E5%8A%9B%E5%AD%A6/10_02UR5%E5%9D%90%E6%A0%87%E7%B3%BB.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;如果我们还记得DH参数定义中关节角度θ的定义，当θ为0时，一个关节的X轴与上一个关节的X轴应该平行——上图正是如此。&lt;/p&gt;
+&lt;p&gt;根据DH参数的定义：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/robotics/%E5%B9%B2%E8%B4%A7_10%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%8A%A8%E5%8A%9B%E5%AD%A6/10_03DH%E5%8F%82%E6%95%B0%E5%AE%9A%E4%B9%89.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;我们在UR5的结构示意图标注出部分参数：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/robotics/%E5%B9%B2%E8%B4%A7_10%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%8A%A8%E5%8A%9B%E5%AD%A6/10_04UR5DH%E7%A4%BA%E6%84%8F%E5%9B%BE.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;最后我们得到UR5的DH参数表：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/robotics/%E5%B9%B2%E8%B4%A7_10%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%8A%A8%E5%8A%9B%E5%AD%A6/10_05UR5DH%E5%8F%82%E6%95%B0%E8%A1%A8.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;a与d怎么来的？通常来讲，它们是机械设计的时候确定的设计参数，机械臂的生产产家会告诉这些数值。当然，我们也可以自行在机械臂上测量出来&amp;hellip;&amp;hellip;&lt;/p&gt;
+&lt;p&gt;实际运用中，机械臂的制造厂商通常会将机械臂的DH参数表给我们；实在没有，也可以根据一些算法，根据控制关节运动的同时用外部装置准确测量end effector的位姿解算出DH参数表。有时候，由于制造过程中不可避免的误差、或长时间使用后机械结构的磨损，会导致原有的DH参数表不够准确；这个时候也可以用类似的方法重新标定机械臂的DH参数。对这部分感兴趣的小伙伴，可以查一下机械臂的&lt;strong&gt;Kinematics Model Identification 或 Kinematics Calibration&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;对于在本文前面提到的第一个任务：将一个物体从A点移动B点。对于这样一个任务，我们只需要机械臂在A点的时候能在对的位置以对的角度拿到物体、在B点以对的位置对的角度放下物体就好了。所以，一个比较合适的思路是：&lt;/p&gt;
+&lt;p&gt;Ⅰ.计算A点与B点end effector理想位姿的逆运动学解（可以直接用解析大法几何大法等等）q~a~，q~b~&lt;/p&gt;
+&lt;p&gt;Ⅱ.从q~a~到q~b~求出关节的运动轨迹&lt;/p&gt;
+&lt;p&gt;Ⅲ.根据求出的轨迹，控制关节运动&lt;/p&gt;
+&lt;p&gt;是不是很简单？这样的简单的“Pick and Place”应用，大概就是机械臂在工业上最早甚至也是最广泛的应用了。&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;这里再简单讲解下关节空间的&lt;strong&gt;轨迹生成（Trajectory Generation）&lt;/strong&gt;。需要注意的是，trajectory并不仅仅是空间中的一条线，它是&lt;strong&gt;物体位姿相对于时间的函数&lt;/strong&gt;，包含了物体每个时刻的位置、速度、加速度等信息。&lt;/p&gt;
+&lt;p&gt;假设我们要求机械臂从A点到B点的时间为t&#39;，在A点与B点的时候end effector均为静止，那我们的轨迹*q(t)*应当满足这样的要求:
+$$
+q(0) = q_a, \ \ q(t&#39;) = q_b \&lt;br&gt;
+q&#39;(0) = 0 , \ \ q(t&#39;) = 0
+$$
+这个函数需要满足上面四个等式，则它至少需要有四个未知数；因此最直接的思路就是用一个三阶多项式来拟合：
+$$
+q(t) = at^3 + bt^2 +ct +d
+$$&lt;/p&gt;
+&lt;p&gt;关节空间的轨迹生成比起操作空间的轨迹生成简单许多，主要是可以方便地避免超出关节可运动范围或奇异状态等问题。以后有机会，我们再仔细讲讲trajectory generation这个话题。&lt;/p&gt;
+&lt;p&gt;现在再看第二任务：在空中以一定速度画圆。这个任务本身已经规定了end effector的轨迹，而我们的任务是通过控制关节的运动让end effector能够跟随（track）这条轨迹。这样看来，我们很难再采用类似第一个任务那种方法。&lt;/p&gt;
+&lt;p&gt;因为我们的任务是让end effector跟随一个圆形轨迹，也就是说，每一个时刻我们都要知道end effector 位姿x~d~。我们说过，每时每刻都把逆运动学解直接求出来是一个不太现实的——这个时候，雅可比矩阵求逆法应该自然而然地进入我们脑海：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/robotics/%E5%B9%B2%E8%B4%A7_10%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%8A%A8%E5%8A%9B%E5%AD%A6/10_07%E9%80%86%E8%BF%90%E5%8A%A8%E5%AD%A6%E6%B1%82%E8%A7%A3%E6%80%9D%E8%B7%AF.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;对于这个方法不是很清楚的，请回去看《干货 | “逆运动学”——从操作空间到关节空间》一文。&lt;/p&gt;
+&lt;p&gt;这个任务相比“Pick and Place”难度提升了一些，但在工业应用中，加工、切割、喷涂等等，类似的应用也非常广泛。&lt;/p&gt;
+&lt;p&gt;根据任务的不同，我们需要采用不同的解决方法。那么现在的问题是，什么样的任务只靠运动学无法解决好，而需要动力学加入呢？&lt;/p&gt;
+&lt;p&gt;要回答这个问题，首先要明确动力学研究什么。机械臂的运动学，研究的是关节位置或位置变化与末端执行器位姿或位姿变化的关系，这里面只有“运动”，不涉及任何“动力”；由此可以想见，机械臂的动力学研究的必然与“动力”有关。所谓“动力”，指的是机械臂各部分受到的力或扭矩（我们以后统一用“力”指代“力或扭矩”）。机械臂的动力学，则是要研究下面几个问题：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;机械臂在运动过程中受到什么样地内力和外力？&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;这些力怎么改变机械臂的运动状态？&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;关节受力与末端执行器的受力有什么关系？&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;因为研究的是力，所以我们对机械臂的了解，在“关节的运动如何改变末端执行器的运动”以外又深入了一层，进入了“关节驱动器（actuator）产生的力如何改变关节的运动、从而改变end effector的运动”这个层面。也因此，我们将要控制的变量，也从关节的位置或速度，变成了关节的力。&lt;/p&gt;
+&lt;p&gt;如果你有准确的动力学模型，你就能够准确控制关节的加速度，从而准确控制end effector的加速度。我们知道，位置是加速度对时间的两次积分，这意味着，直接控制加速度允许你对轨迹做更精确快速的跟踪。&lt;/p&gt;
+&lt;p&gt;对上面所说的第二个任务，如果要求画圆的速度很快，雅可比矩阵求逆法d~x~不能过大的要求马上就不能满足了。即使忽略这个限制，关节位置控制器由于对它所要控制的对象的动力学一无所知，也很难快速地跟上end effector圆形轨迹需要的关节轨迹。结果是什么呢？机械臂可能会抖得很厉害、画出来的圆会比实际的小且不那么圆、甚至end effector只能在原地振动。&lt;/p&gt;
+&lt;p&gt;如果看不太明白上面这一段话也没有关系，我们以后会详细讲机械臂的各种控制方法。但是可以理解的一点是，&lt;strong&gt;动力学的引入允许我们更快、更精确地跟随需要的轨迹&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;给大家看看舵机做的只用逆运动学的机械臂和工业级的用于做精确激光切割的机械臂画圆的区别——&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;但工业级械臂更庞大：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/robotics/%E5%B9%B2%E8%B4%A7_10%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%8A%A8%E5%8A%9B%E5%AD%A6/10_10%E7%BA%BF%E5%88%87%E5%89%B2%E5%B7%A5%E4%B8%9A%E6%9C%BA%E6%A2%B0%E8%87%82.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;现在，我们有最后一个任务，让end effector去打磨一个零件——拿一把锉刀靠近零件然后来回运动并不足够，你还需要能够控制锉刀对零件施加一定的力。很明显，涉及到接触力，单纯用运动学也是无法解决的。&lt;strong&gt;动力学的引入让我们有可能控制机械臂与外界的相互作用力&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;这篇文章没有太多新的知识，这可能也是任何课本都不会有的章节；但我觉得它很重要。首先，在学完了逆运动学之后，你已经可以尽情地去用Arduino和舵机等等DIY自己的机械臂，尝试不同的逆运动学算法，让它完成搬东西、画画等各种好玩的任务。然而你也要明白，在Robotics的世界里，这只是入门的一步。没有动力学加入控制回路的机器人能做的事情非常有限，它们速度无法做到很快、负载不能做很重、如果功率很大会非常危险。明白了这些，我们才不会在学习复杂的机械臂动力学时不知所以然。&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>【机器人学基础知识】7、力的传递关系、奇异、冗余——从雅可比矩阵你还能得到什么？(雅可比矩阵下篇)</title>
+      <link>https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_07%E9%9B%85%E5%8F%AF%E6%AF%94%E7%9F%A9%E9%98%B5%E7%BB%88%E7%AF%87/</link>
+      <pubDate>Sun, 17 Jan 2021 14:03:23 +0800</pubDate>
+      
+      <guid>https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_07%E9%9B%85%E5%8F%AF%E6%AF%94%E7%9F%A9%E9%98%B5%E7%BB%88%E7%AF%87/</guid>
+      
+        <description>&lt;h3 id=&#34;0-回顾&#34;&gt;0 回顾&lt;/h3&gt;
+&lt;p&gt;这是关于雅可比矩阵的第三篇文章。我们回顾下前面的内容，雅可比矩阵从何而来、如何求之。&lt;/p&gt;
+&lt;p&gt;首先我们在学习&lt;strong&gt;正运动学&lt;/strong&gt;——即如何&lt;strong&gt;将关节空间的位置映射到操作空间的位置及朝向&lt;/strong&gt;这个问题之后，第二个问题就是瞬时运动学——&lt;strong&gt;如何将关节空间的速度映射到操作空间的速度&lt;/strong&gt;。经过推导，我们发现，雅可比矩阵就是解出这个映射的关键:
+$$
+\dot{x} = J \dot{q}
+$$
+其中，
+$$
+J = \begin{bmatrix}
+\frac{dx_1}{dq_1} &amp;amp; \dots &amp;amp; \frac{dx_1}{dq_n} \\&lt;br&gt;
+\vdots &amp;amp; \ddots &amp;amp; \vdots \\ 
+\frac{dx_m}{dq_1} &amp;amp; \dots &amp;amp; \frac{dx_m}{dq_n} 
+\end{bmatrix}
+$$
+雅可比矩阵有m行n列:&lt;strong&gt;m为操作空间的自由度，n为关节空间的自由度&lt;/strong&gt;（或说关节数量）。&lt;/p&gt;
+&lt;p&gt;基本雅可比矩阵（Basic Jacobian）是&lt;strong&gt;由笛卡尔坐标描述操作空间线速度及角速度求得&lt;/strong&gt;，可分为两部分：线速度雅可比矩阵$J_v$和角速度雅可比矩阵$J_w$，分别求解。
+$$
+J = \begin{bmatrix}
+J_v \\&lt;br&gt;
+J_w
+\end{bmatrix}
+$$
+求解基本雅可比矩阵需要先求解正运动学。一个链式机械臂的$J_v$由end effector的位置对关节位置求导得到；$J_v$由每一个旋转关节的旋转轴单位向量得到——具体求解方法请复习上一篇。理解这个简单的求解方法对理解雅可比矩阵大有益处！&lt;/p&gt;
+&lt;p&gt;回顾完毕，现在我们可以来和雅可比矩阵进行一场更深入的交流……&lt;/p&gt;
+&lt;h3 id=&#34;1-力传递force-relationship&#34;&gt;1 力传递（Force relationship）&lt;/h3&gt;
+&lt;p&gt;在研究了关节空间与操作空间的位置映射关系和速度关系以后，我们继续思考：那么它们的&lt;strong&gt;力/扭矩映射关系&lt;/strong&gt;又如何？举例说明——如果别人抓着你的手用力想把它从你戳红包的屏幕上移开，你的肩膀、手肘、手腕等各处关节（这里假设身体的其他部分没有作用且固定了）各自需要输出多大的力矩才能让你的手保持不动呢？如果你要锤击一个沙包，它们又需要输出多大的扭矩呢？&lt;/p&gt;
+&lt;p&gt;很神奇的是，&lt;strong&gt;雅可比矩阵同样也是连接关节空间与操作空间力/扭矩映射关系的纽带。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;现在我们设在关节空间，关节输出的力/扭矩为:
+$$
+\tau = {[\tau_1 \quad \tau_2 \quad \dots \quad \tau_n]}^T
+$$
+关节运动速度为
+$$
+\dot{q} =  {[\dot{q}_1 \quad \dot{q}_2 \quad \dots \quad \dot{q}_n]}^T
+$$
+注意我们使用的始终是列向量（这是在第二篇文章中就约好了的^o^）。&lt;/p&gt;
+&lt;p&gt;那么整个系统输出的功率（等于力乘速度）在关节空间即表示为
+$$
+P = {\tau}^T \dot{q}
+$$
+希望你一眼就明白这是个&lt;strong&gt;向量点乘&lt;/strong&gt;，P显然是一个标量……&lt;/p&gt;
+&lt;p&gt;现在从操作空间的角度看，设此时end effector能够对外界输出的力/扭矩（或说为了&lt;strong&gt;维持整个系统的静态平衡&lt;/strong&gt;，外界对end effector的作用力/扭矩）为
+$$
+F = {[f_1 \quad f_2 \quad f_3 \quad n_1 \quad n_2 \quad n_3]}^T
+$$
+其中f表示力，n表示扭矩。&lt;/p&gt;
+&lt;p&gt;end effector的速度则为
+$$
+\dot{x} = {[\dot{x}_1 \quad \dot{x}_2 \quad \dots \quad \dot{x}_n]}^T
+$$
+那么施加在end effector上的外力对整个系统做功的功率即为
+$$
+P = F^T \dot{x}
+$$
+由能量守恒定律，我们必须有
+$$
+P = {\tau}^T \dot{q} = F^T \dot{x}
+$$
+带入瞬时运动学的式子：
+$$
+{\tau}^T \dot{q} = F^T \dot{x} \\&lt;br&gt;
+\tau^T = F^TJ = (J^TF)^T \\&lt;br&gt;
+\tau = J^TF
+$$
+注：$(AB)^T = B^TA^T$&lt;/p&gt;
+&lt;p&gt;经过漫长的推导，我们得到雅可比矩阵的另一个重要用途：J的转置乘以操作空间的力/扭矩就可得到关节空间输出的力/扭矩！这是一个&lt;strong&gt;从操作空间到关节空间的映射&lt;/strong&gt;，与我们之前讲到的正运动学、瞬时运动学方向正好相反。&lt;/p&gt;
+&lt;p&gt;应该庆幸，当别人试图把你的手掰到别处时，你的大脑已经把测量你的手受到的外力（F）、计算你手臂的雅可比矩阵的转置、求出每个关节需要输出的力并执行这整个过程，在你完全不知道的情况下完成了。&lt;/p&gt;
+&lt;p&gt;那么对于真正的机械臂而言，学习这个力映射关系又有什么意义呢？对于最传统的位置控制机器人，依赖对位置精确的传感，基于一种不达目的地绝不罢休的精神运动，这个式子可能确实没什么用。但是，越来越多的应用场景要求机器人能够在某一位置/某一方向维持特定的力（比如抓握一个物体、擦玻璃）、或者在一个复杂环境中安全工作（保证不会在碰到障碍物时对物体施加过大的作用力）；要实现这样的控制，这个映射关系必不可少——我们以后会更详细地讲解这个式子的应用。&lt;/p&gt;
+&lt;h3 id=&#34;2-奇异singularity&#34;&gt;2 奇异（Singularity）&lt;/h3&gt;
+&lt;p&gt;我们在《从RP入门机器人学》中提到了Singularity这个问题，简单地说，Singularity就是&lt;strong&gt;机械臂处在某一个configuration（即特定的关节位置组合）时，end effector失去某个方向的自由度&lt;/strong&gt;——你手臂伸直的那一刻，你的手绝无法沿着你手臂的方向运动。&lt;/p&gt;
+&lt;p&gt;现在有了雅可比矩阵，我们可以从数学的角度重新来认识Singularity。为什么呢？不要忘了雅可比矩阵的用处：关节的运动速度乘以雅可比矩阵即得到end effector的运动速度。而end effector失去某个方向的自由度即意味着&lt;strong&gt;在机械臂到达那个configuration的瞬间，不管关节怎么运动，end effector在这个方向的速度总为0&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;从线性代数的角度来说，此时的J矩阵有这样的特性：对所有任意向量a，$J_a$相乘得到向量b，则所有向量b组成的线性空间维度将比正常情况下少至少一个自由度——这说明什么？说明这个时候的雅可比矩阵&lt;strong&gt;遭遇了降维攻击&lt;/strong&gt;，被&lt;strong&gt;降秩&lt;/strong&gt;了啊！&lt;/p&gt;
+&lt;p&gt;我们以RR平面机械臂举例：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/robotics/%E5%B9%B2%E8%B4%A7_07%E9%9B%85%E5%8F%AF%E6%AF%94%E7%9F%A9%E9%98%B5%E7%BB%88%E7%AF%87/7_01RR%E6%9C%BA%E6%A2%B0%E8%87%82.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;这个机械臂的雅可比矩阵为：
+$$
+J = \begin{bmatrix}
+\frac{dx_e}{d\theta_1} &amp;amp;  \frac{dx_e}{d\theta_2} \\&lt;br&gt;
+\frac{dy_e}{d\theta_1} &amp;amp;  \frac{dy_e}{d\theta_2} 
+\end{bmatrix}
+= \begin{bmatrix}
+-\sin(\theta_1 + \theta_2) - \sin\theta_1 &amp;amp; -\sin(\theta_1 + \theta_2) \\&lt;br&gt;
+\cos(\theta_1 + \theta_2) + \cos\theta_1 &amp;amp;  \cos(\theta_1 + \theta_2) 
+\end{bmatrix}
+$$
+现在，为了求出在什么configuration下机械臂会遇到奇异点，即求这个雅可比矩阵什么时候&lt;strong&gt;不是满秩矩阵&lt;/strong&gt;，我们可以直接利用&lt;strong&gt;此时J的特征值为0&lt;/strong&gt;（即此时J是一个奇异矩阵）求得：
+$$
+det(J) = -\cos(\theta_1 + \theta_2) (\sin(\theta_1 + \theta_2)+\sin\theta_1) + \sin(\theta_1 + \theta_2)(\cos(\theta_1 + \theta_2)+\cos\theta_1) = 0
+$$
+稍微计算一下（三角恒等式什么的也是要很熟的！）可得：
+$$
+\sin(\theta_1 + \theta_2)\cos\theta_1 - \cos(\theta_1 + \theta_2)\sin\theta_1 = 0 \\&lt;br&gt;
+\sin(\theta_1 + \theta_2 - \theta_1) = \sin\theta_2 = 0
+$$
+所以singular configuration是$\theta_2=0$！此时，机械臂“伸直”，end effector无法在沿机械臂link的方向上运动。将这个值代入原矩阵，会发现J的行/列向量不是线性独立，它的秩为1。&lt;/p&gt;
+&lt;p&gt;在数学上，奇异矩阵的说法只对方阵有效，求特征值也是只对方阵有效。对于机器人来说，（Kinematic）Singularity是机器人在某一个configuration时end effector运动空间的降维，与雅可比矩阵的形状并无关——只是当雅可比矩阵不是方阵时，我们需要先把冗余自由度去掉再求解。&lt;/p&gt;
+&lt;h3 id=&#34;3-冗余redundancy&#34;&gt;3 冗余（Redundancy）&lt;/h3&gt;
+&lt;p&gt;说到冗余自由度，相信你已经可以想到如何从雅可比矩阵看出冗余了——当它&lt;strong&gt;又矮又胖&lt;/strong&gt;的时候就是啦。在第一篇文章中也曾用你的手举例，因为人的手在关节空间有七个自由度，所以你能够在手部固定的情况下移动你的手肘。从数学的角度上，这意味着
+$$
+\exists \dot{q},J\dot{q} = 0
+$$
+不得不感叹数学语言真的是简洁优美……&lt;/p&gt;
+&lt;p&gt;我们知道，假如A是一个方阵，那么Ax=0有非零解的充分必要条件是A是一个奇异矩阵——也就是说，如果没有冗余自由度，一个机械臂关节运动而end effector不动的情况只有在它处于singularity时才能出现。但是，如果A是一个矮胖矩阵，那么Ax=0必然有无数个非零解，这些解组成的空间即称为“零空间”（nullspace）。&lt;/p&gt;
+&lt;p&gt;简单地提一下：对于一个有冗余自由度的机器人，假设你除了要控制end effector运动到某一位置，还要保证过程中它的手肘不碰到障碍物，那你&lt;strong&gt;总是可以在nullspace中找到一组解满足你的要求&lt;/strong&gt;：在不改变end effector轨迹的同时避开障碍物。这样的方法称为null space control，我们以后有机会会详细展开。&lt;/p&gt;
+&lt;p&gt;希望今天这篇文章能让你对雅可比矩阵在机器人学中的重要地位有更强烈的认识，对这个系列一开始提到的机器人的奇异、冗余等问题有更深刻的理解。当然了，希望至少也帮你复习了一下线性代数吧。&lt;/p&gt;
+&lt;p&gt;三篇关于雅可比矩阵的文章终于写完了，但是它仍然会不停地出现在以后的文章中——逆运动学、动力学、机器人控制，哪里都有它的影子。在我看来，它是连接机械、物理与数学的桥梁，优美得无与伦比呢。&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>【机器人学基础知识】6、机械臂的雅可比矩阵这么厉害，怎么把它求出来呢？</title>
+      <link>https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_06%E6%80%8E%E4%B9%88%E6%B1%82%E9%9B%85%E5%8F%AF%E6%AF%94%E7%9F%A9%E9%98%B5/</link>
+      <pubDate>Thu, 14 Jan 2021 16:01:23 +0800</pubDate>
+      
+      <guid>https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_06%E6%80%8E%E4%B9%88%E6%B1%82%E9%9B%85%E5%8F%AF%E6%AF%94%E7%9F%A9%E9%98%B5/</guid>
+      
+        <description>&lt;blockquote&gt;
+&lt;p&gt;上一篇文章我们从正运动学公式推导出瞬时运动学公式，推出著名的雅可比矩阵，并例举出了一个特别简单的例子以提供直观印象。简单回顾一下——&lt;/p&gt;
+&lt;p&gt;瞬时运动学解决了如何从关节速度得到end effector速度问题:
+$$
+\dot x = J \dot q
+$$
+其中，J表示雅可比矩阵（Jacobian Matrix）：
+$$
+J = \begin{bmatrix}
+\frac{dx_1}{dq_1} &amp;amp; \dots &amp;amp; \frac{dx_1}{dq_n} \\&lt;br&gt;
+\vdots &amp;amp; \ddots &amp;amp; \vdots \\ 
+\frac{dx_m}{dq_1} &amp;amp; \dots &amp;amp; \frac{dx_m}{dq_n} 
+\end{bmatrix}
+$$
+雅可比矩阵的物理意义，以第5行第3列举例来说，&lt;strong&gt;表示当第3个关节转动/平移足够小的一定量（微分概念）时，乘上这个值就等于end effector在第5个自由度上相应的转到/平移量&lt;/strong&gt;。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;1-基本雅可比矩阵basic-jacobian&#34;&gt;1 基本雅可比矩阵（Basic Jacobian）&lt;/h3&gt;
+&lt;h4 id=&#34;11-定义&#34;&gt;1.1 定义&lt;/h4&gt;
+&lt;p&gt;上面说end effector第5个自由度，到底指的是哪个自由度？显然，这取决于我们如何描述end effector的运动。举个例子来说，假如我们有一个全自由度的end effector (即3个转动DOF，3个平动DOF)，那我们可以&lt;strong&gt;定义前3个自由度为沿某个坐标系（一般指世界/基坐标系）的x,y,z轴平移，后三个自由度为绕该坐标系的x,y,z轴旋转&lt;/strong&gt;——这样我们说的第5个自由度，指的是绕这个坐标系的y轴旋转。实际雅可比矩阵的结果，完全取决于我们选取的坐标系与描述end effector运动的顺序。&lt;/p&gt;
+&lt;p&gt;所以，我们把&lt;strong&gt;用笛卡尔坐标系描述线速度(linear velocity)和角速度(angular velocity)、以机械臂的基坐标系(Base frame)或frame {0}作为参考系&lt;/strong&gt;来描述end effector速度所求的雅可比矩阵，称为基本雅可比矩阵；其他所有表示方法(如将笛卡尔坐标系改为柱坐标系、球坐标系；角度改为欧拉角、四元数quaternion等)都可以由这个基本雅可比矩阵转换得到。根据上面基本雅可比矩阵的定义，end effector的速度可以写为：
+$$
+\dot x = \begin{bmatrix}
+v_x \\&lt;br&gt;
+v_y \\&lt;br&gt;
+v_z \\&lt;br&gt;
+w_x \\&lt;br&gt;
+w_y \\&lt;br&gt;
+w_z
+\end{bmatrix}
+= \begin{bmatrix}
+\vec v \\&lt;br&gt;
+\vec w
+\end{bmatrix}
+$$
+相应的，雅可比矩阵也可以写成：
+$$
+J = \begin{bmatrix}
+J_v \\&lt;br&gt;
+J_w
+\end{bmatrix}
+$$
+从J的表达式中很容易可以看出，上半部分对应线速度、下半部分对应角速度。&lt;/p&gt;
+&lt;h4 id=&#34;12-线速度部分&#34;&gt;1.2 线速度部分&lt;/h4&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/robotics/%E5%B9%B2%E8%B4%A7_06%E6%80%8E%E4%B9%88%E6%B1%82%E9%9B%85%E5%8F%AF%E6%AF%94%E7%9F%A9%E9%98%B5/6_01RR%E6%9C%BA%E6%A2%B0%E8%87%82.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;首先从我们比较容易理解的上半部分$J_v$开始，以之前讲的RR机械臂为例，我们是怎么求出雅可比矩阵的？&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;先写出end effector位置的正运动学表达式&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;$$
+x_e = \cos{(\theta_1 + \theta_2)} + \cos{\theta_1} \\&lt;br&gt;
+y_e = \sin{(\theta_1 + \theta_2)} + \sin{\theta_1}
+$$&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;再用操作空间的位置向量对关节空间的位置向量求导&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;$$
+J = \begin{bmatrix}
+\frac{dx_e}{d\theta_1} &amp;amp;  \frac{dx_e}{d\theta_2} \\&lt;br&gt;
+\frac{dy_e}{d\theta_1} &amp;amp;  \frac{dy_e}{d\theta_2} 
+\end{bmatrix}
+= \begin{bmatrix}
+-\sin(\theta_1 + \theta_2) - \sin\theta_1 &amp;amp; -\sin(\theta_1 + \theta_2) \\&lt;br&gt;
+\cos(\theta_1 + \theta_2) + \cos\theta_1 &amp;amp;  \cos(\theta_1 + \theta_2) 
+\end{bmatrix}
+$$&lt;/p&gt;
+&lt;p&gt;根据瞬时运动学的定义，这个方法是非常直观的。那如果我们的机械臂复杂一点，需要用到齐次坐标变换来求正运动学公式呢？&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/robotics/%E5%B9%B2%E8%B4%A7_06%E6%80%8E%E4%B9%88%E6%B1%82%E9%9B%85%E5%8F%AF%E6%AF%94%E7%9F%A9%E9%98%B5/6_02RPRR%E6%9C%BA%E6%A2%B0%E8%87%82.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;这是我们求出来end effector的正运动学表达式（查看《“正运动学”——从关节空间到操作空间》），这里假设图中$O_e$和$O_4$是重合的：
+$$
+{}^0_eT = \begin{bmatrix}
+× &amp;amp; × &amp;amp; × &amp;amp; l_2c\theta_1c\theta_3 + l_1c\theta_1 \\ 
+× &amp;amp; × &amp;amp; × &amp;amp; l_2s\theta_1c\theta_3 + l_1s\theta_1 \\&lt;br&gt;
+× &amp;amp; × &amp;amp; × &amp;amp; l_2s\theta_3 + d_2 \\&lt;br&gt;
+0 &amp;amp; 0 &amp;amp; 0 &amp;amp; 1
+\end{bmatrix}
+$$
+由于这里不要旋转矩阵，只需要平移矩阵，我们又假设$O_e$和$O_4$是重合的，则平移矩阵表达的是&lt;strong&gt;end effector的位置w.r.t frame{0}&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;所以，我们要求的$J_v$，&lt;strong&gt;只需要对平移矩阵对关节空间向量($v_1,d_2,v_3,v_4$)求导即可&lt;/strong&gt;，按照向量求导的规则，我们得到是一个&lt;strong&gt;3 x 4&lt;/strong&gt;的矩阵：
+$$
+J_v = \begin{bmatrix}
+-l_2s\theta_1c\theta_3 - l_1s\theta_1 &amp;amp; 0 &amp;amp; -l_2c\theta_1s\theta_3 &amp;amp; 0 \\&lt;br&gt;
+l_2c\theta_1c\theta_3 + l_1c\theta_1 &amp;amp; 0 &amp;amp; -l_2s\theta_1s\theta_3 &amp;amp; 0 \\&lt;br&gt;
+0 &amp;amp; 1 &amp;amp; l_2c\theta_3 &amp;amp;0
+\end{bmatrix}
+$$&lt;/p&gt;
+&lt;h4 id=&#34;12-角速度部分&#34;&gt;1.2 角速度部分&lt;/h4&gt;
+&lt;p&gt;说完$J_v$，我们要来说下半部分的$J_w$了。这个矩阵其实很容易求，但是要理解它则需要一点小“技巧”。我们还是先从最简单的平面机械臂看起:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/robotics/%E5%B9%B2%E8%B4%A7_06%E6%80%8E%E4%B9%88%E6%B1%82%E9%9B%85%E5%8F%AF%E6%AF%94%E7%9F%A9%E9%98%B5/6_03RR%E6%9C%BA%E6%A2%B0%E8%87%822.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;这次，我们只关心end effector的朝向。对于平面机械臂而言，end effector只有一个转动自由度，即图中标出的α（设与x轴重合时为0°，从x轴旋转到y轴为正方向）。此时我们的操作空间为(&lt;em&gt;α&lt;/em&gt;)，关节空间还是（$\theta_1,\theta_2$);根据定义，我们求解的雅可比矩阵角速度部分如下:
+$$
+J_{w} = \begin{bmatrix}
+\frac{d\alpha}{d\theta_1} &amp;amp; \frac{d\alpha}{d\theta_2} 
+\end{bmatrix}
+$$
+对于这个平面机械臂而言，我们很容易可以看出:$\theta_1$转多少度，$\alpha$就转动多少度；同理$\theta_2$也是。则$J_w$应为[1, 1]。&lt;/p&gt;
+&lt;p&gt;举这个例子，希望它能帮助我们建立一个直观印象和基本概念——一个机械臂的旋转关节绕某个轴转多少角度，他的end effector就会相应地绕这个轴多少角度；在平面机械臂的情况中，这表示一个旋转关节的转速&lt;strong&gt;乘以1&lt;/strong&gt;即可得到它引起(Contribute)的end effector转动的速度，因此上面的$J_w$为[1,1]。&lt;/p&gt;
+&lt;p&gt;在三维空间里，角速度定义为一个&lt;strong&gt;指向旋转轴的向量&lt;/strong&gt;，其方向可以由右手定则确定。因为我们定义机械臂的每个旋转关节都是&lt;strong&gt;绕自身的Z轴旋转&lt;/strong&gt;的，所以当每一个旋转关节转速为$w$时，它所contribute的end effector的角速度向量以这个旋转关节本身的坐标系为参照系必然为$[0,0,w]$。换句话说，这个旋转关节的转速&lt;strong&gt;乘以[0,0,1]&lt;strong&gt;可以得到它所引起的end effector的角速度(&lt;strong&gt;w.r.t 该旋转关节坐标系&lt;/strong&gt;)。(end effector的实际速度可由不同旋转关节contribute的角速度&lt;/strong&gt;线性叠加&lt;/strong&gt;。)&lt;/p&gt;
+&lt;p&gt;由于我们基本的雅可比矩阵是&lt;strong&gt;以frame{0}为参考系&lt;/strong&gt;的，为了写出$J_w$，我们需要把每个旋转关节的z轴[0,0,1]，从以关节自身坐标系为参考系&lt;strong&gt;转换到基准坐标系frame{0}表示&lt;/strong&gt;。另外，对于平移关节，因为&lt;strong&gt;平移关节的运动不可能改变end effector的朝向，故end effector的orientation对平移关节位置的求导一定是0&lt;/strong&gt;！&lt;/p&gt;
+&lt;p&gt;以前面出现的RPRR机械臂为例，它的雅可比矩阵角速度部分是这样的:
+$$
+J_w = \begin{bmatrix}
+{}^0\hat{Z}_1 &amp;amp; \vec{0} &amp;amp; {}^0\hat{Z}_3 &amp;amp; {}^0\hat{Z}_4
+\end{bmatrix}
+$$
+看明白了么?&lt;/p&gt;
+&lt;p&gt;现在我们只剩最后一个问题就是怎么把各个关节的z轴坐标w.r.t frame{0}求出来——其实算一遍各个关节的齐次坐标变换矩阵。例如${}^0_1T,{}^0_3T$：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/robotics/%E5%B9%B2%E8%B4%A7_06%E6%80%8E%E4%B9%88%E6%B1%82%E9%9B%85%E5%8F%AF%E6%AF%94%E7%9F%A9%E9%98%B5/6_04%E5%90%84%E4%B8%AA%E5%85%B3%E8%8A%82%E7%9B%B8%E5%AF%B9%E4%BA%8E%E5%9F%BA%E5%9D%90%E6%A0%87%E7%B3%BB%E7%9A%84%E5%8F%98%E6%8D%A2%E7%9F%A9%E9%98%B5.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h4 id=&#34;13-小结&#34;&gt;1.3 小结&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;基本雅可比矩阵的上部分$J_v$由end effector的位置向量对关节求导得出；&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;end effector的位置向量可由正运动学得到&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;基本雅可比矩阵的下半部分$J_w$可由每个旋转关节的z轴以基准坐标系为参考系写出的单位向量得到&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;把$J_v$和$J_w$合起来可以得到一个&lt;strong&gt;m × n的矩阵，其中m是end effector/操作空间的自由度（对于空间机械臂通常m=6），n是机械臂的关节数量。&lt;/strong&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;2-其它雅可比矩阵&#34;&gt;2 其它雅可比矩阵&lt;/h3&gt;
+&lt;p&gt;最后简单地提一下，得到Basic Jacobian 后，要求其他形式的雅可比 矩阵都不是问题，&lt;strong&gt;只需要乘一个转换矩阵就可以了&lt;/strong&gt;。比如说，如果你的end effector位置是由柱坐标表示的，即$(\rho,\theta,z)$,而坐标转换为笛卡尔坐标是:
+$$
+x = \rho \ \cos{\theta} \\&lt;br&gt;
+y = \rho \ \sin{\theta} \\ 
+z = z
+$$
+那么转换矩阵E~p~(这里的p表示position)就&lt;strong&gt;由笛卡尔坐标对柱坐标的向量求导&lt;/strong&gt;得出:&lt;/p&gt;
+&lt;p&gt;$$
+E_p = \frac
+{d\begin{bmatrix}
+x \\&lt;br&gt;
+y \\ 
+z
+\end{bmatrix}
+}
+{d\begin{bmatrix}
+\rho \\&lt;br&gt;
+\theta \\&lt;br&gt;
+z
+\end{bmatrix}
+}
+= \begin{bmatrix}
+\cos{\theta} &amp;amp; \sin{\theta} &amp;amp; 0 \\&lt;br&gt;
+-\rho\sin{\theta} &amp;amp; \rho\cos{\theta} &amp;amp; 0 \\&lt;br&gt;
+0 &amp;amp; 0 &amp;amp; 1
+\end{bmatrix}
+$$&lt;/p&gt;
+&lt;p&gt;而&lt;strong&gt;新的雅可比矩阵的上半部分就等于基本雅可比矩阵的$J_v$左乘上这个$E_p$&lt;/strong&gt;。对于旋转也类似——大家了解一下就好，不再详细展开了。&lt;/p&gt;
+&lt;p&gt;这篇文章主要讲了Basic Jacobian的求法，新的内容不多，但希望能够让你对雅可比矩阵有更进一步了解。上次说要讲雅可比矩阵与Singularity、Redundancy的关系，还说要解矮胖的线性方程……篇幅所限，只能留到下一篇了。毕竟雅可比矩阵这么重要，为它多写一篇也不为过呢！&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>【机器人学基础知识】5、“瞬时运动学”——还是从关节空间到操作空间</title>
+      <link>https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_05%E7%9E%AC%E6%97%B6%E8%BF%90%E5%8A%A8%E5%AD%A6/</link>
+      <pubDate>Wed, 13 Jan 2021 16:01:23 +0800</pubDate>
+      
+      <guid>https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_05%E7%9E%AC%E6%97%B6%E8%BF%90%E5%8A%A8%E5%AD%A6/</guid>
+      
+        <description>&lt;blockquote&gt;
+&lt;p&gt;看懂本文，除了了解矩阵、向量、向量点乘、矩阵向量相乘等内容，以及看明白我们该系列的前四篇文章外，你还需要懂得简单的&lt;strong&gt;向量求导运算&lt;/strong&gt;——其实很简单啦，如果你不知道怎么对向量求导，那就把它当一列标量一个一个写出来，比如这样：
+$$
+\frac{d\vec{x}}{d\vec{q}} =   \frac
+{
+d{\begin{bmatrix}
+x_1 \\&lt;br&gt;
+x_2 \\ 
+x_3
+\end{bmatrix}
+}
+}
+{
+d{\begin{bmatrix}
+q_1 \\&lt;br&gt;
+q_2
+\end{bmatrix}
+}
+}
+= \begin{bmatrix}
+\frac{dx_1}{dq_1} &amp;amp; \frac{dx_1}{dq_2} \\&lt;br&gt;
+\frac{dx_2}{dq_1} &amp;amp; \frac{dx_2}{dq_2} \\&lt;br&gt;
+\frac{dx_3}{dq_1} &amp;amp; \frac{dx_3}{dq_2}
+\end{bmatrix}
+$$&lt;/p&gt;
+&lt;p&gt;不知道行列怎么分布？把分母乘到右边，算一下&lt;strong&gt;左边是3×1向量，右边是3×2矩阵乘以2×1向量 = 3×1向量&lt;/strong&gt;，左右相等，搞定！简单粗暴，方便有效。哎呀，一不小心，把&lt;strong&gt;雅可比矩阵&lt;/strong&gt;（Jacobian Matrix）都给写出来了呢。（想要知道数学上是怎么定义推导出向量求导方法的请去上数学课，我只负责教你记住啦😄）&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;上一篇文章我们利用&lt;strong&gt;DH参数&lt;/strong&gt;与&lt;strong&gt;坐标变换&lt;/strong&gt;，推到了机械臂的“正运动学”求解方法：只要知道机械臂的结构以及每个关节的位置（关节位置，指的是&lt;strong&gt;旋转关节的角度以及平移关节的平移&lt;/strong&gt;），就可以求出end effector的位置和朝向，即完整的end effector的齐次变换矩阵w.r.t基座/地面坐标系。“正运动学”通常对应“逆运动学”，这篇文章先聚焦“瞬时运动学”；因为它与前面的内容一脉相承，在一类机器人控制的理论框架中，也比逆运动学更重要。&lt;/p&gt;
+&lt;p&gt;瞬时运动学（Instantaneous kinematic）也是描述从关节空间到操作空间的映射，“瞬时”表明它不是描述“静态”的文章，而是描述“动态”的&lt;strong&gt;速度&lt;/strong&gt;。还记得正运动学要求解的“函数“是什么吗？如下所示：
+$$
+\vec{x}=f(\vec{q})
+$$
+其中，q向量表示关节位置，x向量表示end effector的位置和朝向。&lt;/p&gt;
+&lt;p&gt;在上一篇文章的正运动学求解中，由于空间朝向表示的复杂性，我们最终用齐次坐标变换矩阵T来表示end effector的位置和朝向，而不是一个向量。不过，从数学的角度或抽象理解的角度来讲，上面的式子显然更为通用（更何况我们有“一百种”办法可以用向量来表示空间朝向，分分钟抛弃旋转矩阵）。&lt;/p&gt;
+&lt;p&gt;现在，当我们说“瞬时运动学”求解的是从关节空间到操作空间的速度映射时，由于速度描述的是短时间内的位置变化，即&lt;strong&gt;位置对时间的导数&lt;/strong&gt;，相信你很自然地会想到我们需要求解这样一个函数：
+$$
+\frac{d\vec{x}}{dt} = g(\frac{d\vec{q}}{dt}) \\&lt;br&gt;
+or \\&lt;br&gt;
+\dot{x} = g(\dot{q})
+$$
+现在我们的任务就是，从“正运动学”公式推导出“瞬时运动学”公式：
+$$
+\frac{d\vec{x}}{dt} = \frac {df(\vec{q})}{dt}
+= \frac {df(\vec{q})}{d\vec{q}} \cdot \frac {d\vec{q}}{dt} \\&lt;br&gt;
+i.e: \ \dot{x} =\frac{d\vec{x}}{dq} \cdot \dot{q}
+$$
+有没有觉得上面的式子某个地方很眼熟啊？没错，就是我们一开始提到的向量x对向量q的求导了！&lt;strong&gt;将关节空间的速度与操作空间的速度连接起来的，就是由向量求导获得的雅可比矩阵。&lt;strong&gt;现在，让我们把这个&lt;/strong&gt;重要的结论&lt;/strong&gt;用数学方式表示出来，用J表示向量x对向量q的导数：
+$$
+\dot{x} = J\dot{q}
+$$
+根据一开始讲的向量求导方法，J是一个矩阵。这个矩阵其实一点也不抽象：如果我们仔细看它的每一个元素，就会发现它的&lt;strong&gt;第i行第j列表示的物理意义就是当第j个关节运动时，操作空间的第i个平动/转动方向会如何运动&lt;/strong&gt;：
+$$
+J = \begin{bmatrix}
+\frac{dx_1}{dq_1} &amp;amp; \cdots &amp;amp; \frac{dx_1}{dq_n} \\&lt;br&gt;
+\vdots &amp;amp; \ddots &amp;amp; \vdots \\&lt;br&gt;
+\frac{dx_m}{dq_1} &amp;amp; \cdots &amp;amp; \frac{dx_m}{dq_n}
+\end{bmatrix}
+$$
+比如第一行第一列，就表示当第一个关节运动某个角度/距离时，end effector相应的在x1这个方向上运动/转动某个距离/角度。如果你还是觉得太抽象，那我们来看一个例子，还是上一篇文章用到的那个平面机械臂：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/robotics/%E5%B9%B2%E8%B4%A7_05%E7%9E%AC%E6%97%B6%E8%BF%90%E5%8A%A8%E5%AD%A6/5_01RR%E6%9C%BA%E6%A2%B0%E8%87%82.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;我们的关节空间是$(\theta_1,\theta_2)$，操作空间是$(x_e,y_e)$，我们也写出了正运动学公式（将link的长度都定为1）：
+$$
+x_e = \cos(\theta_1 + \theta_2) + \cos\theta_1 \\&lt;br&gt;
+y_e = \sin(\theta_1 + \theta_2) + \sin\theta_1
+$$
+那么雅可比矩阵就是:
+$$
+J = \begin{bmatrix}
+\frac{dx_e}{d\theta_1} &amp;amp;  \frac{dx_e}{d\theta_2} \\&lt;br&gt;
+\frac{dy_e}{d\theta_1} &amp;amp;  \frac{dy_e}{d\theta_2} 
+\end{bmatrix}
+= \begin{bmatrix}
+-\sin(\theta_1 + \theta_2) - \sin\theta_1 &amp;amp; -\sin(\theta_1 + \theta_2) \\&lt;br&gt;
+\cos(\theta_1 + \theta_2) + \cos\theta_1 &amp;amp;  \cos(\theta_1 + \theta_2) 
+\end{bmatrix}
+$$
+注意在我们这个例子中，关节空间有两个自由度、操作空间也有两个自由度，所以我们的雅可比矩阵是正方形的（square matrix）；但&lt;strong&gt;雅可比矩阵不一定是方阵&lt;/strong&gt;，这一点大家要记住。&lt;/p&gt;
+&lt;p&gt;如果你考虑一下当$\theta_1$为0， $\theta_2$为90°的时候，代入算一下，我们会得到这样的雅可比矩阵：
+$$
+J = \begin{bmatrix}
+-1 &amp;amp; -1 \\&lt;br&gt;
+1 &amp;amp;  0 
+\end{bmatrix}
+$$
+对应的机械臂:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/robotics/%E5%B9%B2%E8%B4%A7_05%E7%9E%AC%E6%97%B6%E8%BF%90%E5%8A%A8%E5%AD%A6/5_01RR%E6%9C%BA%E6%A2%B0%E8%87%822.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;现在你看，如果我们保持第一个关节不动、转动第二个关节，那么&lt;strong&gt;在这一个瞬间&lt;/strong&gt;end effector将只能在x方向运动，速度为1（线速度等于角速度乘以半径，即link的长度），y方向的速度则为0，所以J矩阵的第二列是[-1, 0]。&lt;/p&gt;
+&lt;p&gt;而如果我们保持第二个关节不动、转动第一个关节，end effector的瞬时速度将与end effector与第一个关节轴的连线垂直，其半径为√2，则线速度为√2，分解为x方向的-1和y方向的1，所以J矩阵的第一列为[-1, 1]。&lt;/p&gt;
+&lt;p&gt;希望这么啰嗦的解释可以让你获得雅可比矩阵最直观的理解，一旦理解了，是不是其实很简单呢？&lt;/p&gt;
+&lt;p&gt;瞬时运动学的这个公式太优美了，让我们再看一遍：
+$$
+\dot{x} = J \dot{q}
+$$
+这个式子表明了，end effector的速度与joint velocity的关系是线性的！这个式子的形式也与我们在线性代数中用尽了各种方法（高斯消元法是其中一种）去求解的线性方程&lt;strong&gt;Ax = b&lt;/strong&gt;一模一样：&lt;strong&gt;如果我们想要end effector以某个速度运动，求对应的关节速度，那这个问题就是一个解线性方程的问题了&lt;/strong&gt;！比起逆运动学，这实在漂亮方便了不知道多少倍呢。&lt;/p&gt;
+&lt;p&gt;如果你只知道A矩阵是正方形时怎么解，那么学习机器人学就可以帮助你以最直观的方式了解当A矩阵是瘦高型或者矮胖型的时候是什么意义、又如何求解了——又学机器人学又学线性代数，是不是很超值？下一篇文章，作者会教你如何写出雅可比矩阵，更会带你深入地了解它、应用它（比如我们第一篇干货文就提到的&lt;strong&gt;奇异点Singularity和冗余自由度Redundancy&lt;/strong&gt;，都可以从雅可比矩阵获得数学上的理解），顺便还会教你如何对付高瘦矮胖的线性方程。&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>【机器人学基础知识】4、“正运动学”-从关节到操作空间</title>
+      <link>https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_04%E6%AD%A3%E8%BF%90%E5%8A%A8%E5%AD%A6-%E4%BB%8E%E5%85%B3%E8%8A%82%E7%A9%BA%E9%97%B4%E5%88%B0%E6%93%8D%E4%BD%9C%E7%A9%BA%E9%97%B4/</link>
+      <pubDate>Mon, 04 Jan 2021 16:01:23 +0800</pubDate>
+      
+      <guid>https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_04%E6%AD%A3%E8%BF%90%E5%8A%A8%E5%AD%A6-%E4%BB%8E%E5%85%B3%E8%8A%82%E7%A9%BA%E9%97%B4%E5%88%B0%E6%93%8D%E4%BD%9C%E7%A9%BA%E9%97%B4/</guid>
+      
+        <description>&lt;p&gt;所谓的正运动学，英文叫&lt;strong&gt;Forward Kinematics&lt;/strong&gt;或Direct Kinematics，简单来说，就是你&lt;strong&gt;知道每个关节的位置（关节位置指平移关节的位移或旋转关节的转角），求末端执行器（end effector）的位置/朝向（position/orientation)&lt;/strong&gt;。以一个简单的RR平面机械臂的例子介绍：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/robotics/%E5%B9%B2%E8%B4%A7_04%E6%AD%A3%E8%BF%90%E5%8A%A8%E5%AD%A6/4_01RR%E6%9C%BA%E6%A2%B0%E8%87%82.jpg&#34; alt=&#34;4_01RR机械臂&#34;&gt;&lt;/p&gt;
+&lt;p&gt;首先，假设我们只关心end effector的位置$(x_e,y_e)$，那么在这样的设定下，&lt;strong&gt;关节空间就是$(\theta_1,\theta_2)$，操作空间就是$(x_e,y_e)$&lt;/strong&gt;。我们的任务是求从关节空间到操作空间&lt;strong&gt;位置关系的映射&lt;/strong&gt;。在上图中，假设每段&lt;em&gt;link&lt;/em&gt;的长度为1，则机器人的几何关系直接写出：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/robotics/%E5%B9%B2%E8%B4%A7_04%E6%AD%A3%E8%BF%90%E5%8A%A8%E5%AD%A6/4_02RR%E6%9C%BA%E6%A2%B0%E8%87%82%E5%87%A0%E4%BD%95%E5%85%B3%E7%B3%BB.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;通过$(\theta_1,\theta_2)$求出$(x_e,y_e)$，即为RR机械臂的正运动学。&lt;/p&gt;
+&lt;p&gt;不过，如果我们有四轴、六轴、甚至更多轴呢？如果我们的end effector操作空间有六个自由度呢？显然，这种情况下简单粗暴的几何法已经超越人类正常大脑的认知了。我们要如何表示这个映射，又要怎么计算呢？&lt;/p&gt;
+&lt;p&gt;这个时候，我们之前讲到的坐标变换和DH参数就该派上用场了！&lt;/p&gt;
+&lt;p&gt;对于六自由度的end effector（即操作空间有六个自由度），我们可以重新表述正运动学所解决的问题——那就是，我们需要&lt;strong&gt;求end effector的position and orientation相对于base frame、以joint position为变量的坐标变换（函数）&lt;/strong&gt;。用数学语言描述，就是：
+$$
+\vec {x} = f(\vec{q})
+$$
+其中&lt;strong&gt;q&lt;/strong&gt;是关节空间位置向量，就如同上面例子中的$(\theta_1, \theta_2)$；&lt;strong&gt;x&lt;/strong&gt;是操作空间位置和朝向向量，如同上面例子中的$(x_e,y_e)$。由于表示三维的朝向/角度并不容易，我们可以暂且把&lt;strong&gt;x&lt;/strong&gt;理解为end effector的坐标变换矩阵，这样我们就有了这个式子：
+$$
+{}_e^0T=f(\vec{q})
+$$
+式子左边表示end effector的坐标w.r.t第0个坐标即base frame（如果你对这样的记法还不熟悉，强烈建议你再看看那篇坐标变换那篇文章）。&lt;/p&gt;
+&lt;p&gt;我们前面说对于六轴甚至更多轴的机械臂，直接写出这个$f(\boldsymbol {q})$很难。在DH参数那篇文章中，我们详细讲了&lt;strong&gt;如何用四个参数（其中一个为关节位置）给每一个关节附上一个坐标系&lt;/strong&gt;。现在，这些坐标系正好可以帮我们简化求$f(\boldsymbol {q})$的问题：
+$$
+{}^0_eT = {}^0_1T \ {}^1_2T \ \cdots \ {}^{n-1}_{n}T \ {}^n_eT
+$$
+DH参数坐标体系最方便的地方在于，我们可以直接将每一个T矩阵用DH参数表示——在写出这个矩阵之前，我们先复习一下：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/robotics/%E5%B9%B2%E8%B4%A7_04%E6%AD%A3%E8%BF%90%E5%8A%A8%E5%AD%A6/4_03DH%E8%A1%A8%E8%BE%BE%E5%BC%8F.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;现在我们要求两个有特定关系的坐标之间的坐标变换(一定要结合上一张图看清楚每个变量都是指的哪里）&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/robotics/%E5%B9%B2%E8%B4%A7_04%E6%AD%A3%E8%BF%90%E5%8A%A8%E5%AD%A6/4_04DH%E5%8F%82%E6%95%B0%E6%89%80%E5%BE%97%E7%9A%84%E5%8F%98%E6%8D%A2%E7%9F%A9%E9%98%B5.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;上面这张图和这个公式意味着什么呢？意味着我们可以从每个关节的四个DH参数出发，最后得到一个机械臂的正运动学公式！&lt;/p&gt;
+&lt;p&gt;需要注意的是，实际应用中在写两个关节之间的T矩阵时，如果坐标系之间关系很简单（DH参数中有很多个0），那我们也常常可以用&lt;strong&gt;几何大法&lt;/strong&gt;解决；至少可以用来凭直觉验证用DH法写出来的矩阵对不对——不要忘了这个重要的工具哦。&lt;/p&gt;
+&lt;p&gt;以上篇文章讲的RPRR机械臂为例子——记得不管给你什么样的机械臂，不管是要求正运动学解（还是以及以后讲到的逆运动学解、瞬时运动学解、动力学……），&lt;strong&gt;第一件事就是给每个关节附上一个坐标系&lt;/strong&gt;。附坐标系的方法呢，用我们讲的DH参数法通用简洁明了，用你自己的办法也完全可以。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/robotics/%E5%B9%B2%E8%B4%A7_04%E6%AD%A3%E8%BF%90%E5%8A%A8%E5%AD%A6/4_05RPRR%E6%9C%BA%E6%A2%B0%E8%87%82.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;其DH参数表为：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/robotics/%E5%B9%B2%E8%B4%A7_04%E6%AD%A3%E8%BF%90%E5%8A%A8%E5%AD%A6/4_06RPRR%E7%9A%84DH%E5%8F%82%E6%95%B0%E8%A1%A8.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;我们现在的任务就是求&lt;strong&gt;用关节参数q表示的&lt;/strong&gt; &lt;strong&gt;end effector w.r.t frame{0}的T矩阵&lt;/strong&gt;。按照上文提到的方法，我们首先要用&lt;strong&gt;几何大法或DH大法&lt;/strong&gt;把每两个相邻关节之间的T矩阵写出来（实话说，这个机械臂几乎每一个T都可以用几何法直接写出来……如果你清楚地记得&lt;strong&gt;旋转矩阵每一列的意义以及T矩阵最后一列平移向量的意义&lt;/strong&gt;）。&lt;/p&gt;
+&lt;p&gt;为了方便，我们把cos都写成c，sin都写为s：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/robotics/%E5%B9%B2%E8%B4%A7_04%E6%AD%A3%E8%BF%90%E5%8A%A8%E5%AD%A6/4_07RPRR%E7%9A%84%E5%8F%98%E6%8D%A2%E7%9F%A9%E9%98%B5.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/robotics/%E5%B9%B2%E8%B4%A7_04%E6%AD%A3%E8%BF%90%E5%8A%A8%E5%AD%A6/4_08RPRR%E7%9A%84%E5%8F%98%E6%8D%A2%E7%9F%A9%E9%98%B52.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;要求end effector的T矩阵，我们还需要一个end effector w.r.t frame{4}的T矩阵；不过这个矩阵非常简单，我就不帮大家写啦。最后，你可以把这些T矩阵都按顺序乘起来，就得到这个机械臂矩阵形式的正运动学解了。有了这个end effector w.r.t frame{0}（frame{0}通常是某个&lt;strong&gt;固定&lt;/strong&gt;于基座的坐标系）的T矩阵，我们就可以从关节位置求得end effector的位置及朝向。&lt;/p&gt;
+&lt;p&gt;最后想要提的一点是，为什么从关节空间到操作空间就是“正”运动学呢？（相应的&lt;strong&gt;从操作空间到关节空间就是“逆”运动学&lt;/strong&gt;。）因为&lt;strong&gt;从q到x的映射是唯一的&lt;/strong&gt;：同样的&lt;strong&gt;q&lt;/strong&gt;一定对应同样的&lt;strong&gt;x&lt;/strong&gt;。这一点&lt;strong&gt;反过来却不成立&lt;/strong&gt;：同样的&lt;strong&gt;x&lt;/strong&gt;有可能对应不同的&lt;strong&gt;q&lt;/strong&gt;；对于我们在第一篇文章中以人的手臂为例提到的redundant robot来说，同样的&lt;strong&gt;x&lt;/strong&gt;甚至可以对应&lt;strong&gt;无数个q&lt;/strong&gt;。所以，正运动学很简单，逆运动学很麻烦——机器人学有不少的一部分内容，就是在和麻烦的逆运动学作斗争。&lt;/p&gt;
+&lt;p&gt;正运动学虽然简单，但是它是我们之前两篇文章：&lt;strong&gt;坐标变换与DH参数&lt;/strong&gt;的第一次结合。如果你想要学习机器人学，一定、一定把这两篇基础文章都弄清楚。&lt;/p&gt;
+&lt;p&gt;这篇文章就这么愉快地结束啦！&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>【机器人学基础知识】3、机械臂的坐标系与数学模型：传说中的DH参数</title>
+      <link>https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_03dh%E5%BB%BA%E6%A8%A1/</link>
+      <pubDate>Sun, 03 Jan 2021 16:01:23 +0800</pubDate>
+      
+      <guid>https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_03dh%E5%BB%BA%E6%A8%A1/</guid>
+      
+        <description>&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/robotics/%E5%B9%B2%E8%B4%A7_03DH%E5%BB%BA%E6%A8%A1/3_07DH%E7%A4%BA%E6%84%8F%E5%9B%BE.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;今天，我们要把目光收回到机器人身上，看看我们怎样用一系列坐标系来描述一个链式机械臂，机器人学常说的DH参数（Denavit–Hartenberg parameters）又是什么。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;1-相邻关节的坐标变换&#34;&gt;1 相邻关节的坐标变换&lt;/h3&gt;
+&lt;p&gt;在以往的一篇文章()中，链式机器人可以由关节-连杆-关节-连杆-&amp;hellip;&amp;hellip;-连杆-末端执行器（joint - link - joint - link - &amp;hellip;&amp;hellip; - link - end effector ）这样的结构来描述。这就需要知道由连杆相连的两个关节，怎么描述它们的位置/朝向(position/orientation)关系？&lt;/p&gt;
+&lt;p&gt;假设一个关节固定，另一个关节在自由空间中相对于这个固定关节将会有六个自由度；若将每个关节固连一个坐标系，则可以由上一篇文章所讲的齐次变换来描述关节间的位置关系。但是这样做既无法很好地描述一个独特结构而非简单自由刚体的链式机械臂系统、很难将坐标变换与关节本身的参数（旋转关节的旋转角度、平移关节的平移距离）联系起来。&lt;/p&gt;
+&lt;p&gt;直接使用齐次坐标变换不顾机械臂本省的结构限制，这种表达方式是冗余低效的。如果&lt;strong&gt;根据关节的轴之间的关系限制坐标系的选择&lt;/strong&gt;，可以得到更高效的表达方法。&lt;/p&gt;
+&lt;h3 id=&#34;2-dh参数与坐标系确定frame-attachment&#34;&gt;2 DH参数与坐标系确定(frame attachment)&lt;/h3&gt;
+&lt;h4 id=&#34;21-含义&#34;&gt;2.1 含义&lt;/h4&gt;
+&lt;p&gt;&lt;strong&gt;DH参数指的是用四个参数表达两对关节连杆之间位置角度关系的机械臂数学模型和坐标系确定系统&lt;/strong&gt;。它通过&lt;strong&gt;限制原点位置与X轴的方向&lt;/strong&gt;，人为地减少两个自由度，因此它只需要用四个参数即可表达关节之间原本是六个自由度地坐标变换。它是很&lt;strong&gt;通用的convention（惯例）&lt;/strong&gt;，而不是一个知识点。&lt;/p&gt;
+&lt;p&gt;DH中四个参数的物理含义:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;link length（连杆长度）&lt;/strong&gt;：两个关节的轴（旋转关节的旋转轴、平移关节的平移轴）之间的公共法线长度&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;link twist (连杆扭转)&lt;/strong&gt;：一个关节的轴相对于另一关节的轴绕它们的公共法线旋转的角度&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;link offset (连杆偏移)&lt;/strong&gt;：一个关节与下一个关节的公共法线和它与上一个关节的公共法线沿这个关节轴的距离&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;joint angle (关节转角)&lt;/strong&gt;：一个关节与下一个关节的公共法线和它与上一个关节的公共法线绕这个关节轴的转角&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;结合坐标系进行理解，会清楚很多。&lt;/p&gt;
+&lt;p&gt;首先最重要的两条”线“：一个关节的&lt;strong&gt;轴(axis)&lt;/strong&gt;、一个关节的轴与相邻关节轴之间的&lt;strong&gt;公共法线(common normal)&lt;/strong&gt;。&lt;strong&gt;在DH参数体系中，将axis定为Z轴；common normal定为X轴，且X轴的方向为从本关节指向下一个关节&lt;/strong&gt;。&lt;/p&gt;
+&lt;h4 id=&#34;22-示例&#34;&gt;2.2 示例&lt;/h4&gt;
+&lt;p&gt;以RPRR机器人为例&lt;/p&gt;
+&lt;p&gt;Ⅰ.确定原点&lt;/p&gt;
+&lt;p&gt;首先无论是确定原点还是坐标轴，都是&lt;strong&gt;从第一个关节开始&lt;/strong&gt;逐一确定的。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;原点为本关节与下一关节公法线和本关节轴的交点&lt;/strong&gt;，如果是最后一个关节则为前一个关节与本关节公共法线与本关节轴的交点。该规则看似简单，但实际应用中需要注意，如下图的 $ O_2$，这里第二个关节与第三个关节的轴相交了，所以它们的公共法线就在轴的交点上。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/robotics/%E5%B9%B2%E8%B4%A7_03DH%E5%BB%BA%E6%A8%A1/3_01%E7%A1%AE%E5%AE%9A%E5%8E%9F%E7%82%B9.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;Ⅱ.确定Z轴&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Z轴从原点出发，与关节轴重合&lt;/strong&gt;。显然，每个关节的Z轴都可以有两个选择（如上图一二四关节可以选择上或下，三关节可以选择往外或往内），由自己自由决定；但在地面坐标系和末端执行器坐标系已知的情况下，我们通常希望当前Z轴的夹角与上一个已经确定Z轴的夹角能是0°就不要是180°，最后一个关节的Z轴若能与end effector的Z轴重合则选择让它们重合。则Z轴标注如下:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/robotics/%E5%B9%B2%E8%B4%A7_03DH%E5%BB%BA%E6%A8%A1/3_02%E7%A1%AE%E5%AE%9AZ%E8%BD%B4.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;注意图中的Z3既可以选择指向屏幕外，也可以选择指向屏幕内。&lt;/p&gt;
+&lt;p&gt;Ⅲ.确定X轴&lt;/p&gt;
+&lt;p&gt;如上文所说，&lt;strong&gt;X轴为本关节指向下一关节轴的公共法线，与两个关节轴都垂直&lt;/strong&gt;。对于大部分情况这是非常清楚的，但两个Z轴相交时无法确定X轴的方向，这时候由一个公约（convention）确定：&lt;strong&gt;选择X轴的方向使得当前Z轴与下一个Z轴的夹角（即当前关节与下一个关节的link twist）为正且小于180°&lt;/strong&gt;（只对Z轴相交时使用，角度的正负由右手规则确定，大拇指指向方向为X轴正向）。而当两个Z轴平行或重合时，X轴的选择比较随意，通常尽量让它与前或后一致。对于最后一个关节，尽量选择与end effecor更接近的坐标系。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/robotics/%E5%B9%B2%E8%B4%A7_03DH%E5%BB%BA%E6%A8%A1/3_03%E7%A1%AE%E5%AE%9AX%E8%BD%B4.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;一旦原点、Z轴和X轴都确定，我们可以根据&lt;strong&gt;右手定则&lt;/strong&gt;确定Y轴，所有关节的坐标系也就唯一确定了。&lt;/p&gt;
+&lt;h3 id=&#34;3-dh参数表&#34;&gt;3 DH参数表&lt;/h3&gt;
+&lt;p&gt;确定坐标系以后，我们可以用更简洁的方法来表示上面很绕口的四个参数：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/robotics/%E5%B9%B2%E8%B4%A7_03DH%E5%BB%BA%E6%A8%A1/3_04DH%E8%A1%A8%E8%BE%BE%E5%BC%8F.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;对照上面RPRR机械臂的图，把每一个关节的各项参数找出来。通常我们把这些参数做成一个表（注意绕某个轴旋转的角度我们采用右手定则确定正方向）：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/robotics/%E5%B9%B2%E8%B4%A7_03DH%E5%BB%BA%E6%A8%A1/3_05DH%E5%8F%82%E6%95%B0%E8%A1%A8.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;除了$\theta_1, \  d_2, \ \theta_2, \ \theta_4  $为关节自身变量外，其他对应变量如下图所示&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/robotics/%E5%B9%B2%E8%B4%A7_03DH%E5%BB%BA%E6%A8%A1/3_06%E7%A4%BA%E4%BE%8BDH%E5%8F%82%E6%95%B0.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h3 id=&#34;4-小结&#34;&gt;4 小结&lt;/h3&gt;
+&lt;p&gt;通过这篇文章，可以弄清楚以下问题：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;DH参数如何通过限制坐标轴的选择，用四个参数表示六个自由度的空间变换？&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;什么样的坐标变换是DH参数无法表达的？&lt;code&gt;如：一个坐标系的X轴与另一个坐标系的Z轴平行&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;确定每个关节坐标系和DH参数的步骤是什么？&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>【机器人学基础知识】2、位置角度平移旋转，“乱七八糟”的坐标变换</title>
+      <link>https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_02%E4%BD%8D%E7%BD%AE%E8%A7%92%E5%BA%A6%E5%B9%B3%E7%A7%BB%E6%97%8B%E8%BD%AC%E4%BB%A5%E5%8F%8A%E5%9D%90%E6%A0%87%E5%8F%98%E6%8D%A2/</link>
+      <pubDate>Tue, 07 Jan 2020 14:03:23 +0800</pubDate>
+      
+      <guid>https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_02%E4%BD%8D%E7%BD%AE%E8%A7%92%E5%BA%A6%E5%B9%B3%E7%A7%BB%E6%97%8B%E8%BD%AC%E4%BB%A5%E5%8F%8A%E5%9D%90%E6%A0%87%E5%8F%98%E6%8D%A2/</guid>
+      
+        <description>&lt;blockquote&gt;
+&lt;p&gt;今天我们要讲所有学习机器人学的人都需要具备的一项基本技能——坐标变换。看明白这篇文章，你需要一点基础的向量和矩阵知识，不用多，只要知道&lt;strong&gt;向量的加减，点乘（内积）；矩阵的定义、加减乘逆以及转置；还有矩阵与向量的乘法&lt;/strong&gt;就够了。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/robotics/%E5%B9%B2%E8%B4%A7_02%E4%BD%8D%E7%BD%AE%E8%A7%92%E5%BA%A6%E5%B9%B3%E7%A7%BB%E6%97%8B%E8%BD%AC%E4%BB%A5%E5%8F%8A%E5%9D%90%E6%A0%87%E5%8F%98%E6%8D%A2/coordinateTransfromImage.jpg&#34; alt=&#34;coordinateTransfromImage&#34; title=&#34;天天&#34;&gt;&lt;/p&gt;
+&lt;p&gt;机器人学为什么需要坐标变换呢？因为控制一个机械臂的根本，就是弄明白每一个关节的joint position与end effector的position and orientation的关系，用更简洁的话来讲，就是joint space与operational space之间的互相映射关系。这里有两个小说明：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;不仅仅是位置/角度的映射关系，也包括&lt;strong&gt;速度、加速度、力或扭矩的映射关系&lt;/strong&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;所有直接用英文而没有翻译的词汇，都是在第一篇文章中解释过的重要概念&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;1-坐标系coordinate-system&#34;&gt;1 坐标系（coordinate system）&lt;/h3&gt;
+&lt;p&gt;描述空间位置、速度和加速度，大部分都是用笛卡尔坐标系，也就是大家熟知的三个互相垂直的坐标轴组成的坐标系。我只想强调几个地方：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;像题图那样的彩色坐标系，若无特别说明，都是&lt;strong&gt;rgb(红绿蓝）依次对应xyz&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;当我们说绕某一个轴旋转多少角度时，正方向的确定用&lt;strong&gt;右手定则&lt;/strong&gt;，如下图：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/robotics/%E5%B9%B2%E8%B4%A7_02%E4%BD%8D%E7%BD%AE%E8%A7%92%E5%BA%A6%E5%B9%B3%E7%A7%BB%E6%97%8B%E8%BD%AC%E4%BB%A5%E5%8F%8A%E5%9D%90%E6%A0%87%E5%8F%98%E6%8D%A2/rightHandRuleImage.png&#34; alt=&#34;rightHandRuleImage&#34;&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;我们用的都是&lt;strong&gt;右手坐标系&lt;/strong&gt;，即绕&lt;em&gt;z&lt;/em&gt;轴旋转时，&lt;!-- raw HTML omitted --&gt;&lt;em&gt;y&lt;/em&gt;轴在&lt;em&gt;x&lt;/em&gt;轴的+90度方向&lt;!-- raw HTML omitted --&gt;（注：逆时针为正方向）&lt;/li&gt;
+&lt;li&gt;提到某一个坐标系，比如坐标系A时，我们说&lt;strong&gt;frame{A}&lt;/strong&gt;，用&lt;strong&gt;大括号&lt;/strong&gt;表示&lt;/li&gt;
+&lt;li&gt;提到任意需要指明参照系的量时，我们&lt;strong&gt;将坐标系写在左上角&lt;/strong&gt;，如坐标系{A}中&lt;strong&gt;点P&lt;/strong&gt;的位置向量写作${^A}P$&lt;/li&gt;
+&lt;li&gt;我们&lt;strong&gt;将物体/点的名称写在右下角&lt;/strong&gt;，如坐标系{A}中&lt;strong&gt;点O&lt;/strong&gt;的位置向量写作$^Ap_O$&lt;/li&gt;
+&lt;li&gt;提到一个量是相对于某个坐标系时，比如{A}，我们说&lt;strong&gt;with respect to&lt;/strong&gt; {A}，或简写为&lt;strong&gt;w.r.t&lt;/strong&gt; {A}。&lt;/li&gt;
+&lt;li&gt;本文及以后的文章中&lt;strong&gt;所有向量都是列向量，所有向量的转置都是行向量&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;以上是一套比较常用的标记系统(convention)，始终遵循同一套convention有助于在混乱的坐标变换中找到清晰的思路；如果你已经有常用的记法，那么保持你自己的记法也是可以的&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;2-位置position平移变换translation&#34;&gt;2 位置（position）、平移变换（translation）&lt;/h3&gt;
+&lt;p&gt;位置是最简单的，用一个&lt;strong&gt;三维向量&lt;/strong&gt;来表示，想必不用多讲。唯一需要注意的是，讨论一个位置向量&lt;strong&gt;一定要指明参照坐标系&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;平移变换是坐标系空间位置的变换&lt;/strong&gt;，可以&lt;strong&gt;用坐标系原点O的位置向量表示&lt;/strong&gt;，如图所示。多次平移变换也很简单，直接向量相加就可以了&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/robotics/%E5%B9%B2%E8%B4%A7_02%E4%BD%8D%E7%BD%AE%E8%A7%92%E5%BA%A6%E5%B9%B3%E7%A7%BB%E6%97%8B%E8%BD%AC%E4%BB%A5%E5%8F%8A%E5%9D%90%E6%A0%87%E5%8F%98%E6%8D%A2/translationImage.jpg&#34; alt=&#34;translationImage&#34;&gt;&lt;/p&gt;
+&lt;p&gt;求空间中一个点的位置在经过平移变换后的坐标系B中的坐标(point coordinate &lt;strong&gt;with respect to&lt;/strong&gt; frame{B})，看图很快就能明白，就不多讲了。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/robotics/%E5%B9%B2%E8%B4%A7_02%E4%BD%8D%E7%BD%AE%E8%A7%92%E5%BA%A6%E5%B9%B3%E7%A7%BB%E6%97%8B%E8%BD%AC%E4%BB%A5%E5%8F%8A%E5%9D%90%E6%A0%87%E5%8F%98%E6%8D%A2/pointPositionImage.jpg&#34; alt=&#34;pointPositionImage&#34;&gt;&lt;/p&gt;
+&lt;h3 id=&#34;3-角度方向orientation旋转变换rotation&#34;&gt;3 角度/方向（orientation）、旋转变换（rotation）&lt;/h3&gt;
+&lt;p&gt;相比于位置，Orientation的表示方法就麻烦多了。在讨论Orientation之前，有必要说明一点：要表示一个物体的三维位置和朝向，我们通常都在物体上“附上”一个跟着它动跟着它转的坐标系(&lt;strong&gt;attach a frame&lt;/strong&gt; to the object)，然后通过描述这个坐标系与参考坐标系的关系来描述这个物体。所以，&lt;strong&gt;描述一个物体在坐标系中的位置和朝向，总是可以等效为描述坐标系之间的关系&lt;/strong&gt;。因此我们这里讲角度/方向表示法，只要讲两个坐标系之间的关系就可以了。&lt;/p&gt;
+&lt;p&gt;要知道一个坐标系相对于另一个坐标系如何旋转、旋转了多少，应该怎么做呢？我们先从二维的情况看起：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/robotics/%E5%B9%B2%E8%B4%A7_02%E4%BD%8D%E7%BD%AE%E8%A7%92%E5%BA%A6%E5%B9%B3%E7%A7%BB%E6%97%8B%E8%BD%AC%E4%BB%A5%E5%8F%8A%E5%9D%90%E6%A0%87%E5%8F%98%E6%8D%A2/2DRotationImage.jpg&#34; alt=&#34;2DRotationImage&#34;&gt;&lt;/p&gt;
+&lt;p&gt;希望对你来说上图可以轻易看懂:)，因为我们需要在它的基础上扩展到三维的情况&lt;/p&gt;
+&lt;h4 id=&#34;31-旋转矩阵&#34;&gt;3.1 旋转矩阵&lt;/h4&gt;
+&lt;p&gt;空间三维朝向相对来讲复杂得多，因为&lt;strong&gt;平面上坐标的朝向只能有一个自由度&lt;/strong&gt;，即绕垂直平面的轴旋转；而空间中物体的朝向会有三个自由度。不过，如果我们从上图的第一种方法出发，就可以轻松写出一个3×3的R矩阵，我们叫它&lt;strong&gt;旋转矩阵(Rotation matrix)&lt;/strong&gt;：
+$$
+{}^A_BR=[{}^A\vec{x}_B \quad  {}^A\vec{y}_B \quad {}^A\vec{z}_B]
+$$
+这个式子太重要了！&lt;strong&gt;它表明从{B}到{A}的旋转矩阵的每一列都是{B}的坐标轴单位向量在{A}中的表示(wrt {A})&lt;/strong&gt;。很多人可能用旋转矩阵进行各种计算，却始终弄不清楚它的物理意义是什么。记住一个R矩阵究竟表示什么，很多情况下你甚至可以轻松写出它来：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/robotics/%E5%B9%B2%E8%B4%A7_02%E4%BD%8D%E7%BD%AE%E8%A7%92%E5%BA%A6%E5%B9%B3%E7%A7%BB%E6%97%8B%E8%BD%AC%E4%BB%A5%E5%8F%8A%E5%9D%90%E6%A0%87%E5%8F%98%E6%8D%A2/3DRotationImage.jpg&#34; alt=&#34;3DRotationImage&#34;&gt;&lt;/p&gt;
+&lt;p&gt;看明白没？&lt;/p&gt;
+&lt;p&gt;从这个式子出发，我们可以很快发现旋转矩阵的很多神奇之处，比如它是一个正交矩（&lt;strong&gt;orthonormal matrix&lt;/strong&gt;，不仅正交，且每一行每一列的长度都为1），这意味着它的转置等于求逆：&lt;/p&gt;
+&lt;p&gt;由&lt;/p&gt;
+&lt;p&gt;$$
+^A_BR = [{^A}\vec{x}_B \quad  {^A}\vec{y}_B \quad {^A}\vec{z}_B]
+$$&lt;/p&gt;
+&lt;p&gt;可得&lt;/p&gt;
+&lt;p&gt;$$
+{}^A_BR^T = \begin{bmatrix}
+{}^A\vec{x}^T_B \\&lt;br&gt;
+{}^A\vec{y}^T_B \\&lt;br&gt;
+{}^A\vec{z}^T_B
+\end{bmatrix} 
+由于坐标轴正交且为单位向量
+$$&lt;/p&gt;
+&lt;p&gt;$$
+\begin{align}
+{}^A_BR^T {}^A_BR &amp;amp; = \begin{bmatrix} 
+{{}^A\vec{x}_B}^T \\&lt;br&gt;
+{{}^A\vec{y}_B}^T \\&lt;br&gt;
+{{}^A\vec{z}_B}^T
+\end{bmatrix}
+[{}^A\vec{x}_B \quad  {}^A\vec{y}_B \quad {}^A\vec{z}_B] \\&lt;br&gt;
+&amp;amp; = \begin{bmatrix}
+{{}^A\vec{x}_B}^T {}^A\vec{x}_B &amp;amp; {{}^A\vec{x}_B}^T {}^A\vec{y}_B &amp;amp; {{}^A\vec{x}_B}^T {}^A\vec{z}_B \\&lt;br&gt;
+{{}^A\vec{y}_B}^T {}^A\vec{x}_B &amp;amp; {{}^A\vec{y}_B}^T {}^A\vec{y}_B &amp;amp; {{}^A\vec{y}_B}^T {}^A\vec{z}_B \\&lt;br&gt;
+{{}^A\vec{z}_B}^T {}^A\vec{x}_B &amp;amp; {{}^A\vec{z}_B}^T {}^A\vec{y}_B &amp;amp; {{}^A\vec{z}_B}^T {}^A\vec{z}_B 
+\end{bmatrix} \\&lt;br&gt;
+&amp;amp; = \begin{bmatrix}
+1 &amp;amp; 0 &amp;amp; 0\\&lt;br&gt;
+0 &amp;amp; 1 &amp;amp; 0 \\&lt;br&gt;
+0 &amp;amp; 0 &amp;amp; 1
+\end{bmatrix}
+\end{align}
+$$&lt;/p&gt;
+&lt;p&gt;注意$x^Ty$&lt;strong&gt;就是向量的内积/点乘&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;旋转矩阵将一个坐标系旋转为另一个坐标系，那么不难理解旋转矩阵的逆亦即转置可以将坐标系旋转回来。根据上面那个极其重要的式子，可以很快想到&lt;strong&gt;矩阵的每一行就是{A}的坐标轴在{B}中的表示&lt;/strong&gt;。因此，我们可以将这个式子扩展如下：&lt;/p&gt;
+&lt;p&gt;$$
+{}^A_BR = [{}^A\vec{x}_B \quad  {}^A\vec{y}_B \quad {}^A\vec{z}_B] 
+= \begin{bmatrix} 
+{{}^B\vec{x}_A}^T \\&lt;br&gt;
+{{}^B\vec{y}_A}^T \\&lt;br&gt;
+{{}^B\vec{z}_A}^T
+\end{bmatrix} 
+= {{}^B_AR}^T
+$$&lt;/p&gt;
+&lt;h4 id=&#34;32-欧拉角euler-angles转轴转角angle-axis表示法四元数quaternion&#34;&gt;3.2 欧拉角（Euler angles）、转轴转角（Angle-axis）表示法、四元数（Quaternion）&lt;/h4&gt;
+&lt;p&gt;我们说空间中的旋转有三个自由度，因此旋转矩阵是非常冗余的（9个数）。在上面二维坐标旋转的图中，除了用旋转矩阵，我们也用一个角度来表示旋转——三维的情况也类似，你总可以通过定义旋转轴和转角的方式来表示坐标系的朝向或旋转变换。Euler angles, Angle-axis和Quaternion都是常用的&lt;strong&gt;基于旋转轴和旋转角&lt;/strong&gt;的旋转表示方法，其中&lt;strong&gt;前两种用三个变量表示，Quaternion用四个变量表示&lt;/strong&gt;。Quaternion用一个冗余的变量解决了其余两种表示方法无法避免的Singularity问题，在运算插值时也比较方便，因此是计算机程序中表示旋转最常用的一种表示方法。&lt;/p&gt;
+&lt;p&gt;由于这部分内容比较多也比较复杂，我会在合适的时候专门用一篇文章详细介绍。&lt;/p&gt;
+&lt;p&gt;现在还是让我们回到旋转矩阵。求空间中一个点的位置在经过旋转变换后的坐标系A中的坐标，可以用旋转矩阵解决——因为空间中每个点的位置都是坐标轴单位向量的线性组合。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/robotics/%E5%B9%B2%E8%B4%A7_02%E4%BD%8D%E7%BD%AE%E8%A7%92%E5%BA%A6%E5%B9%B3%E7%A7%BB%E6%97%8B%E8%BD%AC%E4%BB%A5%E5%8F%8A%E5%9D%90%E6%A0%87%E5%8F%98%E6%8D%A2/rotationImage.jpg&#34; alt=&#34;rotationImage&#34;&gt;&lt;/p&gt;
+&lt;p&gt;我们说连续的平移变换只需要向量相加，那么连续的旋转变换呢？只要矩阵相乘就可以了：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/robotics/%E5%B9%B2%E8%B4%A7_02%E4%BD%8D%E7%BD%AE%E8%A7%92%E5%BA%A6%E5%B9%B3%E7%A7%BB%E6%97%8B%E8%BD%AC%E4%BB%A5%E5%8F%8A%E5%9D%90%E6%A0%87%E5%8F%98%E6%8D%A2/seriesRotationImage.jpg&#34; alt=&#34;seriesRotationImage&#34;&gt;&lt;/p&gt;
+&lt;p&gt;看了这么多旋转矩阵，你一定明白我们始终把参照坐标系写在左上角的原因了；如果你不坚持用一种convention，那么你很快就会迷失在坐标变换的汪洋大海中…&lt;/p&gt;
+&lt;h3 id=&#34;4-齐次坐标变换homogeneous-transformation&#34;&gt;4 齐次坐标变换（homogeneous transformation）&lt;/h3&gt;
+&lt;p&gt;有了平移和旋转，我们就可以来讲齐次坐标变换了。首先试想，求空间中一个点在经过平移+旋转变换的坐标系中的坐标应该怎么求呢？最直观的想法，可以先平移再旋转：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/robotics/%E5%B9%B2%E8%B4%A7_02%E4%BD%8D%E7%BD%AE%E8%A7%92%E5%BA%A6%E5%B9%B3%E7%A7%BB%E6%97%8B%E8%BD%AC%E4%BB%A5%E5%8F%8A%E5%9D%90%E6%A0%87%E5%8F%98%E6%8D%A2/transformationImage.jpg&#34; alt=&#34;transformationImage&#34;&gt;&lt;/p&gt;
+&lt;p&gt;你可能会想，那我能不能把这整个过程用一个矩阵表示呢？齐次坐标变换矩阵(Transformation matrix)就是为了这个目的：&lt;/p&gt;
+&lt;p&gt;$$
+{}^A_BT = \left[
+\begin{array}{c|c} 
+{}^A_BR &amp;amp; {}^A\vec{p}_{OB} \\ \hline 
+0 \quad 0 \quad 0 &amp;amp; 1
+\end{array} 
+\right] \\&lt;br&gt;
+\begin{bmatrix}
+{}^A\vec{p} \\&lt;br&gt;
+1
+\end{bmatrix} = {}^A_BT \begin{bmatrix}
+{}^B\vec{p} \\&lt;br&gt;
+1
+\end{bmatrix}
+$$&lt;/p&gt;
+&lt;p&gt;相信你可以看出上面两张图的式子其实是一样的，只不过第二张图表示成了T矩阵的形式。&lt;/p&gt;
+&lt;p&gt;T矩阵在一个4×4的矩阵中同时表示旋转变换和平移变换，它方便了坐标变换的逆运算、多坐标系的连续变换；规则与旋转矩阵类似：
+$$
+{}^B_AT = {}^A_BT^{-1} = \left[
+\begin{array}{c|c} 
+{{}^A_BR}^T &amp;amp; -{{}^A_B}R^T \cdot {}^A\vec{p}_{OB} \\ \hline 
+0 \quad 0 \quad 0 &amp;amp; 1
+\end{array} 
+\right]
+$$&lt;/p&gt;
+&lt;p&gt;建议你自己尝试推导。&lt;/p&gt;
+&lt;h3 id=&#34;5-小结&#34;&gt;5 小结&lt;/h3&gt;
+&lt;p&gt;这篇文章主要讲解的概念有：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;坐标系(coordinate system）&lt;/li&gt;
+&lt;li&gt;平移变换(translation)&lt;/li&gt;
+&lt;li&gt;旋转变换(rotation)&lt;/li&gt;
+&lt;li&gt;齐次坐标变换(homogenous transformation)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;注：&lt;strong&gt;永远可以把坐标系中一个点的旋转平移，等效为坐标系本身相反方向的旋转平移&lt;/strong&gt;&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>【机器人学基础知识】1、从RP关节入门机器人学</title>
+      <link>https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_01%E4%BB%8Erp%E5%85%B3%E8%8A%82%E5%85%A5%E9%97%A8%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%AD%A6/</link>
+      <pubDate>Fri, 03 Jan 2020 16:01:23 +0800</pubDate>
+      
+      <guid>https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_01%E4%BB%8Erp%E5%85%B3%E8%8A%82%E5%85%A5%E9%97%A8%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%AD%A6/</guid>
+      
+        <description>&lt;blockquote&gt;
+&lt;p&gt;本科阶段的机器人竞赛制作的机器人、生活中见到的扫地机器人，它们基本都是轮式的移动机器人；移动机器人本身运动控制比较简单，难点在于对外界的感知理解，因此相关研究更多的是人工智能、机器视觉、自然语言处理这一类。然而移动机器人除了移动、简单的搬运货物等功能，缺乏真正的&lt;strong&gt;操作（manipulate）外界物体的能力&lt;/strong&gt;；对这种能力的需求，就是机械臂存在的意义，也是我们学习它的意义。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;狭义的机器人学，其基础研究对象是链式(chain)机器人，它们最基本的组成部分，就是关节(Joint)和连杆(Link)。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;连杆是连接不同关节的机械结构；链式机器人，就是可以用关节-连杆-关节-连杆-……-末端执行机构(end effector)这样的公式表达其结构的机器人。除了链式，还会有树状（如人形机器人，humanoiid robot）、环状机器人（如平行机器人，parallel robot）。&lt;/p&gt;
+&lt;h3 id=&#34;1-基础关节&#34;&gt;1 基础关节&lt;/h3&gt;
+&lt;p&gt;RP关节是组成机械臂/机器人的基础，R是&lt;strong&gt;旋转关节（Revolute Joint）&lt;/strong&gt;，P是&lt;strong&gt;平移关节（Prismatic Joint）&lt;/strong&gt;。请注意，基础关节肯定是只有一个&lt;strong&gt;自由度&lt;/strong&gt;（Degree of freedom/DOF）的，旋转关节只绕某一个轴旋转，平移关节只在某一条直线上运动。因为更高维度的关节（比如有三个自由度的球形关节，Spherical Joint）一定可以由多个基础关节表示。&lt;/p&gt;
+&lt;p&gt;现在可以来看看PPP笛卡尔坐标机器人：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/robotics/%E5%B9%B2%E8%B4%A7_01%E4%BB%8ERP%E5%85%B3%E8%8A%82%E5%85%A5%E9%97%A8%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%AD%A6/PPPImage.jpg&#34; alt=&#34;PPPImage&#34;&gt;&lt;/p&gt;
+&lt;p&gt;无论它长怎样，你都可以清楚地看到它有三个空间上互相垂直的平移关节，正如最常用的笛卡尔坐标系。这种情况下，我们说这个机器人有三个关节，是三轴机器人，关节空间(joint space)有三个自由度，end effector的操作空间(operational space)同样有三个平动（位置）自由度。&lt;/p&gt;
+&lt;p&gt;joint space和operational space是机器人学非常重要的概念：&lt;strong&gt;joint space用来描述每个关节的位置（P关节）或角度（R关节）；operational space用来描述end effector的位置(position)和朝向(orientation)&lt;/strong&gt;。举例来说，如果你需要end effector沿着空间某一条直线走，那么你需要使用operational space来描述；而如果你需要机器人每一个关节都按照你计算好的角度/位置运动，那么你需要用joint space来描述。&lt;/p&gt;
+&lt;p&gt;现在再回头SCARA机器人（结构为RRPR）：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/robotics/%E5%B9%B2%E8%B4%A7_01%E4%BB%8ERP%E5%85%B3%E8%8A%82%E5%85%A5%E9%97%A8%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%AD%A6/SCARAImage.jpg&#34; alt=&#34;SCARAImage&#34;&gt;&lt;/p&gt;
+&lt;p&gt;可以很明显地看出，P关节是唯一能让end effector在竖直方向移动的关节，剩下的三个旋转关节，前两个可以确定end effector在水平面上的位置，最后一个再调整方向……笛卡尔和SCARA机器人，都属于joint space和operational space的映射关系比较简单的机器人；对于复杂一些的机器人，比如后面会出现的由6个R关节组成的PUMA，它们的关系就不是这么简单了。
+顺便提一下，&lt;strong&gt;空间中的自由刚体有六个自由度，三个平动、三个转动。&lt;/strong&gt;&lt;/p&gt;
+&lt;h3 id=&#34;2-结构图&#34;&gt;2 结构图&lt;/h3&gt;
+&lt;p&gt;为了更直观地表明机器人的结构，不知道谁发明了两类关节符号，画出了如题图那样的机械臂结构图。图中圆形表示的R关节旋转轴垂直于屏幕。P关节却没有垂直屏幕的表示方法——发明人很任性地说，除了PPP，谁需要这个，你把机器人转个个儿就都能画了。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/robotics/%E5%B9%B2%E8%B4%A7_01%E4%BB%8ERP%E5%85%B3%E8%8A%82%E5%85%A5%E9%97%A8%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%AD%A6/jointStructureImage.jpg&#34; alt=&#34;jointStructureImage&#34;&gt;&lt;/p&gt;
+&lt;h3 id=&#34;3-冗余自由度kinematic-redundancy&#34;&gt;3 冗余自由度（kinematic redundancy）&lt;/h3&gt;
+&lt;p&gt;学会看结构，我们要能来看点有趣的内容了。人的手臂有七个（基础）关节，你能数出来吗？——别看手机了，现在动动你的肩膀、你的手肘、你的手腕，数一数它们都有几个基础关节？&lt;/p&gt;
+&lt;p&gt;人体的手臂结构图如下所示（耸肩可能可以算一个P关节，可是人极少用它来完成什么操作，因此忽略不计）：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/robotics/%E5%B9%B2%E8%B4%A7_01%E4%BB%8ERP%E5%85%B3%E8%8A%82%E5%85%A5%E9%97%A8%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%AD%A6/armStructureImage.png&#34; alt=&#34;armStructureImage&#34;&gt;&lt;/p&gt;
+&lt;p&gt;只是为了更直观地表现头和手在哪里而已……&lt;/p&gt;
+&lt;p&gt;我们前面说，空间刚体有六个自由度，PPP的joint space有3个自由度，operational space也有3个自由度；SCARA的joint space有4个自由度，operational space也有4个自由度；那么这里，人手臂的joint space有7个自由度，operational space有几个自由度呢？——答案是&lt;strong&gt;6个&lt;/strong&gt;，因为operational space是物理空间，在这个空间里刚体不可能有更多的自由度了。&lt;/p&gt;
+&lt;p&gt;不太严谨地说，这种joint space的自由度比operational space多的情况，就可称为冗余自由度(redundancy)。&lt;/p&gt;
+&lt;p&gt;对于冗余自由度最直观的理解，就是你用你的手握紧近处一个固定的东西（这时在你的operational space，你的手的位置和角度都确定了），你的身体也固定不动，这种情况下，你的手臂（手肘）竟然没有卡死还能动！&lt;/p&gt;
+&lt;p&gt;冗余自由度绝对是大自然赋予人类的伟大创造。在机器人界，冗余自由度通常意味着更高的&lt;strong&gt;灵活性&lt;/strong&gt;。许多研究利用机械臂的冗余自由度实现避障(obstacle avoidance)、或避免自己撞到自己(self-collision avoidance)；防止超出关节可运动范围的限制(joint limit)；或防止机械臂进入奇异点(singularity)，关于奇异点，我们下面很快会讲到。&lt;/p&gt;
+&lt;p&gt;然而，虽然人类控制自己的手臂去完成各种任务是一件几乎完全不用经过大脑的事，控制一个有冗余自由度的机械臂却不那么简单。直观上说，当一个机械臂有冗余自由度时，对应同一个end effector position and orientation的joint position（这是逆运动学研究的内容，即inverse kinematics）通常有无数个解；如何解决这个问题，在无数个解中找出最合理的那一个，已经是机器人学高级阶段才会学习到的内容。&lt;/p&gt;
+&lt;p&gt;最后还要说，&lt;strong&gt;冗余自由度其实是一个相对的概念&lt;/strong&gt;。更确切地说，是一个joint space相对于任务空间(task space)的概念。那什么是task space呢？顾名思义，如果你的任务是要在一个平面内定位，那么你的任务空间就需要两个自由度；如果你的任务是要在三维世界中确定朝向，那么你的任务空间就需要三个自由度。严谨地说，&lt;strong&gt;当可用于完成任务的关节空间自由度大于任务空间自由度时，我们就称之为redundancy&lt;/strong&gt;。&lt;/p&gt;
+&lt;h3 id=&#34;4-奇异点&#34;&gt;4 奇异点&lt;/h3&gt;
+&lt;p&gt;我们前面提到redundancy可以用来避免进入奇异点，奇异点是什么，又为什么需要避免呢？&lt;/p&gt;
+&lt;p&gt;试试看，当你伸直手臂、并把你的手臂和桌子边缘一条直线重合时，若保持身体不动，你能让你的手沿着这条直线前进或后退吗？我们前面说，人的手（即人手臂的end effector）是具有全部6个自由度的，为什么在这个时候，它在与手臂平行的方向完全无法运动了呢？&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;像这种机械臂的end effector失去了某个方向的自由度，在该方向上运动速度只能为0、该方向上的力/扭矩全完全由机械结构承担（而不需要关节上的电机/肌肉等actuator出力）的情况，就称为kinematic singularity。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;除了伸直手臂这一个singularity（我们称为elbow lock，肘部奇点），机械臂的世界还有很多singularity的情况。比如很经典的wrist lock（腕部奇点），工业上通常称为第4-第6轴平行产生奇异点（如果你看第二张图一个经典工业机械臂PUMA的示意图，里面也出现了wrist lock，正是由第4-第6轴平行产生），此时end effector失去了在垂直屏幕方向运动的自由度。再比如overhead lock（顶置奇点）, 通常是当第4关节位置与第1关节旋转轴重合时产生，此时end effector同样只能在屏幕面上运动，无法在垂直屏幕的方向运动；你可以把手举高让手腕与肩膀在同一直线上，然后试着在垂直手臂平面的方向移动手腕感受一下。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/robotics/%E5%B9%B2%E8%B4%A7_01%E4%BB%8ERP%E5%85%B3%E8%8A%82%E5%85%A5%E9%97%A8%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%AD%A6/wristLockImage.png&#34; alt=&#34;wristLockImage&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/robotics/%E5%B9%B2%E8%B4%A7_01%E4%BB%8ERP%E5%85%B3%E8%8A%82%E5%85%A5%E9%97%A8%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%AD%A6/overHeadLockImage.jpg&#34; alt=&#34;overHeadLockImage&#34;&gt;&lt;/p&gt;
+&lt;p&gt;在机械臂的线性代数世界里，redundancy意味着线性方程有无数个解，而singularity则意味着某个矩阵（雅可比矩阵）的降秩（从而不可逆、线性方程无解）。更重要的是，当机器人接近singularity时，这个矩阵也越来越接近不可逆，此时由operational space的速度来计算joint space的速度，可能会得到接近无限大的计算结果；这种情况对于机器人来说，当然是非常危险。&lt;/p&gt;
+&lt;p&gt;以上讲的所有东西都只是为了建立直观印象，窥探机器人学里的趣味与难题。&lt;strong&gt;要真正学好机器人学，最终还得从线性代数的角度去理解&lt;/strong&gt;。从下一篇标明干货的文章开始，我们要拿起线性代数这个工具，从坐标变换开始，到描述机器人关节和连杆关系的DH参数，到正运动学(forward kinematics)、逆运动学(inverse kinematics)和动力学(dynamics)；走进机器人学的数学世界，才算真正走进了机器人学。&lt;/p&gt;
+&lt;h3 id=&#34;5-小结&#34;&gt;5 小结&lt;/h3&gt;
+&lt;p&gt;这篇文章介绍了一些重要概念：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;revolute joint，prismatic joint，end effector&lt;/li&gt;
+&lt;li&gt;degree of freedom&lt;/li&gt;
+&lt;li&gt;joint position，end effector position / orientation&lt;/li&gt;
+&lt;li&gt;joint space，operation space，task space&lt;/li&gt;
+&lt;li&gt;redundancy&lt;/li&gt;
+&lt;li&gt;singularity&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;必须要掌握。&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>B样条曲线</title>
+      <link>https://littlethinking.cn/post/robotics/b%E6%A0%B7%E6%9D%A1%E6%9B%B2%E7%BA%BF/</link>
+      <pubDate>Thu, 19 Dec 2019 16:01:23 +0800</pubDate>
+      
+      <guid>https://littlethinking.cn/post/robotics/b%E6%A0%B7%E6%9D%A1%E6%9B%B2%E7%BA%BF/</guid>
+      
+        <description>&lt;p&gt;B 样条曲线是在 Bezier 曲线基础上发展起来的一类曲线，它客服了 Bezier 曲线整体控制性所带来的不便，最常用的是二次与三次 B 样条曲线。&lt;/p&gt;
+&lt;h2 id=&#34;1-什么是样条&#34;&gt;1 什么是样条&lt;/h2&gt;
+&lt;p&gt;样条（spline）二字，是从英文翻译过来的。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;实际应用中，样条是一根富有弹性的细木条或塑料条。在应用 CAD/CAM 技术以前，航空、船舶和汽车制造业普遍采用手工绘制自由曲线。绘图时用压铁使样条通过指定的形值点（样点），再适当地调整压铁，改变样条形态，直到符合设计要求。所以在绘图术语中，样条是通过一组指定点集而生成平滑曲线的柔性带。样条曲线（spline curve）原指用这种方式绘制的曲线。&lt;/li&gt;
+&lt;li&gt;从力学角度考虑，样条可看做一弹性细梁，压铁是作用在梁上的集中载荷。由此，设计样条曲线的过程可抽象为：求弹性细梁在外加集中载荷作用下产生的弯曲变形。&lt;/li&gt;
+&lt;li&gt;在数学上使用分段的三次多项式函数来描绘这种曲线，其中各曲线段的连接处有连续的一次和二次导数。&lt;/li&gt;
+&lt;li&gt;在计算机图形学中，样条曲线指由多项式曲线段连接而成的曲线，在每段的边界处满足特定的连续性条件。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;2-bezier-曲线&#34;&gt;2 Bezier 曲线&lt;/h2&gt;
+&lt;h3 id=&#34;21-bezier-曲线介绍&#34;&gt;2.1 Bezier 曲线介绍&lt;/h3&gt;
+&lt;p&gt;贝塞尔曲线是这样的一条曲线，它是依据四个位置任意的点坐标绘制出的一条光滑曲线。在历史上，研究贝塞尔曲线的人最初是按照已知曲线参数方程来确定四个点的思路设计出这种矢量曲线绘制法。1962 年，法国数学家 Pierre Bézier 第一个研究了这种矢量绘制曲线的方法，并给出了详细的计算公式，因此按照这样的公式绘制出来的曲线就用他的姓氏来命名是为贝塞尔曲线。&lt;/p&gt;
+&lt;h3 id=&#34;22-bezier-曲线定义&#34;&gt;2.2 Bezier 曲线定义&lt;/h3&gt;
+&lt;p&gt;给定空间&lt;em&gt;n+1&lt;/em&gt;个控制顶点$P_{i}(i=0 \rightarrow n)$，则 Bezier 曲线定义为：
+$$
+p(t)= \sum_{i=1}^{n} P_{i}B_{i,n}(t) \qquad  i \in [0,1]
+$$
+其中：$B_{i,n}(t)$称为基函数
+$$
+B_{i,n}(t)=\frac{n!}{i!(n-i)!}t^{i}(1-t)^{n-i}=C_{n}^{i}t^{i}(1-t)^{n-i}
+$$&lt;/p&gt;
+&lt;h3 id=&#34;23-bezier-曲线性质&#34;&gt;2.3 Bezier 曲线性质&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;端点性质：&lt;/p&gt;
+&lt;p&gt;a) $p(0)=P_{0},p(1)=P_{n}$，即曲线过而二端点；&lt;/p&gt;
+&lt;p&gt;b) $p&#39;(0)=n(P_{1}-P_{0}),p&#39;(1)=n(P_{n}-P_{n-1})$，即在二端点与控制多边形相切。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;凸包性：Bezier 曲线完成落在控制多边形的凸包内。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;对称性：由$P_{i}$与$P_{n-i}$组成的曲线,位置一致，方向相反。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;几何不变性：Bezier 曲线的形状仅仅与控制多边形各个顶点的相对位置有关，而与坐标系的选择无关。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;变差缩减性：若 Bezier 曲线的特征多边形是一个平面图形，则平面内任意直线与$p(t)$的交点个数不多于该直线与其特征多边形的交点个数，这一性质叫做变差缩减性质。&lt;/p&gt;
+&lt;p&gt;此性质反应了 Bezier 曲线 比其特征多边形的波动还小，也就是说Bezier 曲线比特征多边形的折线更光顺。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Bezier 曲线的递推公式（de Casteljau 算法）
+$$
+\begin{equation}
+P_{i}^{k} =
+\begin{cases}
+P_{i} &amp;amp; k=0 \&lt;br&gt;
+(1-t)P_{i}^{k-1} + tP_{i+1}^{k-1} &amp;amp; k=1,2,&amp;hellip;,n \quad i=0,1,&amp;hellip;,n-k
+\end{cases}
+\end{equation}
+$$
+de Casteljau 算法稳定可靠，直观简便，可以编出十分简便的程序，是计算 Bezier 曲线的基本算法和标准算法。&lt;/p&gt;
+&lt;h3 id=&#34;24-bezier-曲线缺点&#34;&gt;2.4 Bezier 曲线缺点&lt;/h3&gt;
+&lt;p&gt;Bezier 曲线在外形设计的应用中存在一些具体的不足之处。主要有一下三点：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;确定了多边形的顶点数（n个），也就决定了所定义的Bezier曲线的阶次（n-1次），这样很不灵活；&lt;/li&gt;
+&lt;li&gt;当顶点数（n）较大时，曲线的阶次将比较高。此时，多边形对曲线形状的控制将明显减弱；&lt;/li&gt;
+&lt;li&gt;Bezier 的调和函数的值，在开区间$(0,1)$内均不为0。因此，所定义的曲线在$(0&amp;lt;t&amp;lt;1)$的区间内的任何一点均要受到全部顶点的影响，即改变其中任一个顶点的位置，都将对整条曲线产生影响，因此对曲线进行局部修改是不可能的。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;3-b-样条曲线&#34;&gt;3 B 样条曲线&lt;/h2&gt;
+&lt;p&gt;为了克服在 Bezier 曲线中存在的问题，Gordon、Riesenfeld 和 Forrest 等人拓展了 Bezier 曲线，用 n 次 B 样条基函数替换了伯恩斯坦基函数，构造了 B 样条曲线。B样条曲线除了保持 Bezier 曲线所具有的优点外，还增加了可以对曲线进行局部修改这一突出的优点。除此之外，它还具有对特征多边形更逼近以及多项式阶次较低等优点。因此，B 样条曲线在外形设计中得到了更广泛的重视和应用。&lt;/p&gt;
+&lt;h3 id=&#34;31-b-样条曲线定义&#34;&gt;3.1 B 样条曲线定义&lt;/h3&gt;
+&lt;p&gt;B 样条曲线方程可写为：
+$$
+p(u)=\sum_{i=0}^{n}P_{i}N_{i,k}(u)
+$$
+其中，$P_{i}(i=0 \rightarrow n )$为控制顶点（坐标），$N_{i,k}(i=0 \rightarrow n)$为$k$次规范B样条基函数，最高次数为$k$。基函数是由一个节点矢量的非递减参数$u$的序列$U:u_{0} \leq u_{1} \leq &amp;hellip; \leq u_{n+k+1}$所决定的$k$次多项式。&lt;/p&gt;
+&lt;p&gt;B 样条的基函数通常采用Cox-deBoor递推公式：&lt;/p&gt;
+&lt;p&gt;$$
+\begin{cases}
+N_{i,0}(u)=\begin{cases}
+1 &amp;amp; \mbox{if } u_{i} \leq u \leq u_{i+1}  \&lt;br&gt;
+0 &amp;amp; \mbox{others}
+\end{cases} \&lt;br&gt;
+N_{i,k}(u)=\frac{u-u_{i}}{u_{i+k}-u_{i}}N_{i,k-1}(u)+\frac{u_{i+k+1}-u}{u_{i+k+1}-u_{i+1}}N_{i+1,k-1}(u) \&lt;br&gt;
+\mbox{define } \frac{0}{0} = 0
+\end{cases}
+$$
+上式中，$i$为节点序号，$k$为基函数的次数，共有$n+1$个控制点。注意区分节点和控制顶点，节点是在节点矢量$U$中取得，控制顶点则是坐标点，决定B样条的控制多边形。Cox-deBoor递推公式是B样条曲线的定义的核心，该部分在程序中实现可采用递归的方式。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;21
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;22
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-matlab&#34; data-lang=&#34;matlab&#34;&gt;&lt;span class=&#34;c&#34;&gt;% BaseFunction.m文件&lt;/span&gt;
+&lt;span class=&#34;k&#34;&gt;function&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;Nik_u &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;BaseFunction&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;i, k , u, NodeVector&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;c&#34;&gt;% 计算基函数Ni,k(u),NodeVector为节点向量&lt;/span&gt;
+
+&lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;k&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;==&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;       &lt;span class=&#34;c&#34;&gt;% 0次B样条&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;u&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;NodeVector&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;))&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;u&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;NodeVector&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;))&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;Nik_u&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;1.0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;else&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;Nik_u&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;0.0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;end&lt;/span&gt;
+&lt;span class=&#34;k&#34;&gt;else&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;Length1&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;NodeVector&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;k&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;NodeVector&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;Length2&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;NodeVector&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;k&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;NodeVector&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;      &lt;span class=&#34;c&#34;&gt;% 支撑区间的长度&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Length1&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;==&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;0.0&lt;/span&gt;       &lt;span class=&#34;c&#34;&gt;% 规定0/0 = 0&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;Length1&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;1.0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;end&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Length2&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;==&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;0.0&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;Length2&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;1.0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;end&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;Nik_u&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;u&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;NodeVector&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;))&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;/&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Length1&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;BaseFunction&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;k&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;u&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;NodeVector&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;c&#34;&gt;...&lt;/span&gt;
+        &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;NodeVector&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;k&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;u&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;/&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Length2&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;BaseFunction&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;k&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;u&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;NodeVector&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;span class=&#34;k&#34;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;所给程序可用于计算基函数$N_{i,k}(u)$的值，程序中对不同类型的B样条曲线区别在于节点矢量 NodeVector 的取值不同。&lt;/p&gt;
+&lt;h3 id=&#34;32-b样条曲线的分类&#34;&gt;3.2 B样条曲线的分类&lt;/h3&gt;
+&lt;p&gt;根据节点矢量中节点的分布情况不同，可以划分4种类型的B样条曲线。不同类型的B样条曲线区别主要在于节点矢量，对于具有$n+1$个控制顶点$(P_{0},P_{1},&amp;hellip;,P_{n})$的 $k $次B样条曲线，无论是哪种类型都具有$n+k+2$个节点$[u_{0},u_{1},&amp;hellip;,u_{n+k+2}]$。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;均匀B样条曲线&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;节点矢量中节点为沿参数轴均匀或等距分布。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;准均匀B样条曲线&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;其节点矢量中两端节点具有重复度$k+1$，即$u_{0}=u_{1}=&amp;hellip;=u_{k}$，$u_{n+1}=u_{n+2}=&amp;hellip;=u_{n+k+1}$，所有的内节点均匀分布，具有重复度1。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;分段Bezier曲线&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;其节点矢量中两端节点的重复度与类型2相同，为$k+1$。不同的是内节点重复度为$k$。该类型有限制条件，控制顶点数减1必须等于次数的正整数倍，即$\frac{n}{k}=正整数$。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;一般非均匀B样条曲线&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;对任意分布的节点矢量$U=[u_{0},u_{1},&amp;hellip;,u_{n+k+1}]$，只要在数学上成立都可选取。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;33-b-样条曲线的绘制&#34;&gt;3.3 B 样条曲线的绘制&lt;/h3&gt;
+&lt;h4 id=&#34;331-节点矢量的确定&#34;&gt;3.3.1 节点矢量的确定&lt;/h4&gt;
+&lt;p&gt;不同类型的 B 样条曲线区别主要在于节点矢量，对于具有$n+1$个控制顶点$(P_{0},P_{1},&amp;hellip;,P_{n})$的 $k$ 次B样条曲线，无论是哪种类型都具有$n+k+2$个节点$([u_{0},u_{1}&amp;hellip;u_{n+k+1}])$。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/robotics/B%E6%A0%B7%E6%9D%A1%E6%9B%B2%E7%BA%BF/20150510153754214.jpg&#34; alt=&#34;20150510153754214&#34;&gt;&lt;/p&gt;
+&lt;p&gt;根据图示，三种类型的B样条曲线对应的节点矢量分别为： 
+$$
+[0 \ \frac{1}{7} \ \frac{2}{7} \ \frac{3}{7} \ \frac{4}{7} \ \frac{5}{7} \ \frac{6}{7} \ 1] \&lt;br&gt;
+[0 \ 0 \ 0 \ \frac{1}{3} \ \frac{2}{3} 1 \ 1 \ 1] \&lt;br&gt;
+[0 \ 0 \ 0 \ \frac{1}{2} \ \frac{1}{2} 1 \ 1 \ 1] 
+$$
+需要注意的是分段Bezier曲线必须满足$\frac{n}{k}=正整数$。&lt;/p&gt;
+&lt;p&gt;这里给出准均匀B样条和分段Bezier曲线的生成节点矢量的代码，均匀B样条的很简单就不列出了。假设共n+1个控制顶点，k次B样条，输入参数为 n, k ，输出节点矢量NodeVector。&lt;/p&gt;
+&lt;p&gt;准均匀B样条曲线的节点矢量生成：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-matlab&#34; data-lang=&#34;matlab&#34;&gt;&lt;span class=&#34;c&#34;&gt;% U_quasi_uniform.m文件&lt;/span&gt;
+&lt;span class=&#34;k&#34;&gt;function&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;NodeVector &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;U_quasi_uniform&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;n, k&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;c&#34;&gt;% 准均匀B样条的节点向量计算，共n+1个控制顶点，k次B样条&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;NodeVector&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;zeros&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;n&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;k&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;piecewise&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;n&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;k&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;       &lt;span class=&#34;c&#34;&gt;% 曲线的段数&lt;/span&gt;
+&lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;piecewise&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;==&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;       &lt;span class=&#34;c&#34;&gt;% 只有一段曲线时，n = k&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;n&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;n&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;k&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;NodeVector&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;end&lt;/span&gt;
+&lt;span class=&#34;k&#34;&gt;else&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;flag&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;       &lt;span class=&#34;c&#34;&gt;% 不止一段曲线时&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;while&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;flag&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;~=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;piecewise&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;NodeVector&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;k&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;flag&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;NodeVector&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;k&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;flag&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;piecewise&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;flag&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;flag&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;end&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;NodeVector&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;n&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;n&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;k&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;span class=&#34;k&#34;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;分段Bezier曲线的节点矢量生成：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;21
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;22
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;23
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-matlab&#34; data-lang=&#34;matlab&#34;&gt;&lt;span class=&#34;c&#34;&gt;% U_piecewise_Bezier.m文件&lt;/span&gt;
+&lt;span class=&#34;k&#34;&gt;function&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;NodeVector &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;U_piecewise_Bezier&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;n, k&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;c&#34;&gt;% 分段Bezier曲线的节点向量计算，共n+1个控制顶点，k次B样条&lt;/span&gt;
+&lt;span class=&#34;c&#34;&gt;% 分段Bezier端节点重复度为k+1，内间节点重复度为k,且满足n/k为正整数&lt;/span&gt;
+
+&lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;~&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;mod&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;n&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;k&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;~&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;mod&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;k&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;k&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;   &lt;span class=&#34;c&#34;&gt;% 满足n是k的整数倍且k为正整数&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;NodeVector&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;zeros&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;n&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;k&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;   &lt;span class=&#34;c&#34;&gt;% 节点矢量长度为n+k+2&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;NodeVector&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;n&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;n&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;k&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;ones&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;k&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;  &lt;span class=&#34;c&#34;&gt;% 右端节点置1&lt;/span&gt;
+
+    &lt;span class=&#34;n&#34;&gt;piecewise&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;n&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;/&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;k&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;      &lt;span class=&#34;c&#34;&gt;% 设定内节点的值&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;Flg&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;piecewise&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;
+        &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;piecewise&lt;/span&gt;
+            &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;j&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;k&lt;/span&gt;
+                &lt;span class=&#34;n&#34;&gt;NodeVector&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;k&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Flg&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;k&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;j&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;piecewise&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+            &lt;span class=&#34;k&#34;&gt;end&lt;/span&gt;
+            &lt;span class=&#34;n&#34;&gt;Flg&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Flg&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+        &lt;span class=&#34;k&#34;&gt;end&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;end&lt;/span&gt;
+
+&lt;span class=&#34;k&#34;&gt;else&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;fprintf&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#39;error!\n&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;span class=&#34;k&#34;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h4 id=&#34;332-b样条曲线的绘制&#34;&gt;3.3.2 B样条曲线的绘制&lt;/h4&gt;
+&lt;p&gt;根据B样条曲线的定义公式，曲线上任一点坐标值是参数变量$u$的函数，用矩阵形式表示
+$$
+p(u)=(P_{0} \quad P_{1} \quad &amp;hellip; \quad P_{n}   )\begin{pmatrix}
+(N_{0,k} (u) \&lt;br&gt;
+(N_{1,k} (u) \&lt;br&gt;
+\vdots  \&lt;br&gt;
+(N_{n,k} (u)
+\end{pmatrix}
+$$
+只需要确定控制顶点$d_{i}$、曲线的次数$k$ 以及基函数$N_{i,k}(u)$，就完全确定了曲线。&lt;/p&gt;
+&lt;p&gt;B样条曲线的绘制函数：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;21
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;22
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;23
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;24
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;25
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;26
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;27
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;28
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-matlab&#34; data-lang=&#34;matlab&#34;&gt;&lt;span class=&#34;c&#34;&gt;% DrawSpline.m文件&lt;/span&gt;
+&lt;span class=&#34;k&#34;&gt;function&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;DrawSpline&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;n, k, P, NodeVector&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;c&#34;&gt;% B样条的绘图函数&lt;/span&gt;
+&lt;span class=&#34;c&#34;&gt;% 已知n+1个控制顶点P(i), k次B样条，P是2*(n+1)矩阵存控制顶点坐标, 节点向量NodeVector&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;plot&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;P&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;n&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;),&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;P&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;n&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;),&lt;/span&gt;&lt;span class=&#34;c&#34;&gt;...&lt;/span&gt;
+                    &lt;span class=&#34;s&#34;&gt;&amp;#39;o&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#39;LineWidth&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;c&#34;&gt;...&lt;/span&gt;
+                    &lt;span class=&#34;s&#34;&gt;&amp;#39;MarkerEdgeColor&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#39;k&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;c&#34;&gt;...&lt;/span&gt;
+                    &lt;span class=&#34;s&#34;&gt;&amp;#39;MarkerFaceColor&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#39;g&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;c&#34;&gt;...&lt;/span&gt;
+                    &lt;span class=&#34;s&#34;&gt;&amp;#39;MarkerSize&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;6&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;line&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;P&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;n&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;),&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;P&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;n&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;));&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;Nik&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;zeros&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;n&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;u&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;0.005&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mf&#34;&gt;0.005&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;n&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;Nik&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;BaseFunction&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;k&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;u&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;NodeVector&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;end&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;p_u&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;P&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Nik&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;u&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;==&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;tempx&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;p_u&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;tempy&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;p_u&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;line&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;([&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;tempx&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;p_u&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)],&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;tempy&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;p_u&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)],&lt;/span&gt;&lt;span class=&#34;c&#34;&gt;...&lt;/span&gt;
+            &lt;span class=&#34;s&#34;&gt;&amp;#39;Marker&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#39;.&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#39;LineStyle&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#39;-&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#39;Color&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,[.&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;3&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;6&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;9&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;],&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#39;LineWidth&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;3&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;else&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;line&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;([&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;tempx&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;p_u&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)],&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;tempy&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;p_u&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)],&lt;/span&gt;&lt;span class=&#34;c&#34;&gt;...&lt;/span&gt;
+            &lt;span class=&#34;s&#34;&gt;&amp;#39;Marker&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#39;.&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#39;LineStyle&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#39;-&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#39;Color&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,[.&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;3&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;6&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;9&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;],&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#39;LineWidth&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;3&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;tempx&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;p_u&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;tempy&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;p_u&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;end&lt;/span&gt;
+&lt;span class=&#34;k&#34;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;调用 &lt;code&gt;DrawSpline(n, k, P, NodeVector)&lt;/code&gt; 函数就能绘制曲线，注意输入变量要正确。&lt;/p&gt;
+&lt;p&gt;下面给出绘制三种不同B样条曲线的命令流，可以参考比较每种类型之间的区别。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;21
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;22
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;23
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;24
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;25
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;26
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;27
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;28
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;29
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;30
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;31
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;32
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;33
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;34
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;35
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;36
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;37
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;38
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;39
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;40
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;41
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;42
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-matlab&#34; data-lang=&#34;matlab&#34;&gt;&lt;span class=&#34;c&#34;&gt;% 绘制三种类型的B样条曲线，需要前面所给的所有.m文件&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;clear&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;all&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;span class=&#34;c&#34;&gt;%控制顶点&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;P&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mf&#34;&gt;9.036145&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;21.084337&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;37.607573&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;51.893287&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;61.187608&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+    &lt;span class=&#34;mf&#34;&gt;51.779661&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;70.084746&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;50.254237&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;69.745763&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;49.576271&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;];&lt;/span&gt;
+
+&lt;span class=&#34;n&#34;&gt;n&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;4&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;k&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+
+&lt;span class=&#34;n&#34;&gt;flag&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;span class=&#34;c&#34;&gt;% flag = 1，绘制均匀B样条曲线&lt;/span&gt;
+&lt;span class=&#34;c&#34;&gt;% flag = 2, 绘制准均匀B样条曲线&lt;/span&gt;
+&lt;span class=&#34;c&#34;&gt;% flag = 3, 绘制分段Bezier曲线&lt;/span&gt;
+
+&lt;span class=&#34;k&#34;&gt;switch&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;flag&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;case&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;NodeVector&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;linspace&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;n&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;k&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt; &lt;span class=&#34;c&#34;&gt;% 均匀B样条的节点矢量&lt;/span&gt;
+
+        &lt;span class=&#34;c&#34;&gt;% 绘制样条曲线&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;plot&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;P&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;n&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;),&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;P&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;n&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;),&lt;/span&gt;&lt;span class=&#34;c&#34;&gt;...&lt;/span&gt;
+                        &lt;span class=&#34;s&#34;&gt;&amp;#39;o&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#39;LineWidth&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;c&#34;&gt;...&lt;/span&gt;
+                        &lt;span class=&#34;s&#34;&gt;&amp;#39;MarkerEdgeColor&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#39;k&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;c&#34;&gt;...&lt;/span&gt;
+                        &lt;span class=&#34;s&#34;&gt;&amp;#39;MarkerFaceColor&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#39;g&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;c&#34;&gt;...&lt;/span&gt;
+                        &lt;span class=&#34;s&#34;&gt;&amp;#39;MarkerSize&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;6&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;line&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;P&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;n&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;),&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;P&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;n&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;));&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;Nik&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;zeros&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;n&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+        &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;u&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;k&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;n&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;k&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;mf&#34;&gt;0.001&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;n&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;/&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;n&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;k&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+            &lt;span class=&#34;c&#34;&gt;% for u = 0 : 0.005 : 1&lt;/span&gt;
+            &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;i&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;:&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;n&lt;/span&gt;
+                &lt;span class=&#34;n&#34;&gt;Nik&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;BaseFunction&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;k&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;u&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;NodeVector&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+            &lt;span class=&#34;k&#34;&gt;end&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;p_u&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;P&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Nik&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;line&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;p_u&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;),&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;p_u&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;),&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#39;Marker&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#39;.&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#39;LineStyle&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#39;-&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#39;Color&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,[.&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;3&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;6&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;9&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]);&lt;/span&gt;
+        &lt;span class=&#34;k&#34;&gt;end&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;case&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;NodeVector&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;U_quasi_uniform&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;n&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;k&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt; &lt;span class=&#34;c&#34;&gt;% 准均匀B样条的节点矢量&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;DrawSpline&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;n&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;k&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;P&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;NodeVector&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;case&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;3&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;NodeVector&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;U_piecewise_Bezier&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;n&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;k&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;  &lt;span class=&#34;c&#34;&gt;% 分段Bezier曲线的节点矢量&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;DrawSpline&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;n&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;k&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;P&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;NodeVector&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;otherwise&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;fprintf&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#39;error!\n&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;);&lt;/span&gt;
+&lt;span class=&#34;k&#34;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;三种类型的B样条曲线&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;均匀B样条曲线&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/robotics/B%E6%A0%B7%E6%9D%A1%E6%9B%B2%E7%BA%BF/20150510172723541.jpg&#34; alt=&#34;20150510172723541&#34;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;准均匀B样条曲线&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/robotics/B%E6%A0%B7%E6%9D%A1%E6%9B%B2%E7%BA%BF/20150510173020071.jpg&#34; alt=&#34;20150510173020071&#34;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;分段Bezier曲线&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/robotics/B%E6%A0%B7%E6%9D%A1%E6%9B%B2%E7%BA%BF/20150510172707221.jpg&#34; alt=&#34;20150510172707221&#34;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;参考文献&#34;&gt;参考文献&lt;/h2&gt;
+&lt;p&gt;[1] &lt;a href=&#34;https://blog.csdn.net/Mr_Grit/article/details/45603627&#34;&gt;https://blog.csdn.net/Mr_Grit/article/details/45603627&lt;/a&gt;&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>关于</title>
+      <link>https://littlethinking.cn/about/</link>
+      <pubDate>Wed, 18 Dec 2019 21:38:52 +0800</pubDate>
+      
+      <guid>https://littlethinking.cn/about/</guid>
+      
+        <description>&lt;blockquote&gt;
+&lt;p&gt;心有猛虎，细嗅蔷薇&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;关于我&#34;&gt;关于我&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;来自四川德阳&lt;/li&gt;
+&lt;li&gt;一名即将毕业的机械专业Huster&lt;/li&gt;
+&lt;li&gt;爱好机器人、喜欢嵌入式、热衷游戏&lt;/li&gt;
+&lt;li&gt;勇于接受新事物，总是瞎折腾&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;关于本站&#34;&gt;关于本站&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;本站使用Hugo生成，采用&lt;code&gt;hugo-theme-jane&lt;/code&gt;主题&lt;/li&gt;
+&lt;li&gt;同其他机器人热爱者一样，会发布一些关于机器人文章&lt;/li&gt;
+&lt;li&gt;非计算机专业，也有IT梦，会发布C/C++、Python等编程语言学习的文章&lt;/li&gt;
+&lt;li&gt;所有文章通常不开放评论，若有错误或疑问，欢迎邮件提出，接受各种建议&lt;/li&gt;
+&lt;li&gt;拒绝任何政治相关内容&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+      
+    </item>
+    
+  </channel>
+</rss>

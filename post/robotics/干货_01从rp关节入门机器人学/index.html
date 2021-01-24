@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="zh-cn" itemscope itemtype="http://schema.org/WebPage">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>【机器人学基础知识】1、从RP关节入门机器人学 - 小虎 - Mechanical student,Robot enthusiast</title>
+  
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes"/>
+
+<meta name="MobileOptimized" content="width"/>
+<meta name="HandheldFriendly" content="true"/>
+
+
+<meta name="applicable-device" content="pc,mobile">
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+<meta name="author" content="xiaohu" />
+  <meta name="description" content="本科阶段的机器人竞赛制作的机器人、生活中见到的扫地机器人，它们基本都是轮式的移动机器人；移动机器人本身运动控制比较简单，难点在于对外界的感知" />
+
+  <meta name="keywords" content="ROS, algorithm, 小虎, 博客, 笔记" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.80.0" />
+
+
+<link rel="canonical" href="https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_01%E4%BB%8Erp%E5%85%B3%E8%8A%82%E5%85%A5%E9%97%A8%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%AD%A6/" />
+
+
+
+
+
+<link rel="icon" href="/favicon.ico" />
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/sass/jane.min.b3a8813c06e6d785beba22bf8264e174fa2cb3a396b22f9ba24e2c00c18aaf7f.css" integrity="sha256-s6iBPAbm14W&#43;uiK/gmThdPoss6OWsi&#43;bok4sAMGKr38=" media="screen" crossorigin="anonymous">
+
+
+
+
+
+<meta property="og:title" content="【机器人学基础知识】1、从RP关节入门机器人学" />
+<meta property="og:description" content="本科阶段的机器人竞赛制作的机器人、生活中见到的扫地机器人，它们基本都是轮式的移动机器人；移动机器人本身运动控制比较简单，难点在于对外界的感知" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_01%E4%BB%8Erp%E5%85%B3%E8%8A%82%E5%85%A5%E9%97%A8%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%AD%A6/" />
+<meta property="article:published_time" content="2020-01-03T16:01:23+08:00" />
+<meta property="article:modified_time" content="2020-01-03T16:06:23+08:00" />
+<meta itemprop="name" content="【机器人学基础知识】1、从RP关节入门机器人学">
+<meta itemprop="description" content="本科阶段的机器人竞赛制作的机器人、生活中见到的扫地机器人，它们基本都是轮式的移动机器人；移动机器人本身运动控制比较简单，难点在于对外界的感知">
+<meta itemprop="datePublished" content="2020-01-03T16:01:23+08:00" />
+<meta itemprop="dateModified" content="2020-01-03T16:06:23+08:00" />
+<meta itemprop="wordCount" content="3596">
+
+
+
+<meta itemprop="keywords" content="机器人学,基础关节,冗余自由度,奇异点," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="【机器人学基础知识】1、从RP关节入门机器人学"/>
+<meta name="twitter:description" content="本科阶段的机器人竞赛制作的机器人、生活中见到的扫地机器人，它们基本都是轮式的移动机器人；移动机器人本身运动控制比较简单，难点在于对外界的感知"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+</script>
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">小虎</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <li class="mobile-menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://littlethinking.cn/">主页</a>
+          
+        
+      </li><li class="mobile-menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://littlethinking.cn/post/">归档</a>
+          
+        
+      </li><li class="mobile-menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://littlethinking.cn/tags/">标签</a>
+          
+        
+      </li><li class="mobile-menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://littlethinking.cn/categories/">分类</a>
+          
+        
+      </li><li class="mobile-menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://littlethinking.cn/about/">关于</a>
+          
+        
+      </li>
+    
+
+    
+  </ul>
+</nav>
+
+
+  
+    
+
+
+
+
+
+
+  <link rel="stylesheet" href="/lib/photoswipe/photoswipe.min.css" />
+  <link rel="stylesheet" href="/lib/photoswipe/default-skin/default-skin.min.css" />
+
+
+
+
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+<div class="pswp__bg"></div>
+
+<div class="pswp__scroll-wrap">
+    
+    <div class="pswp__container">
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+    </div>
+    
+    <div class="pswp__ui pswp__ui--hidden">
+    <div class="pswp__top-bar">
+      
+      <div class="pswp__counter"></div>
+      <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+      <button class="pswp__button pswp__button--share" title="Share"></button>
+      <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+      <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+      
+      
+      <div class="pswp__preloader">
+        <div class="pswp__preloader__icn">
+          <div class="pswp__preloader__cut">
+            <div class="pswp__preloader__donut"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+      <div class="pswp__share-tooltip"></div>
+    </div>
+    <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+    </button>
+    <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+    </button>
+    <div class="pswp__caption">
+      <div class="pswp__caption__center"></div>
+    </div>
+    </div>
+    </div>
+</div>
+
+  
+
+  
+
+  
+
+  <header id="header" class="header container">
+    <div class="logo-wrapper">
+  <a href="/" class="logo">
+    
+      小虎
+    
+  </a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    
+    
+        <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://littlethinking.cn/">主页</a>
+          
+
+        
+
+      </li>
+    
+        <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://littlethinking.cn/post/">归档</a>
+          
+
+        
+
+      </li>
+    
+        <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://littlethinking.cn/tags/">标签</a>
+          
+
+        
+
+      </li>
+    
+        <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://littlethinking.cn/categories/">分类</a>
+          
+
+        
+
+      </li>
+    
+        <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://littlethinking.cn/about/">关于</a>
+          
+
+        
+
+      </li>
+    
+
+    
+    
+
+    
+  </ul>
+</nav>
+
+  </header>
+
+  <div id="mobile-panel">
+    <main id="main" class="main bg-llight">
+      <div class="content-wrapper">
+        <div id="content" class="content container">
+          <article class="post bg-white">
+    
+    <header class="post-header">
+      <h1 class="post-title">【机器人学基础知识】1、从RP关节入门机器人学</h1>
+      
+      <div class="post-meta">
+        <time datetime="2020-01-03" class="post-time">
+          2020-01-03
+        </time>
+        <div class="post-category">
+            <a href="https://littlethinking.cn/categories/%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%AD%A6%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/"> 机器人学基础知识 </a>
+            
+          </div>
+        <span class="more-meta"> 约 3596 字 </span>
+          <span class="more-meta"> 预计阅读 8 分钟 </span>
+
+        
+        
+
+        
+        
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#1-基础关节">1 基础关节</a></li>
+        <li><a href="#2-结构图">2 结构图</a></li>
+        <li><a href="#3-冗余自由度kinematic-redundancy">3 冗余自由度（kinematic redundancy）</a></li>
+        <li><a href="#4-奇异点">4 奇异点</a></li>
+        <li><a href="#5-小结">5 小结</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+
+    
+    <div class="post-content">
+      <blockquote>
+<p>本科阶段的机器人竞赛制作的机器人、生活中见到的扫地机器人，它们基本都是轮式的移动机器人；移动机器人本身运动控制比较简单，难点在于对外界的感知理解，因此相关研究更多的是人工智能、机器视觉、自然语言处理这一类。然而移动机器人除了移动、简单的搬运货物等功能，缺乏真正的<strong>操作（manipulate）外界物体的能力</strong>；对这种能力的需求，就是机械臂存在的意义，也是我们学习它的意义。</p>
+</blockquote>
+<p><strong>狭义的机器人学，其基础研究对象是链式(chain)机器人，它们最基本的组成部分，就是关节(Joint)和连杆(Link)。</strong></p>
+<p>连杆是连接不同关节的机械结构；链式机器人，就是可以用关节-连杆-关节-连杆-……-末端执行机构(end effector)这样的公式表达其结构的机器人。除了链式，还会有树状（如人形机器人，humanoiid robot）、环状机器人（如平行机器人，parallel robot）。</p>
+<h3 id="1-基础关节">1 基础关节</h3>
+<p>RP关节是组成机械臂/机器人的基础，R是<strong>旋转关节（Revolute Joint）</strong>，P是<strong>平移关节（Prismatic Joint）</strong>。请注意，基础关节肯定是只有一个<strong>自由度</strong>（Degree of freedom/DOF）的，旋转关节只绕某一个轴旋转，平移关节只在某一条直线上运动。因为更高维度的关节（比如有三个自由度的球形关节，Spherical Joint）一定可以由多个基础关节表示。</p>
+<p>现在可以来看看PPP笛卡尔坐标机器人：</p>
+<p><img src="/images/robotics/%E5%B9%B2%E8%B4%A7_01%E4%BB%8ERP%E5%85%B3%E8%8A%82%E5%85%A5%E9%97%A8%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%AD%A6/PPPImage.jpg" alt="PPPImage"></p>
+<p>无论它长怎样，你都可以清楚地看到它有三个空间上互相垂直的平移关节，正如最常用的笛卡尔坐标系。这种情况下，我们说这个机器人有三个关节，是三轴机器人，关节空间(joint space)有三个自由度，end effector的操作空间(operational space)同样有三个平动（位置）自由度。</p>
+<p>joint space和operational space是机器人学非常重要的概念：<strong>joint space用来描述每个关节的位置（P关节）或角度（R关节）；operational space用来描述end effector的位置(position)和朝向(orientation)</strong>。举例来说，如果你需要end effector沿着空间某一条直线走，那么你需要使用operational space来描述；而如果你需要机器人每一个关节都按照你计算好的角度/位置运动，那么你需要用joint space来描述。</p>
+<p>现在再回头SCARA机器人（结构为RRPR）：</p>
+<p><img src="/images/robotics/%E5%B9%B2%E8%B4%A7_01%E4%BB%8ERP%E5%85%B3%E8%8A%82%E5%85%A5%E9%97%A8%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%AD%A6/SCARAImage.jpg" alt="SCARAImage"></p>
+<p>可以很明显地看出，P关节是唯一能让end effector在竖直方向移动的关节，剩下的三个旋转关节，前两个可以确定end effector在水平面上的位置，最后一个再调整方向……笛卡尔和SCARA机器人，都属于joint space和operational space的映射关系比较简单的机器人；对于复杂一些的机器人，比如后面会出现的由6个R关节组成的PUMA，它们的关系就不是这么简单了。
+顺便提一下，<strong>空间中的自由刚体有六个自由度，三个平动、三个转动。</strong></p>
+<h3 id="2-结构图">2 结构图</h3>
+<p>为了更直观地表明机器人的结构，不知道谁发明了两类关节符号，画出了如题图那样的机械臂结构图。图中圆形表示的R关节旋转轴垂直于屏幕。P关节却没有垂直屏幕的表示方法——发明人很任性地说，除了PPP，谁需要这个，你把机器人转个个儿就都能画了。</p>
+<p><img src="/images/robotics/%E5%B9%B2%E8%B4%A7_01%E4%BB%8ERP%E5%85%B3%E8%8A%82%E5%85%A5%E9%97%A8%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%AD%A6/jointStructureImage.jpg" alt="jointStructureImage"></p>
+<h3 id="3-冗余自由度kinematic-redundancy">3 冗余自由度（kinematic redundancy）</h3>
+<p>学会看结构，我们要能来看点有趣的内容了。人的手臂有七个（基础）关节，你能数出来吗？——别看手机了，现在动动你的肩膀、你的手肘、你的手腕，数一数它们都有几个基础关节？</p>
+<p>人体的手臂结构图如下所示（耸肩可能可以算一个P关节，可是人极少用它来完成什么操作，因此忽略不计）：</p>
+<p><img src="/images/robotics/%E5%B9%B2%E8%B4%A7_01%E4%BB%8ERP%E5%85%B3%E8%8A%82%E5%85%A5%E9%97%A8%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%AD%A6/armStructureImage.png" alt="armStructureImage"></p>
+<p>只是为了更直观地表现头和手在哪里而已……</p>
+<p>我们前面说，空间刚体有六个自由度，PPP的joint space有3个自由度，operational space也有3个自由度；SCARA的joint space有4个自由度，operational space也有4个自由度；那么这里，人手臂的joint space有7个自由度，operational space有几个自由度呢？——答案是<strong>6个</strong>，因为operational space是物理空间，在这个空间里刚体不可能有更多的自由度了。</p>
+<p>不太严谨地说，这种joint space的自由度比operational space多的情况，就可称为冗余自由度(redundancy)。</p>
+<p>对于冗余自由度最直观的理解，就是你用你的手握紧近处一个固定的东西（这时在你的operational space，你的手的位置和角度都确定了），你的身体也固定不动，这种情况下，你的手臂（手肘）竟然没有卡死还能动！</p>
+<p>冗余自由度绝对是大自然赋予人类的伟大创造。在机器人界，冗余自由度通常意味着更高的<strong>灵活性</strong>。许多研究利用机械臂的冗余自由度实现避障(obstacle avoidance)、或避免自己撞到自己(self-collision avoidance)；防止超出关节可运动范围的限制(joint limit)；或防止机械臂进入奇异点(singularity)，关于奇异点，我们下面很快会讲到。</p>
+<p>然而，虽然人类控制自己的手臂去完成各种任务是一件几乎完全不用经过大脑的事，控制一个有冗余自由度的机械臂却不那么简单。直观上说，当一个机械臂有冗余自由度时，对应同一个end effector position and orientation的joint position（这是逆运动学研究的内容，即inverse kinematics）通常有无数个解；如何解决这个问题，在无数个解中找出最合理的那一个，已经是机器人学高级阶段才会学习到的内容。</p>
+<p>最后还要说，<strong>冗余自由度其实是一个相对的概念</strong>。更确切地说，是一个joint space相对于任务空间(task space)的概念。那什么是task space呢？顾名思义，如果你的任务是要在一个平面内定位，那么你的任务空间就需要两个自由度；如果你的任务是要在三维世界中确定朝向，那么你的任务空间就需要三个自由度。严谨地说，<strong>当可用于完成任务的关节空间自由度大于任务空间自由度时，我们就称之为redundancy</strong>。</p>
+<h3 id="4-奇异点">4 奇异点</h3>
+<p>我们前面提到redundancy可以用来避免进入奇异点，奇异点是什么，又为什么需要避免呢？</p>
+<p>试试看，当你伸直手臂、并把你的手臂和桌子边缘一条直线重合时，若保持身体不动，你能让你的手沿着这条直线前进或后退吗？我们前面说，人的手（即人手臂的end effector）是具有全部6个自由度的，为什么在这个时候，它在与手臂平行的方向完全无法运动了呢？</p>
+<p><strong>像这种机械臂的end effector失去了某个方向的自由度，在该方向上运动速度只能为0、该方向上的力/扭矩全完全由机械结构承担（而不需要关节上的电机/肌肉等actuator出力）的情况，就称为kinematic singularity。</strong></p>
+<p>除了伸直手臂这一个singularity（我们称为elbow lock，肘部奇点），机械臂的世界还有很多singularity的情况。比如很经典的wrist lock（腕部奇点），工业上通常称为第4-第6轴平行产生奇异点（如果你看第二张图一个经典工业机械臂PUMA的示意图，里面也出现了wrist lock，正是由第4-第6轴平行产生），此时end effector失去了在垂直屏幕方向运动的自由度。再比如overhead lock（顶置奇点）, 通常是当第4关节位置与第1关节旋转轴重合时产生，此时end effector同样只能在屏幕面上运动，无法在垂直屏幕的方向运动；你可以把手举高让手腕与肩膀在同一直线上，然后试着在垂直手臂平面的方向移动手腕感受一下。</p>
+<p><img src="/images/robotics/%E5%B9%B2%E8%B4%A7_01%E4%BB%8ERP%E5%85%B3%E8%8A%82%E5%85%A5%E9%97%A8%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%AD%A6/wristLockImage.png" alt="wristLockImage"></p>
+<p><img src="/images/robotics/%E5%B9%B2%E8%B4%A7_01%E4%BB%8ERP%E5%85%B3%E8%8A%82%E5%85%A5%E9%97%A8%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%AD%A6/overHeadLockImage.jpg" alt="overHeadLockImage"></p>
+<p>在机械臂的线性代数世界里，redundancy意味着线性方程有无数个解，而singularity则意味着某个矩阵（雅可比矩阵）的降秩（从而不可逆、线性方程无解）。更重要的是，当机器人接近singularity时，这个矩阵也越来越接近不可逆，此时由operational space的速度来计算joint space的速度，可能会得到接近无限大的计算结果；这种情况对于机器人来说，当然是非常危险。</p>
+<p>以上讲的所有东西都只是为了建立直观印象，窥探机器人学里的趣味与难题。<strong>要真正学好机器人学，最终还得从线性代数的角度去理解</strong>。从下一篇标明干货的文章开始，我们要拿起线性代数这个工具，从坐标变换开始，到描述机器人关节和连杆关系的DH参数，到正运动学(forward kinematics)、逆运动学(inverse kinematics)和动力学(dynamics)；走进机器人学的数学世界，才算真正走进了机器人学。</p>
+<h3 id="5-小结">5 小结</h3>
+<p>这篇文章介绍了一些重要概念：</p>
+<ul>
+<li>revolute joint，prismatic joint，end effector</li>
+<li>degree of freedom</li>
+<li>joint position，end effector position / orientation</li>
+<li>joint space，operation space，task space</li>
+<li>redundancy</li>
+<li>singularity</li>
+</ul>
+<p>必须要掌握。</p>
+
+    </div>
+
+    
+    
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">xiaohu</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+      2020-01-03
+      
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">许可协议</span>
+    <span class="item-content">本文转载自微信公众号ROBOTICS，原作者CC</span>
+  </p>
+</div>
+
+
+    
+    
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          <a href="https://littlethinking.cn/tags/%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%AD%A6/">机器人学</a>
+          <a href="https://littlethinking.cn/tags/%E5%9F%BA%E7%A1%80%E5%85%B3%E8%8A%82/">基础关节</a>
+          <a href="https://littlethinking.cn/tags/%E5%86%97%E4%BD%99%E8%87%AA%E7%94%B1%E5%BA%A6/">冗余自由度</a>
+          <a href="https://littlethinking.cn/tags/%E5%A5%87%E5%BC%82%E7%82%B9/">奇异点</a>
+          
+        </div>
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/robotics/%E5%B9%B2%E8%B4%A7_02%E4%BD%8D%E7%BD%AE%E8%A7%92%E5%BA%A6%E5%B9%B3%E7%A7%BB%E6%97%8B%E8%BD%AC%E4%BB%A5%E5%8F%8A%E5%9D%90%E6%A0%87%E5%8F%98%E6%8D%A2/">
+            
+            <i class="iconfont">
+              <svg  class="icon" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="18" height="18">
+  <path d="M691.908486 949.511495l75.369571-89.491197c10.963703-12.998035 10.285251-32.864502-1.499144-44.378743L479.499795 515.267417 757.434875 204.940602c11.338233-12.190647 11.035334-32.285311-0.638543-44.850487l-80.46666-86.564541c-11.680017-12.583596-30.356378-12.893658-41.662889-0.716314L257.233596 494.235404c-11.332093 12.183484-11.041474 32.266891 0.657986 44.844348l80.46666 86.564541c1.772366 1.910513 3.706415 3.533476 5.750981 4.877077l306.620399 321.703933C662.505829 963.726242 680.945807 962.528973 691.908486 949.511495z"></path>
+</svg>
+
+            </i>
+            <span class="prev-text nav-default">【机器人学基础知识】2、位置角度平移旋转，“乱七八糟”的坐标变换</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        
+          <a class="next" href="/post/robotics/b%E6%A0%B7%E6%9D%A1%E6%9B%B2%E7%BA%BF/">
+            <span class="next-text nav-default">B样条曲线</span>
+            <span class="prev-text nav-mobile">下一篇</span>
+            
+            <i class="iconfont">
+              <svg class="icon" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="18" height="18">
+  <path d="M332.091514 74.487481l-75.369571 89.491197c-10.963703 12.998035-10.285251 32.864502 1.499144 44.378743l286.278095 300.375162L266.565125 819.058374c-11.338233 12.190647-11.035334 32.285311 0.638543 44.850487l80.46666 86.564541c11.680017 12.583596 30.356378 12.893658 41.662889 0.716314l377.434212-421.426145c11.332093-12.183484 11.041474-32.266891-0.657986-44.844348l-80.46666-86.564541c-1.772366-1.910513-3.706415-3.533476-5.750981-4.877077L373.270379 71.774697C361.493148 60.273758 343.054193 61.470003 332.091514 74.487481z"></path>
+</svg>
+
+            </i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+
+  
+  
+
+  
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+    
+
+  
+
+        </div>
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="icon-links">
+  
+  
+    <a href="mailto:hust.chen@foxmail.com" rel="me noopener" class="iconfont"
+      title="email" >
+      <svg class="icon" viewBox="0 0 1451 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="36" height="36">
+  <path d="M664.781909 681.472759 0 97.881301C0 3.997201 71.046997 0 71.046997 0L474.477909 0 961.649408 0 1361.641813 0C1361.641813 0 1432.688811 3.997201 1432.688811 97.881301L771.345323 681.472759C771.345323 681.472759 764.482731 685.154773 753.594283 688.65053L753.594283 688.664858C741.602731 693.493018 729.424896 695.068979 718.077952 694.839748 706.731093 695.068979 694.553173 693.493018 682.561621 688.664858L682.561621 688.65053C671.644501 685.140446 664.781909 681.472759 664.781909 681.472759L664.781909 681.472759ZM718.063616 811.603883C693.779541 811.016482 658.879232 802.205449 619.10784 767.734955 542.989056 701.759633 0 212.052267 0 212.052267L0 942.809523C0 942.809523 0 1024 83.726336 1024L682.532949 1024 753.579947 1024 1348.948139 1024C1432.688811 1024 1432.688811 942.809523 1432.688811 942.809523L1432.688811 212.052267C1432.688811 212.052267 893.138176 701.759633 817.019477 767.734955 777.248 802.205449 742.347691 811.03081 718.063616 811.603883L718.063616 811.603883Z"></path>
+</svg>
+
+    </a>
+  
+    <a href="https://github.com/LittleThinking" rel="me noopener" class="iconfont"
+      title="github"  target="_blank"
+      >
+      <svg class="icon" style="" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="36" height="36">
+  <path d="M512 12.672c-282.88 0-512 229.248-512 512 0 226.261333 146.688 418.133333 350.08 485.76 25.6 4.821333 34.986667-11.008 34.986667-24.618667 0-12.16-0.426667-44.373333-0.64-87.04-142.421333 30.890667-172.458667-68.693333-172.458667-68.693333C188.672 770.986667 155.008 755.2 155.008 755.2c-46.378667-31.744 3.584-31.104 3.584-31.104 51.413333 3.584 78.421333 52.736 78.421333 52.736 45.653333 78.293333 119.850667 55.68 149.12 42.581333 4.608-33.109333 17.792-55.68 32.426667-68.48-113.706667-12.8-233.216-56.832-233.216-253.013333 0-55.893333 19.84-101.546667 52.693333-137.386667-5.76-12.928-23.04-64.981333 4.48-135.509333 0 0 42.88-13.738667 140.8 52.48 40.96-11.392 84.48-17.024 128-17.28 43.52 0.256 87.04 5.888 128 17.28 97.28-66.218667 140.16-52.48 140.16-52.48 27.52 70.528 10.24 122.581333 5.12 135.509333 32.64 35.84 52.48 81.493333 52.48 137.386667 0 196.693333-119.68 240-233.6 252.586667 17.92 15.36 34.56 46.762667 34.56 94.72 0 68.522667-0.64 123.562667-0.64 140.202666 0 13.44 8.96 29.44 35.2 24.32C877.44 942.592 1024 750.592 1024 524.672c0-282.752-229.248-512-512-512"></path>
+</svg>
+
+    </a>
+  
+    <a href="https://weibo.com/5287489047/" rel="me noopener" class="iconfont"
+      title="weibo"  target="_blank"
+      >
+      <svg class="icon" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="36" height="36">
+  <path d="M385.714286 733.714286q12-19.428571 6.285714-39.428571t-25.714286-28.571429q-19.428571-8-41.714286-0.571429t-34.285714 26.285714q-12.571429 19.428571-7.428571 39.142857t24.571429 28.857143 42.571429 1.428571 35.714286-27.142857zm53.714286-69.142857q4.571429-7.428571 2-15.142857t-10-10.571429q-8-2.857143-16.285714 2.857143t-12.285714 10.571429q-9.714286 17.714286 7.428571 25.714286 8 2.857143 16.571429 2.857143t12.571429-10.571429zm99.428571 61.142857q-25.714286 58.285714-90.285714 85.714286t-128 6.857143q-61.142857-19.428571-84.285714-72.285714t3.714286-107.142857q26.857143-53.142857 86.571429-79.428571t120.285714-10.857143q63.428571 16.571429 90.571429 68.285714t1.428571 108.857143zm178.285714-91.428571q-5.142857-54.857143-50.857143-97.142857t-119.142857-62.285714-156.857143-12q-127.428571 13.142857-211.142857 80.857143t-75.714286 151.142857q5.142857 54.857143 50.857143 97.142857t119.142857 62.285714 156.857143 12q127.428571-13.142857 211.142857-80.857143t75.714286-151.142857zm176 2.285714q0 38.857143-21.142857 79.714286t-62.285714 78.285714-96.285714 67.142857-129.142857 47.428571-154.571429 17.714286-157.142857-19.142857-137.428571-53.142857-98-86.285714-37.142857-114q0-65.714286 39.714286-140t112.857143-147.428571q96.571429-96.571429 195.142857-134.857143t140.857143 4q37.142857 36.571429 11.428571 119.428571-2.285714 8-0.571429 11.428571t5.714286 4 8.285714 2.857143 7.714286-2l3.428571-1.142857q79.428571-33.714286 140.571429-33.714286t87.428571 34.857143q25.714286 36 0 101.714286-1.142857 7.428571-2.571429 11.428571t2.571429 7.142857 6.857143 4.285714 9.714286 3.428571q32.571429 10.285714 58.857143 26.857143t45.714286 46.571429 19.428571 66.571429zm-42.285714-356.571429q24 26.857143 31.142857 62t-3.714286 67.142857q-4.571429 13.142857-16.857143 19.428571t-25.428571 2.285714q-13.142857-4.571429-19.428571-16.857143t-2.285714-25.428571q11.428571-36-13.714286-63.428571t-61.142857-20q-13.714286 2.857143-25.714286-4.571429t-14.285714-21.142857q-2.857143-13.714286 4.571429-25.428571t21.142857-14.571429q34.285714-7.428571 68 3.142857t57.714286 37.428571zm103.428571-93.142857q49.714286 54.857143 64.285714 127.142857t-7.714286 138q-5.142857 15.428571-19.428571 22.857143t-29.714286 2.285714-22.857143-19.428571-2.857143-29.714286q16-46.857143 5.714286-98.285714t-45.714286-90.285714q-35.428571-39.428571-84.571429-54.571429t-98.857143-4.857143q-16 3.428571-29.714286-5.428571t-17.142857-24.857143 5.428571-29.428571 24.857143-16.857143q70.285714-14.857143 139.428571 6.571429t118.857143 76.857143z"></path>
+</svg>
+
+    </a>
+  
+    <a href="https://www.zhihu.com/people/littlethink" rel="me noopener" class="iconfont"
+      title="zhihu"  target="_blank"
+      >
+      <svg class="icon" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="36" height="36">
+  <path d="M351.791182 562.469462l192.945407 0c0-45.367257-21.3871-71.939449-21.3871-71.939449L355.897709 490.530013c3.977591-82.182744 7.541767-187.659007 8.816806-226.835262l159.282726 0c0 0-0.86367-67.402109-18.578124-67.402109s-279.979646 0-279.979646 0 16.850783-88.141456 39.318494-127.053698c0 0-83.60514-4.510734-112.121614 106.962104S81.344656 355.077018 76.80834 367.390461c-4.536316 12.313443 24.62791 5.832845 36.941354 0 12.313443-5.832845 68.050885-25.924439 84.252893-103.69571l86.570681 0c1.165546 49.28652 4.596691 200.335724 3.515057 226.835262L109.86113 490.530013c-25.275663 18.147312-33.701566 71.939449-33.701566 71.939449L279.868105 562.469462c-8.497535 56.255235-23.417339 128.763642-44.275389 167.210279-33.05279 60.921511-50.55235 116.65793-169.802314 212.576513 0 0-19.442818 14.257725 40.829917 9.073656 60.273758-5.185093 117.305683-20.739347 156.840094-99.807147 20.553105-41.107233 41.805128-93.250824 58.386782-146.138358l-0.055259 0.185218 167.855986 193.263655c0 0 22.035876-51.847855 5.832845-108.880803L371.045711 650.610918l-42.1244 31.157627-0.045025 0.151449c11.69946-41.020252 20.11206-81.5749 22.726607-116.858498C351.665315 564.212152 351.72876 563.345412 351.791182 562.469462z"></path>
+  <path d="M584.918753 182.033893l0 668.840094 70.318532 0 28.807093 80.512708 121.875768-80.512708 153.600307 0L959.520453 182.033893 584.918753 182.033893zM887.150192 778.934538l-79.837326 0-99.578949 65.782216-23.537066-65.782216-24.855084 0L659.341766 256.673847l227.807403 0L887.149169 778.934538z"></path>
+</svg>
+
+    </a>
+
+
+<a href="https://littlethinking.cn/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+    class="iconfont" title="rss" target="_blank">
+    <svg class="icon" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="30" height="30">
+  <path d="M819.157333 1024C819.157333 574.592 449.408 204.8 0 204.8V0c561.706667 0 1024 462.293333 1024 1024h-204.842667zM140.416 743.04a140.8 140.8 0 0 1 140.501333 140.586667A140.928 140.928 0 0 1 140.074667 1024C62.72 1024 0 961.109333 0 883.626667s62.933333-140.544 140.416-140.586667zM678.784 1024h-199.04c0-263.210667-216.533333-479.786667-479.744-479.786667V345.173333c372.352 0 678.784 306.517333 678.784 678.826667z"></path>
+</svg>
+
+  </a>
+   
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy;
+    
+      2019 -
+    2021
+    <span class="heart">
+      
+      <i class="iconfont">
+        <svg class="icon" viewBox="0 0 1025 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="14" height="14">
+  <path d="M1000.1 247.9c-15.5-37.3-37.6-70.6-65.7-98.9-54.4-54.8-125.8-85-201-85-85.7 0-166 39-221.4 107.4C456.6 103 376.3 64 290.6 64c-75.1 0-146.5 30.4-201.1 85.6-28.2 28.5-50.4 61.9-65.8 99.3-16 38.8-24 79.9-23.6 122.2 0.7 91.7 40.1 177.2 108.1 234.8 3.1 2.6 6 5.1 8.9 7.8 14.9 13.4 58 52.8 112.6 102.7 93.5 85.5 209.9 191.9 257.5 234.2 7 6.1 15.8 9.5 24.9 9.5 9.2 0 18.1-3.4 24.9-9.5 34.5-30.7 105.8-95.9 181.4-165 74.2-67.8 150.9-138 195.8-178.2 69.5-57.9 109.6-144.4 109.9-237.3 0.1-42.5-8-83.6-24-122.2z"
+   fill="#8a8a8a"></path>
+</svg>
+
+      </i>
+    </span><span class="author">
+        xiaohu
+        
+      </span></span>
+
+  
+  
+
+  
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont">
+        
+        <svg class="icon" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="35" height="35">
+  <path d="M510.866688 227.694839 95.449397 629.218702l235.761562 0-2.057869 328.796468 362.40389 0L691.55698 628.188232l241.942331-3.089361L510.866688 227.694839zM63.840492 63.962777l894.052392 0 0 131.813095L63.840492 195.775872 63.840492 63.962777 63.840492 63.962777zM63.840492 63.962777"></path>
+</svg>
+
+      </i>
+    </div>
+  </div>
+  
+<script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+
+
+
+
+<script type="text/javascript" src="/js/main.dee43230127a73d039a734510fa896c89c3c7ce0cf0be0c7a7433f8fd69b76dc.js" integrity="sha256-3uQyMBJ6c9A5pzRRD6iWyJw8fODPC&#43;DHp0M/j9abdtw=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    <script type="text/javascript" src="/js/load-photoswipe.js"></script>
+    <script type="text/javascript" src="/lib/photoswipe/photoswipe.min.js"></script>
+    <script type="text/javascript" src="/lib/photoswipe/photoswipe-ui-default.min.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

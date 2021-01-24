@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Categories on 小虎 - Mechanical student,Robot enthusiast</title>
+    <link>https://littlethinking.cn/categories/</link>
+    <description>Recent content in Categories on 小虎 - Mechanical student,Robot enthusiast</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sun, 24 Jan 2021 14:03:23 +0800</lastBuildDate><atom:link href="https://littlethinking.cn/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>机器人学基础知识</title>
+      <link>https://littlethinking.cn/categories/%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%AD%A6%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</link>
+      <pubDate>Sun, 24 Jan 2021 14:03:23 +0800</pubDate>
+      
+      <guid>https://littlethinking.cn/categories/%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%AD%A6%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>算法</title>
+      <link>https://littlethinking.cn/categories/%E7%AE%97%E6%B3%95/</link>
+      <pubDate>Thu, 19 Dec 2019 16:01:23 +0800</pubDate>
+      
+      <guid>https://littlethinking.cn/categories/%E7%AE%97%E6%B3%95/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>
