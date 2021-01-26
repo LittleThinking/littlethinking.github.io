@@ -397,7 +397,7 @@ $$
 \begin{equation}
 P_{i}^{k} =
 \begin{cases}
-P_{i} &amp; k=0 \<br>
+P_{i} &amp; k=0 \\<br>
 (1-t)P_{i}^{k-1} + tP_{i+1}^{k-1} &amp; k=1,2,&hellip;,n \quad i=0,1,&hellip;,n-k
 \end{cases}
 \end{equation}
@@ -422,10 +422,10 @@ $$
 <p>$$
 \begin{cases}
 N_{i,0}(u)=\begin{cases}
-1 &amp; \mbox{if } u_{i} \leq u \leq u_{i+1}  \<br>
+1 &amp; \mbox{if } u_{i} \leq u \leq u_{i+1}  \\<br>
 0 &amp; \mbox{others}
-\end{cases} \<br>
-N_{i,k}(u)=\frac{u-u_{i}}{u_{i+k}-u_{i}}N_{i,k-1}(u)+\frac{u_{i+k+1}-u}{u_{i+k+1}-u_{i+1}}N_{i+1,k-1}(u) \<br>
+\end{cases} \\<br>
+N_{i,k}(u)=\frac{u-u_{i}}{u_{i+k}-u_{i}}N_{i,k-1}(u)+\frac{u_{i+k+1}-u}{u_{i+k+1}-u_{i+1}}N_{i+1,k-1}(u) \\<br>
 \mbox{define } \frac{0}{0} = 0
 \end{cases}
 $$
@@ -507,9 +507,9 @@ $$
 <p><img src="/images/robotics/B%E6%A0%B7%E6%9D%A1%E6%9B%B2%E7%BA%BF/20150510153754214.jpg" alt="20150510153754214"></p>
 <p>根据图示，三种类型的B样条曲线对应的节点矢量分别为： 
 $$
-[0 \ \frac{1}{7} \ \frac{2}{7} \ \frac{3}{7} \ \frac{4}{7} \ \frac{5}{7} \ \frac{6}{7} \ 1] \<br>
-[0 \ 0 \ 0 \ \frac{1}{3} \ \frac{2}{3} 1 \ 1 \ 1] \<br>
-[0 \ 0 \ 0 \ \frac{1}{2} \ \frac{1}{2} 1 \ 1 \ 1] 
+[0 \ \frac{1}{7} \ \frac{2}{7} \ \frac{3}{7} \ \frac{4}{7} \ \frac{5}{7} \ \frac{6}{7} \ 1] \\<br>
+[0 \ 0 \ 0 \ \frac{1}{3} \ \frac{2}{3} 1 \ 1 \ 1] \\<br>
+[0 \ 0 \ 0 \ \frac{1}{2} \ \frac{1}{2} 1 \ 1 \ 1]
 $$
 需要注意的是分段Bezier曲线必须满足$\frac{n}{k}=正整数$。</p>
 <p>这里给出准均匀B样条和分段Bezier曲线的生成节点矢量的代码，均匀B样条的很简单就不列出了。假设共n+1个控制顶点，k次B样条，输入参数为 n, k ，输出节点矢量NodeVector。</p>
@@ -611,9 +611,9 @@ $$
 <p>根据B样条曲线的定义公式，曲线上任一点坐标值是参数变量$u$的函数，用矩阵形式表示
 $$
 p(u)=(P_{0} \quad P_{1} \quad &hellip; \quad P_{n}   )\begin{pmatrix}
-(N_{0,k} (u) \<br>
-(N_{1,k} (u) \<br>
-\vdots  \<br>
+(N_{0,k} (u) \\<br>
+(N_{1,k} (u) \\<br>
+\vdots  \\<br>
 (N_{n,k} (u)
 \end{pmatrix}
 $$

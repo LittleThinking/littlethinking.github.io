@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>逆运动学 on 小虎 - Mechanical student,Robot enthusiast</title>
+    <link>https://littlethinking.cn/tags/%E9%80%86%E8%BF%90%E5%8A%A8%E5%AD%A6/</link>
+    <description>Recent content in 逆运动学 on 小虎 - Mechanical student,Robot enthusiast</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Mon, 25 Jan 2021 14:03:23 +0800</lastBuildDate><atom:link href="https://littlethinking.cn/tags/%E9%80%86%E8%BF%90%E5%8A%A8%E5%AD%A6/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>【机器人学基础知识】8、“逆运动学”——从操作空间到关节空间（上篇）</title>
+      <link>https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_08%E9%80%86%E8%BF%90%E5%8A%A8%E5%AD%A6-%E4%BB%8E%E6%93%8D%E4%BD%9C%E7%A9%BA%E9%97%B4%E5%88%B0%E5%85%B3%E8%8A%82%E7%A9%BA%E9%97%B4/</link>
+      <pubDate>Mon, 25 Jan 2021 14:03:23 +0800</pubDate>
+      
+      <guid>https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_08%E9%80%86%E8%BF%90%E5%8A%A8%E5%AD%A6-%E4%BB%8E%E6%93%8D%E4%BD%9C%E7%A9%BA%E9%97%B4%E5%88%B0%E5%85%B3%E8%8A%82%E7%A9%BA%E9%97%B4/</guid>
+      <description>0 复习 机器人学基础知识已经完成第8篇了，这里梳理下： 入门：如果不清楚R关节与P关节，建议再去看第一篇文章【机器人学基础知识】1、从RP关节入</description>
+    </item>
+    
+  </channel>
+</rss>
