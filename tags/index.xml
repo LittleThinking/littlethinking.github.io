@@ -6,11 +6,20 @@
     <description>Recent content in Tags on 小虎 - Mechanical student,Robot enthusiast</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Mon, 25 Jan 2021 14:03:23 +0800</lastBuildDate><atom:link href="https://littlethinking.cn/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 26 Jan 2021 14:03:23 +0800</lastBuildDate><atom:link href="https://littlethinking.cn/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>动力学</title>
+      <link>https://littlethinking.cn/tags/%E5%8A%A8%E5%8A%9B%E5%AD%A6/</link>
+      <pubDate>Tue, 26 Jan 2021 14:03:23 +0800</pubDate>
+      
+      <guid>https://littlethinking.cn/tags/%E5%8A%A8%E5%8A%9B%E5%AD%A6/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>机器人学</title>
       <link>https://littlethinking.cn/tags/%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%AD%A6/</link>
-      <pubDate>Mon, 25 Jan 2021 14:03:23 +0800</pubDate>
+      <pubDate>Tue, 26 Jan 2021 14:03:23 +0800</pubDate>
       
       <guid>https://littlethinking.cn/tags/%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%AD%A6/</guid>
       <description></description>
@@ -19,18 +28,9 @@
     <item>
       <title>逆运动学</title>
       <link>https://littlethinking.cn/tags/%E9%80%86%E8%BF%90%E5%8A%A8%E5%AD%A6/</link>
-      <pubDate>Mon, 25 Jan 2021 14:03:23 +0800</pubDate>
-      
-      <guid>https://littlethinking.cn/tags/%E9%80%86%E8%BF%90%E5%8A%A8%E5%AD%A6/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>动力学</title>
-      <link>https://littlethinking.cn/tags/%E5%8A%A8%E5%8A%9B%E5%AD%A6/</link>
       <pubDate>Sun, 24 Jan 2021 14:03:23 +0800</pubDate>
       
-      <guid>https://littlethinking.cn/tags/%E5%8A%A8%E5%8A%9B%E5%AD%A6/</guid>
+      <guid>https://littlethinking.cn/tags/%E9%80%86%E8%BF%90%E5%8A%A8%E5%AD%A6/</guid>
       <description></description>
     </item>
     
