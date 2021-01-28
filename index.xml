@@ -70,7 +70,7 @@ $$&lt;/p&gt;
 &lt;p&gt;如果看不太明白上面这一段话也没有关系，我们以后会详细讲机械臂的各种控制方法。但是可以理解的一点是，&lt;strong&gt;动力学的引入允许我们更快、更精确地跟随需要的轨迹&lt;/strong&gt;。&lt;/p&gt;
 &lt;p&gt;给大家看看舵机做的只用逆运动学的机械臂和工业级的用于做精确激光切割的机械臂画圆的区别——&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://images.cnblogs.com/cnblogs_com/littlethinking/1924297/o_21012811363110_08%E5%8F%AA%E7%94%A8%E9%80%86%E8%BF%90%E5%8A%A8%E5%AD%A6.gif&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://images.cnblogs.com/cnblogs_com/littlethinking/1924297/o_21012811364810_09%E5%B7%A5%E4%B8%9A%E7%BA%A7.gif&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/robotics/%E5%B9%B2%E8%B4%A7_10%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%8A%A8%E5%8A%9B%E5%AD%A6/10_09%E5%B7%A5%E4%B8%9A%E7%BA%A7.gif&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 &lt;p&gt;但工业级械臂更庞大：&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/robotics/%E5%B9%B2%E8%B4%A7_10%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%8A%A8%E5%8A%9B%E5%AD%A6/10_10%E7%BA%BF%E5%88%87%E5%89%B2%E5%B7%A5%E4%B8%9A%E6%9C%BA%E6%A2%B0%E8%87%82.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 &lt;p&gt;现在，我们有最后一个任务，让end effector去打磨一个零件——拿一把锉刀靠近零件然后来回运动并不足够，你还需要能够控制锉刀对零件施加一定的力。很明显，涉及到接触力，单纯用运动学也是无法解决的。&lt;strong&gt;动力学的引入让我们有可能控制机械臂与外界的相互作用力&lt;/strong&gt;。&lt;/p&gt;
