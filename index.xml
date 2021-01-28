@@ -6,10 +6,79 @@
     <description>Recent content on 小虎 - Mechanical student,Robot enthusiast</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Mon, 25 Jan 2021 14:03:23 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 28 Jan 2021 14:03:23 +0800</lastBuildDate>
     
         <atom:link href="https://littlethinking.cn/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>【机器人学基础知识】10、运动学已经够用，为什么还要动力学</title>
+      <link>https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_10%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%8A%A8%E5%8A%9B%E5%AD%A6/</link>
+      <pubDate>Thu, 28 Jan 2021 14:03:23 +0800</pubDate>
+      
+      <guid>https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_10%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%8A%A8%E5%8A%9B%E5%AD%A6/</guid>
+      
+        <description>&lt;blockquote&gt;
+&lt;p&gt;本文为承上启下的一篇文章：一方面，我们很有必要把之前讲过的东西串起来过一遍；另一方面，在我们开始啃机械臂的动力学（dynamics）这块硬骨头之前，我们也很有必要弄明白“为什么需要研究机械臂的动力学？”这样一个问题。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;我们来看一个显示中的机器人，为了赏心悦目的需要，选择机械臂中的颜值担当UR5。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/robotics/%E5%B9%B2%E8%B4%A7_10%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%8A%A8%E5%8A%9B%E5%AD%A6/10_01UR5.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;从上图可以看到，UR5一共有六个R（旋转）关节，其中基座两个，肘部一个，腕部三个。现在如果需要写一段程序，完成两个任务：一个是&lt;strong&gt;把位于A点的物体捡起来并移动到B点&lt;/strong&gt;；二是&lt;strong&gt;在空中以一定的速度画圆&lt;/strong&gt;。假设我们能准确控制每个关节的位置，应当怎么做？&lt;/p&gt;
+&lt;p&gt;我们需要做的第一件事情，就是&lt;strong&gt;确定关节零位，求正运动学解&lt;/strong&gt;。做该步骤的原因是，这是机械臂&lt;strong&gt;数字化、可编程化&lt;/strong&gt;的第一步。这一步，我们可以采用传统的DH参数法。关于采用DH参数法如何确定坐标系（frame attachment），请看文章&lt;a href=&#34;https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_03dh%E5%BB%BA%E6%A8%A1/&#34;&gt;【机器人学基础知识】3、机械臂的坐标系与数学模型：传说中的DH参数&lt;/a&gt;。总之，在确定原点、确定Z轴、确定X轴等一系列步骤之后，我们得到类似下图的关节坐标系。（hint:RGB/红绿蓝对应XYZ）&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/robotics/%E5%B9%B2%E8%B4%A7_10%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%8A%A8%E5%8A%9B%E5%AD%A6/10_02UR5%E5%9D%90%E6%A0%87%E7%B3%BB.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;如果我们还记得DH参数定义中关节角度θ的定义，当θ为0时，一个关节的X轴与上一个关节的X轴应该平行——上图正是如此。&lt;/p&gt;
+&lt;p&gt;根据DH参数的定义：&lt;/p&gt;
+&lt;p&gt;![](/images/robotics/干货_10为什么需要动力学/10_03 DH参数定义.jpg)&lt;/p&gt;
+&lt;p&gt;我们在UR5的结构示意图标注出部分参数：&lt;/p&gt;
+&lt;p&gt;![](/images/robotics/干货_10为什么需要动力学/10_04UR5 DH示意图.jpg)&lt;/p&gt;
+&lt;p&gt;最后我们得到UR5的DH参数表：&lt;/p&gt;
+&lt;p&gt;![](/images/robotics/干货_10为什么需要动力学/10_05UR5 DH参数表.jpg)&lt;/p&gt;
+&lt;p&gt;a与d怎么来的？通常来讲，它们是机械设计的时候确定的设计参数，机械臂的生产产家会告诉这些数值。当然，我们也可以自行在机械臂上测量出来&amp;hellip;&amp;hellip;&lt;/p&gt;
+&lt;p&gt;实际运用中，机械臂的制造厂商通常会将机械臂的DH参数表给我们；实在没有，也可以根据一些算法，根据控制关节运动的同时用外部装置准确测量end effector的位姿解算出DH参数表。有时候，由于制造过程中不可避免的误差、或长时间使用后机械结构的磨损，会导致原有的DH参数表不够准确；这个时候也可以用类似的方法重新标定机械臂的DH参数。对这部分感兴趣的小伙伴，可以查一下机械臂的&lt;strong&gt;Kinematics Model Identification 或 Kinematics Calibration&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;对于在本文前面提到的第一个任务：将一个物体从A点移动B点。对于这样一个任务，我们只需要机械臂在A点的时候能在对的位置以对的角度拿到物体、在B点以对的位置对的角度放下物体就好了。所以，一个比较合适的思路是：&lt;/p&gt;
+&lt;p&gt;Ⅰ.计算A点与B点end effector理想位姿的逆运动学解（可以直接用解析大法几何大法等等）$q_a$，$q_b$&lt;/p&gt;
+&lt;p&gt;Ⅱ.从$q_a$到$q_b$求出关节的运动轨迹&lt;/p&gt;
+&lt;p&gt;Ⅲ.根据求出的轨迹，控制关节运动&lt;/p&gt;
+&lt;p&gt;是不是很简单？这样的简单的“Pick and Place”应用，大概就是机械臂在工业上最早甚至也是最广泛的应用了。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.cnblogs.com/cnblogs_com/littlethinking/1924297/o_21012811362010_06%20pick%20and%20place.gif&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;这里再简单讲解下关节空间的&lt;strong&gt;轨迹生成（Trajectory Generation）&lt;/strong&gt;。需要注意的是，trajectory并不仅仅是空间中的一条线，它是&lt;strong&gt;物体位姿相对于时间的函数&lt;/strong&gt;，包含了物体每个时刻的位置、速度、加速度等信息。&lt;/p&gt;
+&lt;p&gt;假设我们要求机械臂从A点到B点的时间为t&#39;，在A点与B点的时候end effector均为静止，那我们的轨迹q(t)应当满足这样的要求:
+$$
+q(0) = q_a, \ \ q(t&#39;) = q_b \\&lt;br&gt;
+q&#39;(0) = 0 , \ \ q(t&#39;) = 0
+$$
+这个函数需要满足上面四个等式，则它至少需要有四个未知数；因此最直接的思路就是用一个三阶多项式来拟合：
+$$
+q(t) = at^3 + bt^2 +ct +d
+$$&lt;/p&gt;
+&lt;p&gt;关节空间的轨迹生成比起操作空间的轨迹生成简单许多，主要是可以方便地避免超出关节可运动范围或奇异状态等问题。以后有机会，我们再仔细讲讲trajectory generation这个话题。&lt;/p&gt;
+&lt;p&gt;现在再看第二任务：在空中以一定速度画圆。这个任务本身已经规定了end effector的轨迹，而我们的任务是通过控制关节的运动让end effector能够跟随（track）这条轨迹。这样看来，我们很难再采用类似第一个任务那种方法。&lt;/p&gt;
+&lt;p&gt;因为我们的任务是让end effector跟随一个圆形轨迹，也就是说，每一个时刻我们都要知道end effector 位姿$x_d$。我们说过，每时每刻都把逆运动学解直接求出来是一个不太现实的——这个时候，雅可比矩阵求逆法应该自然而然地进入我们脑海：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/robotics/%E5%B9%B2%E8%B4%A7_10%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%8A%A8%E5%8A%9B%E5%AD%A6/10_07%E9%80%86%E8%BF%90%E5%8A%A8%E5%AD%A6%E6%B1%82%E8%A7%A3%E6%80%9D%E8%B7%AF.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;对于这个方法不是很清楚的，请回去看&lt;a href=&#34;https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_08%E9%80%86%E8%BF%90%E5%8A%A8%E5%AD%A6-%E4%BB%8E%E6%93%8D%E4%BD%9C%E7%A9%BA%E9%97%B4%E5%88%B0%E5%85%B3%E8%8A%82%E7%A9%BA%E9%97%B4/&#34;&gt;【机器人学基础知识】8、“逆运动学”——从操作空间到关节空间（上篇）&lt;/a&gt;一文。&lt;/p&gt;
+&lt;p&gt;这个任务相比“Pick and Place”难度提升了一些，但在工业应用中，加工、切割、喷涂等等，类似的应用也非常广泛。&lt;/p&gt;
+&lt;p&gt;根据任务的不同，我们需要采用不同的解决方法。那么现在的问题是，什么样的任务只靠运动学无法解决好，而需要动力学加入呢？&lt;/p&gt;
+&lt;p&gt;要回答这个问题，首先要明确动力学研究什么。机械臂的运动学，研究的是关节位置或位置变化与末端执行器位姿或位姿变化的关系，这里面只有“运动”，不涉及任何“动力”；由此可以想见，机械臂的动力学研究的必然与“动力”有关。所谓“动力”，指的是机械臂各部分受到的力或扭矩（我们以后统一用“力”指代“力或扭矩”）。机械臂的动力学，则是要研究下面几个问题：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;机械臂在运动过程中受到什么样地内力和外力？&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;这些力怎么改变机械臂的运动状态？&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;关节受力与末端执行器的受力有什么关系？&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;因为研究的是力，所以我们对机械臂的了解，在“关节的运动如何改变末端执行器的运动”以外又深入了一层，进入了“关节驱动器（actuator）产生的力如何改变关节的运动、从而改变end effector的运动”这个层面。也因此，我们将要控制的变量，也从关节的位置或速度，变成了关节的力。&lt;/p&gt;
+&lt;p&gt;如果你有准确的动力学模型，你就能够准确控制关节的加速度，从而准确控制end effector的加速度。我们知道，位置是加速度对时间的两次积分，这意味着，直接控制加速度允许你对轨迹做更精确快速的跟踪。&lt;/p&gt;
+&lt;p&gt;对上面所说的第二个任务，如果要求画圆的速度很快，雅可比矩阵求逆法d~x~不能过大的要求马上就不能满足了。即使忽略这个限制，关节位置控制器由于对它所要控制的对象的动力学一无所知，也很难快速地跟上end effector圆形轨迹需要的关节轨迹。结果是什么呢？机械臂可能会抖得很厉害、画出来的圆会比实际的小且不那么圆、甚至end effector只能在原地振动。&lt;/p&gt;
+&lt;p&gt;如果看不太明白上面这一段话也没有关系，我们以后会详细讲机械臂的各种控制方法。但是可以理解的一点是，&lt;strong&gt;动力学的引入允许我们更快、更精确地跟随需要的轨迹&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;给大家看看舵机做的只用逆运动学的机械臂和工业级的用于做精确激光切割的机械臂画圆的区别——&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.cnblogs.com/cnblogs_com/littlethinking/1924297/o_21012811363110_08%E5%8F%AA%E7%94%A8%E9%80%86%E8%BF%90%E5%8A%A8%E5%AD%A6.gif&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.cnblogs.com/cnblogs_com/littlethinking/1924297/o_21012811364810_09%E5%B7%A5%E4%B8%9A%E7%BA%A7.gif&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;但工业级械臂更庞大：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/robotics/%E5%B9%B2%E8%B4%A7_10%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%8A%A8%E5%8A%9B%E5%AD%A6/10_10%E7%BA%BF%E5%88%87%E5%89%B2%E5%B7%A5%E4%B8%9A%E6%9C%BA%E6%A2%B0%E8%87%82.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;现在，我们有最后一个任务，让end effector去打磨一个零件——拿一把锉刀靠近零件然后来回运动并不足够，你还需要能够控制锉刀对零件施加一定的力。很明显，涉及到接触力，单纯用运动学也是无法解决的。&lt;strong&gt;动力学的引入让我们有可能控制机械臂与外界的相互作用力&lt;/strong&gt;。&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;这篇文章没有太多新的知识，这可能也是任何课本都不会有的章节；但我觉得它很重要。首先，在学完了逆运动学之后，你已经可以尽情地去用Arduino和舵机等等DIY自己的机械臂，尝试不同的逆运动学算法，让它完成搬东西、画画等各种好玩的任务。然而你也要明白，在Robotics的世界里，这只是入门的一步。没有动力学加入控制回路的机器人能做的事情非常有限，它们速度无法做到很快、负载不能做很重、如果功率很大会非常危险。明白了这些，我们才不会在学习复杂的机械臂动力学时不知所以然。&lt;/p&gt;
+</description>
+      
+    </item>
     
     <item>
       <title>【机器人学基础知识】9、“逆运动学”——从操作空间到关节空间（下篇）</title>
@@ -1414,75 +1483,6 @@ $$
 &lt;li&gt;所有文章通常不开放评论，若有错误或疑问，欢迎邮件提出，接受各种建议&lt;/li&gt;
 &lt;li&gt;拒绝任何政治相关内容&lt;/li&gt;
 &lt;/ul&gt;
-</description>
-      
-    </item>
-    
-    <item>
-      <title></title>
-      <link>https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_10%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%8A%A8%E5%8A%9B%E5%AD%A6/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_10%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%8A%A8%E5%8A%9B%E5%AD%A6/</guid>
-      
-        <description>&lt;blockquote&gt;
-&lt;p&gt;本文为承上启下的一篇文章：一方面，我们很有必要把之前讲过的东西串起来过一遍；另一方面，在我们开始啃机械臂的动力学（dynamics）这块硬骨头之前，我们也很有必要弄明白“为什么需要研究机械臂的动力学？”这样一个问题。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;我们来看一个显示中的机器人，为了赏心悦目的需要，选择机械臂中的颜值担当UR5。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/robotics/%E5%B9%B2%E8%B4%A7_10%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%8A%A8%E5%8A%9B%E5%AD%A6/10_01UR5.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
-&lt;p&gt;从上图可以看到，UR5一共有六个R（旋转）关节，其中基座两个，肘部一个，腕部三个。现在如果需要写一段程序，完成两个任务：一个是&lt;strong&gt;把位于A点的物体捡起来并移动到B点&lt;/strong&gt;；二是&lt;strong&gt;在空中以一定的速度画圆&lt;/strong&gt;。假设我们能准确控制每个关节的位置，应当怎么做？&lt;/p&gt;
-&lt;p&gt;我们需要做的第一件事情，就是&lt;strong&gt;确定关节零位，求正运动学解&lt;/strong&gt;。做该步骤的原因是，这是机械臂&lt;strong&gt;数字化、可编程化&lt;/strong&gt;的第一步。这一步，我们可以采用传统的DH参数法。关于采用DH参数法如何确定坐标系（frame attachment），请看文章&lt;a href=&#34;https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_03dh%E5%BB%BA%E6%A8%A1/&#34;&gt;【机器人学基础知识】3、机械臂的坐标系与数学模型：传说中的DH参数&lt;/a&gt;。总之，在确定原点、确定Z轴、确定X轴等一系列步骤之后，我们得到类似下图的关节坐标系。（hint:RGB/红绿蓝对应XYZ）&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/robotics/%E5%B9%B2%E8%B4%A7_10%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%8A%A8%E5%8A%9B%E5%AD%A6/10_02UR5%E5%9D%90%E6%A0%87%E7%B3%BB.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
-&lt;p&gt;如果我们还记得DH参数定义中关节角度θ的定义，当θ为0时，一个关节的X轴与上一个关节的X轴应该平行——上图正是如此。&lt;/p&gt;
-&lt;p&gt;根据DH参数的定义：&lt;/p&gt;
-&lt;p&gt;![](/images/robotics/干货_10为什么需要动力学/10_03 DH参数定义.jpg)&lt;/p&gt;
-&lt;p&gt;我们在UR5的结构示意图标注出部分参数：&lt;/p&gt;
-&lt;p&gt;![](/images/robotics/干货_10为什么需要动力学/10_04UR5 DH示意图.jpg)&lt;/p&gt;
-&lt;p&gt;最后我们得到UR5的DH参数表：&lt;/p&gt;
-&lt;p&gt;![](/images/robotics/干货_10为什么需要动力学/10_05UR5 DH参数表.jpg)&lt;/p&gt;
-&lt;p&gt;a与d怎么来的？通常来讲，它们是机械设计的时候确定的设计参数，机械臂的生产产家会告诉这些数值。当然，我们也可以自行在机械臂上测量出来&amp;hellip;&amp;hellip;&lt;/p&gt;
-&lt;p&gt;实际运用中，机械臂的制造厂商通常会将机械臂的DH参数表给我们；实在没有，也可以根据一些算法，根据控制关节运动的同时用外部装置准确测量end effector的位姿解算出DH参数表。有时候，由于制造过程中不可避免的误差、或长时间使用后机械结构的磨损，会导致原有的DH参数表不够准确；这个时候也可以用类似的方法重新标定机械臂的DH参数。对这部分感兴趣的小伙伴，可以查一下机械臂的&lt;strong&gt;Kinematics Model Identification 或 Kinematics Calibration&lt;/strong&gt;。&lt;/p&gt;
-&lt;p&gt;对于在本文前面提到的第一个任务：将一个物体从A点移动B点。对于这样一个任务，我们只需要机械臂在A点的时候能在对的位置以对的角度拿到物体、在B点以对的位置对的角度放下物体就好了。所以，一个比较合适的思路是：&lt;/p&gt;
-&lt;p&gt;Ⅰ.计算A点与B点end effector理想位姿的逆运动学解（可以直接用解析大法几何大法等等）$q_a$，$q_b$&lt;/p&gt;
-&lt;p&gt;Ⅱ.从$q_a$到$q_b$求出关节的运动轨迹&lt;/p&gt;
-&lt;p&gt;Ⅲ.根据求出的轨迹，控制关节运动&lt;/p&gt;
-&lt;p&gt;是不是很简单？这样的简单的“Pick and Place”应用，大概就是机械臂在工业上最早甚至也是最广泛的应用了。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://images.cnblogs.com/cnblogs_com/littlethinking/1924297/o_21012811362010_06%20pick%20and%20place.gif&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
-&lt;p&gt;这里再简单讲解下关节空间的&lt;strong&gt;轨迹生成（Trajectory Generation）&lt;/strong&gt;。需要注意的是，trajectory并不仅仅是空间中的一条线，它是&lt;strong&gt;物体位姿相对于时间的函数&lt;/strong&gt;，包含了物体每个时刻的位置、速度、加速度等信息。&lt;/p&gt;
-&lt;p&gt;假设我们要求机械臂从A点到B点的时间为t&#39;，在A点与B点的时候end effector均为静止，那我们的轨迹q(t)应当满足这样的要求:
-$$
-q(0) = q_a, \ \ q(t&#39;) = q_b \\&lt;br&gt;
-q&#39;(0) = 0 , \ \ q(t&#39;) = 0
-$$
-这个函数需要满足上面四个等式，则它至少需要有四个未知数；因此最直接的思路就是用一个三阶多项式来拟合：
-$$
-q(t) = at^3 + bt^2 +ct +d
-$$&lt;/p&gt;
-&lt;p&gt;关节空间的轨迹生成比起操作空间的轨迹生成简单许多，主要是可以方便地避免超出关节可运动范围或奇异状态等问题。以后有机会，我们再仔细讲讲trajectory generation这个话题。&lt;/p&gt;
-&lt;p&gt;现在再看第二任务：在空中以一定速度画圆。这个任务本身已经规定了end effector的轨迹，而我们的任务是通过控制关节的运动让end effector能够跟随（track）这条轨迹。这样看来，我们很难再采用类似第一个任务那种方法。&lt;/p&gt;
-&lt;p&gt;因为我们的任务是让end effector跟随一个圆形轨迹，也就是说，每一个时刻我们都要知道end effector 位姿$x_d$。我们说过，每时每刻都把逆运动学解直接求出来是一个不太现实的——这个时候，雅可比矩阵求逆法应该自然而然地进入我们脑海：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/robotics/%E5%B9%B2%E8%B4%A7_10%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%8A%A8%E5%8A%9B%E5%AD%A6/10_07%E9%80%86%E8%BF%90%E5%8A%A8%E5%AD%A6%E6%B1%82%E8%A7%A3%E6%80%9D%E8%B7%AF.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
-&lt;p&gt;对于这个方法不是很清楚的，请回去看&lt;a href=&#34;https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_08%E9%80%86%E8%BF%90%E5%8A%A8%E5%AD%A6-%E4%BB%8E%E6%93%8D%E4%BD%9C%E7%A9%BA%E9%97%B4%E5%88%B0%E5%85%B3%E8%8A%82%E7%A9%BA%E9%97%B4/&#34;&gt;【机器人学基础知识】8、“逆运动学”——从操作空间到关节空间（上篇）&lt;/a&gt;一文。&lt;/p&gt;
-&lt;p&gt;这个任务相比“Pick and Place”难度提升了一些，但在工业应用中，加工、切割、喷涂等等，类似的应用也非常广泛。&lt;/p&gt;
-&lt;p&gt;根据任务的不同，我们需要采用不同的解决方法。那么现在的问题是，什么样的任务只靠运动学无法解决好，而需要动力学加入呢？&lt;/p&gt;
-&lt;p&gt;要回答这个问题，首先要明确动力学研究什么。机械臂的运动学，研究的是关节位置或位置变化与末端执行器位姿或位姿变化的关系，这里面只有“运动”，不涉及任何“动力”；由此可以想见，机械臂的动力学研究的必然与“动力”有关。所谓“动力”，指的是机械臂各部分受到的力或扭矩（我们以后统一用“力”指代“力或扭矩”）。机械臂的动力学，则是要研究下面几个问题：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;机械臂在运动过程中受到什么样地内力和外力？&lt;/strong&gt;&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;这些力怎么改变机械臂的运动状态？&lt;/strong&gt;&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;关节受力与末端执行器的受力有什么关系？&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;因为研究的是力，所以我们对机械臂的了解，在“关节的运动如何改变末端执行器的运动”以外又深入了一层，进入了“关节驱动器（actuator）产生的力如何改变关节的运动、从而改变end effector的运动”这个层面。也因此，我们将要控制的变量，也从关节的位置或速度，变成了关节的力。&lt;/p&gt;
-&lt;p&gt;如果你有准确的动力学模型，你就能够准确控制关节的加速度，从而准确控制end effector的加速度。我们知道，位置是加速度对时间的两次积分，这意味着，直接控制加速度允许你对轨迹做更精确快速的跟踪。&lt;/p&gt;
-&lt;p&gt;对上面所说的第二个任务，如果要求画圆的速度很快，雅可比矩阵求逆法d~x~不能过大的要求马上就不能满足了。即使忽略这个限制，关节位置控制器由于对它所要控制的对象的动力学一无所知，也很难快速地跟上end effector圆形轨迹需要的关节轨迹。结果是什么呢？机械臂可能会抖得很厉害、画出来的圆会比实际的小且不那么圆、甚至end effector只能在原地振动。&lt;/p&gt;
-&lt;p&gt;如果看不太明白上面这一段话也没有关系，我们以后会详细讲机械臂的各种控制方法。但是可以理解的一点是，&lt;strong&gt;动力学的引入允许我们更快、更精确地跟随需要的轨迹&lt;/strong&gt;。&lt;/p&gt;
-&lt;p&gt;给大家看看舵机做的只用逆运动学的机械臂和工业级的用于做精确激光切割的机械臂画圆的区别——&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://images.cnblogs.com/cnblogs_com/littlethinking/1924297/o_21012811363110_08%E5%8F%AA%E7%94%A8%E9%80%86%E8%BF%90%E5%8A%A8%E5%AD%A6.gif&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://images.cnblogs.com/cnblogs_com/littlethinking/1924297/o_21012811364810_09%E5%B7%A5%E4%B8%9A%E7%BA%A7.gif&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
-&lt;p&gt;但工业级械臂更庞大：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/robotics/%E5%B9%B2%E8%B4%A7_10%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%8A%A8%E5%8A%9B%E5%AD%A6/10_10%E7%BA%BF%E5%88%87%E5%89%B2%E5%B7%A5%E4%B8%9A%E6%9C%BA%E6%A2%B0%E8%87%82.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
-&lt;p&gt;现在，我们有最后一个任务，让end effector去打磨一个零件——拿一把锉刀靠近零件然后来回运动并不足够，你还需要能够控制锉刀对零件施加一定的力。很明显，涉及到接触力，单纯用运动学也是无法解决的。&lt;strong&gt;动力学的引入让我们有可能控制机械臂与外界的相互作用力&lt;/strong&gt;。&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;这篇文章没有太多新的知识，这可能也是任何课本都不会有的章节；但我觉得它很重要。首先，在学完了逆运动学之后，你已经可以尽情地去用Arduino和舵机等等DIY自己的机械臂，尝试不同的逆运动学算法，让它完成搬东西、画画等各种好玩的任务。然而你也要明白，在Robotics的世界里，这只是入门的一步。没有动力学加入控制回路的机器人能做的事情非常有限，它们速度无法做到很快、负载不能做很重、如果功率很大会非常危险。明白了这些，我们才不会在学习复杂的机械臂动力学时不知所以然。&lt;/p&gt;
 </description>
       
     </item>
