@@ -28,11 +28,11 @@
 &lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/robotics/%E5%B9%B2%E8%B4%A7_10%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%8A%A8%E5%8A%9B%E5%AD%A6/10_02UR5%E5%9D%90%E6%A0%87%E7%B3%BB.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 &lt;p&gt;如果我们还记得DH参数定义中关节角度θ的定义，当θ为0时，一个关节的X轴与上一个关节的X轴应该平行——上图正是如此。&lt;/p&gt;
 &lt;p&gt;根据DH参数的定义：&lt;/p&gt;
-&lt;p&gt;![](/images/robotics/干货_10为什么需要动力学/10_03 DH参数定义.jpg)&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/robotics/%E5%B9%B2%E8%B4%A7_10%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%8A%A8%E5%8A%9B%E5%AD%A6/10_03DH%E5%8F%82%E6%95%B0%E5%AE%9A%E4%B9%89.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 &lt;p&gt;我们在UR5的结构示意图标注出部分参数：&lt;/p&gt;
-&lt;p&gt;![](/images/robotics/干货_10为什么需要动力学/10_04UR5 DH示意图.jpg)&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/robotics/%E5%B9%B2%E8%B4%A7_10%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%8A%A8%E5%8A%9B%E5%AD%A6/10_04UR5DH%E7%A4%BA%E6%84%8F%E5%9B%BE.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 &lt;p&gt;最后我们得到UR5的DH参数表：&lt;/p&gt;
-&lt;p&gt;![](/images/robotics/干货_10为什么需要动力学/10_05UR5 DH参数表.jpg)&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/robotics/%E5%B9%B2%E8%B4%A7_10%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%8A%A8%E5%8A%9B%E5%AD%A6/10_05UR5DH%E5%8F%82%E6%95%B0%E8%A1%A8.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 &lt;p&gt;a与d怎么来的？通常来讲，它们是机械设计的时候确定的设计参数，机械臂的生产产家会告诉这些数值。当然，我们也可以自行在机械臂上测量出来&amp;hellip;&amp;hellip;&lt;/p&gt;
 &lt;p&gt;实际运用中，机械臂的制造厂商通常会将机械臂的DH参数表给我们；实在没有，也可以根据一些算法，根据控制关节运动的同时用外部装置准确测量end effector的位姿解算出DH参数表。有时候，由于制造过程中不可避免的误差、或长时间使用后机械结构的磨损，会导致原有的DH参数表不够准确；这个时候也可以用类似的方法重新标定机械臂的DH参数。对这部分感兴趣的小伙伴，可以查一下机械臂的&lt;strong&gt;Kinematics Model Identification 或 Kinematics Calibration&lt;/strong&gt;。&lt;/p&gt;
 &lt;p&gt;对于在本文前面提到的第一个任务：将一个物体从A点移动B点。对于这样一个任务，我们只需要机械臂在A点的时候能在对的位置以对的角度拿到物体、在B点以对的位置对的角度放下物体就好了。所以，一个比较合适的思路是：&lt;/p&gt;
