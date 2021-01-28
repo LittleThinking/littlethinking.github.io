@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>【机器人学基础知识】8、“逆运动学”——从操作空间到关节空间（上篇） - 小虎 - Mechanical student,Robot enthusiast</title>
+  <title>【机器人学基础知识】9、“逆运动学”——从操作空间到关节空间（下篇） - 小虎 - Mechanical student,Robot enthusiast</title>
   
 
 <meta name="renderer" content="webkit" />
@@ -23,7 +23,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 
 <meta name="author" content="xiaohu" />
-  <meta name="description" content="0 复习 机器人学基础知识已经完成第8篇了，这里梳理下： 入门：如果不清楚R关节与P关节，建议再去看第一篇文章【机器人学基础知识】1、从RP关节入" />
+  <meta name="description" content="逆运动学，就是从操作空间的end effector position and orientation,求关节空间的joint position的问题。在上一篇文章中，我们简单提到求逆" />
 
   <meta name="keywords" content="ROS, algorithm, 小虎, 博客, 笔记" />
 
@@ -35,7 +35,7 @@
 <meta name="generator" content="Hugo 0.80.0" />
 
 
-<link rel="canonical" href="https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_08%E9%80%86%E8%BF%90%E5%8A%A8%E5%AD%A6-%E4%BB%8E%E6%93%8D%E4%BD%9C%E7%A9%BA%E9%97%B4%E5%88%B0%E5%85%B3%E8%8A%82%E7%A9%BA%E9%97%B4/" />
+<link rel="canonical" href="https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_09%E9%80%86%E8%BF%90%E5%8A%A8%E5%AD%A6-%E4%BB%8E%E6%93%8D%E4%BD%9C%E7%A9%BA%E9%97%B4%E5%88%B0%E5%85%B3%E8%8A%82%E7%A9%BA%E9%97%B4%E4%B8%8B%E7%AF%87/" />
 
 
 
@@ -59,24 +59,24 @@
 
 
 
-<meta property="og:title" content="【机器人学基础知识】8、“逆运动学”——从操作空间到关节空间（上篇）" />
-<meta property="og:description" content="0 复习 机器人学基础知识已经完成第8篇了，这里梳理下： 入门：如果不清楚R关节与P关节，建议再去看第一篇文章【机器人学基础知识】1、从RP关节入" />
+<meta property="og:title" content="【机器人学基础知识】9、“逆运动学”——从操作空间到关节空间（下篇）" />
+<meta property="og:description" content="逆运动学，就是从操作空间的end effector position and orientation,求关节空间的joint position的问题。在上一篇文章中，我们简单提到求逆" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_08%E9%80%86%E8%BF%90%E5%8A%A8%E5%AD%A6-%E4%BB%8E%E6%93%8D%E4%BD%9C%E7%A9%BA%E9%97%B4%E5%88%B0%E5%85%B3%E8%8A%82%E7%A9%BA%E9%97%B4/" />
-<meta property="article:published_time" content="2021-01-24T14:03:23+08:00" />
-<meta property="article:modified_time" content="2021-01-24T14:05:23+08:00" />
-<meta itemprop="name" content="【机器人学基础知识】8、“逆运动学”——从操作空间到关节空间（上篇）">
-<meta itemprop="description" content="0 复习 机器人学基础知识已经完成第8篇了，这里梳理下： 入门：如果不清楚R关节与P关节，建议再去看第一篇文章【机器人学基础知识】1、从RP关节入">
-<meta itemprop="datePublished" content="2021-01-24T14:03:23+08:00" />
-<meta itemprop="dateModified" content="2021-01-24T14:05:23+08:00" />
-<meta itemprop="wordCount" content="3634">
+<meta property="og:url" content="https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_09%E9%80%86%E8%BF%90%E5%8A%A8%E5%AD%A6-%E4%BB%8E%E6%93%8D%E4%BD%9C%E7%A9%BA%E9%97%B4%E5%88%B0%E5%85%B3%E8%8A%82%E7%A9%BA%E9%97%B4%E4%B8%8B%E7%AF%87/" />
+<meta property="article:published_time" content="2021-01-25T14:03:23+08:00" />
+<meta property="article:modified_time" content="2021-01-25T14:05:23+08:00" />
+<meta itemprop="name" content="【机器人学基础知识】9、“逆运动学”——从操作空间到关节空间（下篇）">
+<meta itemprop="description" content="逆运动学，就是从操作空间的end effector position and orientation,求关节空间的joint position的问题。在上一篇文章中，我们简单提到求逆">
+<meta itemprop="datePublished" content="2021-01-25T14:03:23+08:00" />
+<meta itemprop="dateModified" content="2021-01-25T14:05:23+08:00" />
+<meta itemprop="wordCount" content="2854">
 
 
 
 <meta itemprop="keywords" content="机器人学,逆运动学," />
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="【机器人学基础知识】8、“逆运动学”——从操作空间到关节空间（上篇）"/>
-<meta name="twitter:description" content="0 复习 机器人学基础知识已经完成第8篇了，这里梳理下： 入门：如果不清楚R关节与P关节，建议再去看第一篇文章【机器人学基础知识】1、从RP关节入"/>
+<meta name="twitter:title" content="【机器人学基础知识】9、“逆运动学”——从操作空间到关节空间（下篇）"/>
+<meta name="twitter:description" content="逆运动学，就是从操作空间的end effector position and orientation,求关节空间的joint position的问题。在上一篇文章中，我们简单提到求逆"/>
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -298,18 +298,18 @@
           <article class="post bg-white">
     
     <header class="post-header">
-      <h1 class="post-title">【机器人学基础知识】8、“逆运动学”——从操作空间到关节空间（上篇）</h1>
+      <h1 class="post-title">【机器人学基础知识】9、“逆运动学”——从操作空间到关节空间（下篇）</h1>
       
       <div class="post-meta">
-        <time datetime="2021-01-24" class="post-time">
-          2021-01-24
+        <time datetime="2021-01-25" class="post-time">
+          2021-01-25
         </time>
         <div class="post-category">
             <a href="https://littlethinking.cn/categories/%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%AD%A6%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/"> 机器人学基础知识 </a>
             
           </div>
-        <span class="more-meta"> 约 3634 字 </span>
-          <span class="more-meta"> 预计阅读 8 分钟 </span>
+        <span class="more-meta"> 约 2854 字 </span>
+          <span class="more-meta"> 预计阅读 6 分钟 </span>
 
         
         
@@ -328,10 +328,9 @@
   <ul>
     <li>
       <ul>
-        <li><a href="#0-复习">0 复习</a></li>
-        <li><a href="#1-逆运动学inverse-kinematics">1 逆运动学（Inverse Kinematics）</a></li>
-        <li><a href="#2-迭代解-雅可比矩阵求逆jacobian-inverse">2 迭代解-雅可比矩阵求逆（Jacobian Inverse）</a></li>
-        <li><a href="#3-冗余雅可比矩阵求逆">3 冗余雅可比矩阵求逆</a></li>
+        <li><a href="#1-雅可比矩阵求逆法">1 雅可比矩阵求逆法</a></li>
+        <li><a href="#2-dlsdamped-least-square阻尼最小平方法">2 DLS（Damped Least Square，阻尼最小平方法）</a></li>
+        <li><a href="#3-雅可比矩阵转置法">3 雅可比矩阵转置法</a></li>
       </ul>
     </li>
   </ul>
@@ -341,114 +340,92 @@
 
     
     <div class="post-content">
-      <h3 id="0-复习">0 复习</h3>
-<p>机器人学基础知识已经完成第8篇了，这里梳理下：</p>
-<ul>
-<li><strong>入门</strong>：如果不清楚R关节与P关节，建议再去看第一篇文章<a href="https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_01%E4%BB%8Erp%E5%85%B3%E8%8A%82%E5%85%A5%E9%97%A8%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%AD%A6/">【机器人学基础知识】1、从RP关节入门机器人学</a></li>
-<li><strong>重要背景知识</strong>：如果不清楚w.r.t frame{0}、旋转矩阵、齐次坐标变换等，建议再去看第二篇文章<a href="https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_02%E4%BD%8D%E7%BD%AE%E8%A7%92%E5%BA%A6%E5%B9%B3%E7%A7%BB%E6%97%8B%E8%BD%AC%E4%BB%A5%E5%8F%8A%E5%9D%90%E6%A0%87%E5%8F%98%E6%8D%A2/">【机器人学基础知识】2、位置角度平移旋转，“乱七八糟”的坐标变换</a></li>
-<li><strong>DH参数是啥</strong>？<strong>从关节空间的关节位置（关节位置又是啥！说不出来要面壁了）如何求出操作空间的end effector position/orientation</strong>？不清楚这些概念，可以再浏览下<a href="https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_03dh%E5%BB%BA%E6%A8%A1/">【机器人学基础知识】3、机械臂的坐标系与数学模型：传说中的DH参数</a>与<a href="https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_04%E6%AD%A3%E8%BF%90%E5%8A%A8%E5%AD%A6-%E4%BB%8E%E5%85%B3%E8%8A%82%E7%A9%BA%E9%97%B4%E5%88%B0%E6%93%8D%E4%BD%9C%E7%A9%BA%E9%97%B4/">【机器人学基础知识】4、机械臂的坐标系与数学模型：传说中的DH参数</a></li>
-<li><strong>从关节空间的关节速度怎么求出操作空间的end effector速度</strong>？？不清楚这些概念，可以再浏览下<a href="https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_05%E7%9E%AC%E6%97%B6%E8%BF%90%E5%8A%A8%E5%AD%A6/">【机器人学基础知识】5、“瞬时运动学”——还是从关节空间到操作空间</a>、<a href="https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_06%E6%80%8E%E4%B9%88%E6%B1%82%E9%9B%85%E5%8F%AF%E6%AF%94%E7%9F%A9%E9%98%B5/">【机器人学基础知识】6、机械臂的雅可比矩阵这么厉害，怎么把它求出来呢？</a>以及<a href="https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_07%E9%9B%85%E5%8F%AF%E6%AF%94%E7%9F%A9%E9%98%B5%E7%BB%88%E7%AF%87/">【机器人学基础知识】7、力的传递关系、奇异、冗余——从雅可比矩阵你还能得到什么？(雅可比矩阵下篇)</a></li>
-</ul>
-<h3 id="1-逆运动学inverse-kinematics">1 逆运动学（Inverse Kinematics）</h3>
-<p>有了前面的铺垫，理解逆运动学所研究的问题就变得非常简单了——我要求我的end effector运动到某一个位置朝向某一个方向（比如我要控制我的手去拿一杯水），此时我的手臂各个关节应该运动到哪个关节位置呢？这个问题显然是机器人学需要研究的一个根本问题——因为对于任意机械臂，<strong>你想控制的量在操作空间，而你能控制的量却在关节空间</strong>。想要控制end effector在操作空间完成特定操作，就一定避不开逆运动学这个问题。</p>
-<p>逆运动学最基本的思路，是从正运动学反过来，比如以我们最熟悉的RR平面机械臂为例</p>
-<p><img src="/images/robotics/%E5%B9%B2%E8%B4%A7_08%E9%80%86%E8%BF%90%E5%8A%A8%E5%AD%A6-%E4%BB%8E%E6%93%8D%E4%BD%9C%E7%A9%BA%E9%97%B4%E5%88%B0%E5%85%B3%E8%8A%82%E7%A9%BA%E9%97%B4/8_01RR%E6%9C%BA%E6%A2%B0%E8%87%82.jpg" alt=""></p>
-<p>它的逆运动学问题是：已知操作空间$(x_e,y_e)$，怎么求关节空间$(\theta_1,\theta_2)$？</p>
-<p>很明显我们有两个未知数、两个方程，解解方程就行了。当然，这明显是一个<strong>非线性方程组</strong>，怎么解？我是把两个等式都两边平方然后相加，可以求出$\theta_2$，然后再求出$\theta_1$。</p>
-<p>如果是一个六自由度的机械臂，我们用包含关节位置的Transformation Matrix（齐次坐标变换矩阵）来表示end effector的位置和朝向，这个矩阵包含了end effector position w.r.t {0}（一个3×1的向量），以及end effector的旋转矩阵w.r.t {0}（一个3×3的矩阵），一共12个未知数，这时候逆运动学又怎么求呢？</p>
-<p>如果是一个七自由度的机械臂，我们说这时候机械臂存在冗余自由度，end effector固定不动的时候关节仍然可以运动，这时候逆运动学又怎么求呢？</p>
-<p>由于逆运动学非线性、解不一定存在或不是唯一等特性，比起正运动学直截了当的写矩阵，求解逆运动学就要困难得多，也因此有很多不同的方法：</p>
-<ul>
-<li>
-<p><strong>解析法</strong>（Analysis Solution），顾名思义是<strong>用代数或几何大法直接求解</strong>，如上面的例子所示。通常随着自由度上升，求得解析解的难度也越来越大，对于冗余机械臂还需要从几个解中选择合适的解。这种方法通常用在特定几何结构的机械臂，并且有特定的关节位置求解顺序。这里有一个视频，展示了一个六自由度KUKA KR 60机械臂的解析解求解方法，<a href="https://v.qq.com/x/page/k1304y06jf4.html">视频链接</a>。由于解析解法不具有通用性，我们后面不再详述。</p>
-</li>
-<li>
-<p><strong>优化法</strong>（Optimization-based Solution），是<strong>把问题转化为一个优化问题求数值解</strong>。用数学语言表达，就是把求
-$$
-q = f^{-1}(x)
-$$</p>
-<p>的问题，转化为&quot;求关节位置q，使实际end effector位置x与正运动学算出的end effector位置发f(q)之间的差值最小&quot;的问题：
-$$
-\min_q,where \ e = {(x - f(q))}^2
-$$
-如何求解上面这个式子（比如用梯度下降大法Gradient Descent）就是一个数学问题了，所以本文也不再详述。</p>
-</li>
-<li>
-<p><strong>迭代解 - 雅可比矩阵求逆法</strong>（Iterative Method - Jacobian Inverse），是把问题“微分化”，利用瞬时运动学的逆运算无限逼近
+      <blockquote>
+<p>逆运动学，就是<strong>从操作空间的end effector position and orientation,求关节空间的joint position</strong>的问题。在上一篇文章中，我们简单提到求逆运动学解的解析解法和优化解法，详细讲解了用逆瞬时（或说微分）运动学即雅可比矩阵法迭代求解逆运动学的方法。这篇文章我们继续讲雅可比矩阵求逆法存在的问题、用以对付Singularity问题的阻尼最小平方法，并详细地讲讲雅可比矩阵转置法。</p>
+</blockquote>
+<h3 id="1-雅可比矩阵求逆法">1 雅可比矩阵求逆法</h3>
+<h4 id="11-原理">1.1 原理</h4>
+<p>雅可比矩阵求逆法，就是利用下面式子所示的关节速度与end effector速度的关系，迭代求解逆运动学问题的方法。
 $$
 \dot{x} = J \dot{q} \Rightarrow \dot{q} = J^{-1} \dot{x}
-$$</p>
-</li>
-<li>
-<p><strong>雅可比矩阵转置法</strong>（Jacobian Transpose），是从下面式子出发，用雅可比矩阵的转置代替困难的求逆运算
 $$
-\tau = J^TF
+我们可以用一个控制框图来表示这个求解过程：</p>
+<p><img src="/images/robotics/%E5%B9%B2%E8%B4%A7_09%E9%80%86%E8%BF%90%E5%8A%A8%E5%AD%A6-%E4%BB%8E%E6%93%8D%E4%BD%9C%E7%A9%BA%E9%97%B4%E5%88%B0%E5%85%B3%E8%8A%82%E7%A9%BA%E9%97%B4(%E4%B8%8B)/9_01%E9%9B%85%E5%8F%AF%E6%AF%94%E7%9F%A9%E9%98%B5%E6%B1%82%E9%80%86%E6%B3%95%E6%A1%86%E5%9B%BE.jpg" alt=""></p>
+<p>这个方法把复杂的逆运动学运算（解析法和优化法）转化为求解线性方程的运算，具有很好的通用性；然而这个方法也存在一些问题。</p>
+<h4 id="12-雅可比矩阵求逆法存在的问题">1.2 雅可比矩阵求逆法存在的问题</h4>
+<p>从原理上讲，使用这个方法最明显的一点要求是——<strong>dx不能过大</strong>。因为Jacobian是随着关节位置变化不断在变化的，一旦关节位置变化很大，算出来的Jacobian Inverse就不再准确了。这个问题通常我们可以用轨迹线性插值（linear interpolation）或限制dx的大小（clamping）来避免。</p>
+<p>这个方法的第二个难点是雅可比矩阵求逆运算。<strong>矩阵求逆是一个非常消耗计算资源的运算</strong>（在写程序时能避免就绝对不要求逆！）。当然，我们总是可以使用各种各样的解线性方程的方法来避开求逆运算，比如LU分解、Chelosky分解、QR分解、SVD（Singular Value Decomposition）等等——这个以后也可以考虑用来填几篇干货了……</p>
+<p>这个方法最大的问题还是在于它<strong>无法很好地对付机器人Singularity或接近Singularity的情况</strong>。从线性方程的角度看，当机器人接近Singularity时，雅可比矩阵也越来越“病态”（ill-conditioned），很小的dx可能求得很大的dq，方程对数值误差也更加敏感；而当机器人处于Singularity时，线性方程可能无解、也可能有无数多个解。</p>
+<p>下面的动图展示了控制机械臂运动轨迹通过两种常见的Singularity Configuration的情况，可以帮助你理解什么叫“接近Singularity时，很小的dx可能得到很大的dq”。(图中end effector走直线轨迹，它停顿的那一点就是机械臂处于singularity的点，可以看到在那个点关节突然快速运动）</p>
+<p><img src="https://images.cnblogs.com/cnblogs_com/littlethinking/1924297/o_2101281133129_02WristSingularity.gif" alt=""></p>
+<p><img src="https://images.cnblogs.com/cnblogs_com/littlethinking/1924297/o_2101281146129_03ShoulderSingularity.gif" alt=""></p>
+<h3 id="2-dlsdamped-least-square阻尼最小平方法">2 DLS（Damped Least Square，阻尼最小平方法）</h3>
+<p>为了避免利用雅可比矩阵求逆法控制机械臂时由于接近Singularity而产生非常大的关节速度，一个自然的想法就是在求解过程中限制关节速度——<strong>既要尽可能地满足方程条件、也要尽可能地让关节速度不要太大</strong>。</p>
+<p>对于前者，我们可以用最小平方法求解方程，这时问题可以这样表述：
 $$
-由于在逆运动学求解中，我们不关心系统的动力学特性，上面这个式子也可以写成
+\min_{\dot{q} } {\Vert{J\dot{q}} - \dot{x} \Vert}^2
 $$
-\dot{q} = J^T \dot{x}
-$$</p>
-</li>
-</ul>
-<p>上面这两个方法相对比较通用（是否工业上常用？这个很难说。可能工业上对特定机械臂用解析解的也不少……），所以这篇文章主要还是给我们的老朋友雅可比矩阵解锁新功能，本文将着重介绍雅可比矩阵求逆法。</p>
-<h3 id="2-迭代解-雅可比矩阵求逆jacobian-inverse">2 迭代解-雅可比矩阵求逆（Jacobian Inverse）</h3>
-<p>雅可比矩阵求逆的方法有什么优点呢？我们还是拿那个两自由度机械臂举例：</p>
-<p><img src="/images/robotics/%E5%B9%B2%E8%B4%A7_08%E9%80%86%E8%BF%90%E5%8A%A8%E5%AD%A6-%E4%BB%8E%E6%93%8D%E4%BD%9C%E7%A9%BA%E9%97%B4%E5%88%B0%E5%85%B3%E8%8A%82%E7%A9%BA%E9%97%B4/8_02RR%E6%9C%BA%E6%A2%B0%E8%87%82J%E6%B1%82%E9%80%86.jpg" alt=""></p>
-<p>假设link的长度都是1，那我们可以求出它的解析解为：
+即求一个dq，使得$Jdq-dx$的norm(向量范数，可以理解为均衡向量距离的一种指标)的平方最小；理想情况下，这个norm等于0。</p>
+<p>对于后者，即是希望||dq||尽可能小（但显然通常情况下不能为0），此时我们可以把上面的式子后面再加一个“阻尼”项，变成这样：
 $$
-\theta_2 = {\cos}^{-1} \frac{x^2 + y^2 - 2}{2} \\<br>
-\theta_1 = \frac{-x \sin\theta_2 + y \cos\theta_2 + y}{y \sin\theta_2 + x \cos\theta_2 +x}
+\min_{\dot{q} } {\Vert{J\dot{q}} - \dot{x} \Vert}^2 + \lambda^2{\Vert{\dot{q}} \Vert}^2
 $$
-现在我们需要end effector从图中$(x_e,y_e)$沿紫色直线运动到$(x'_e,y'_e)$，但需要控制关节位置实现这一点。现在有以下思路——</p>
-<p>Ⅰ.求起点和终点对应的关节位置，直接对这两处关节位置进行线性插值求得关节运动轨迹——这样虽然省了很多计算量，但end effector<strong>不大可能沿着直线走</strong>；</p>
-<p>Ⅱ.把这条直线插入很多很多中间点，<strong>每一个点都求出对应的关节位置</strong>，然后控制每一个关节按着这一系列的关节位置走（就是我们前面说的解析/优化解法）；</p>
-<p>Ⅲ.还是把这条直线插入很多很多中间点，但如果<strong>点与点的间隔足够小、运动时间足够短</strong>，我们就可以在每一点<strong>用雅可比矩阵求逆来求得当前关节位置的变化</strong>——换个角度讲，我们也可以设定end effector沿这条直线的运动速度，用雅可比矩阵求逆求得关节速度，<strong>直接控制关节的运动速度而不是位置</strong>。</p>
-<p>我们将第三个方法画成控制框图：</p>
-<p><img src="/images/robotics/%E5%B9%B2%E8%B4%A7_08%E9%80%86%E8%BF%90%E5%8A%A8%E5%AD%A6-%E4%BB%8E%E6%93%8D%E4%BD%9C%E7%A9%BA%E9%97%B4%E5%88%B0%E5%85%B3%E8%8A%82%E7%A9%BA%E9%97%B4/8_03%E6%96%B9%E6%B3%95%E4%B8%89%E7%9A%84%E6%8E%A7%E5%88%B6%E6%96%B9%E6%B3%95.jpg" alt=""></p>
-<p>图中$x_d$的<strong>下标d表示“desired”</strong>，即你希望x到达的位置和朝向；以后还有<strong>下标c表示“current”</strong>，即当前x的位置/朝向；我们会经常看到这样的下标。</p>
-<p>你可能不懂控制框图，没关系，首先上面一行Joint control（关节控制）之前，从左到右说的是：
+即求一个dq，使$Jdq-dx$的norm的平方，加上乘以一个系数的dq的norm的平方，它们的和最小。这个时候，**λ的大小决定了你更“看重”哪一个条件**：如果λ很大，那可能你求得一个很小的关节运动速度，但这个速度却不能准确地让end effector按照你所希望的轨迹走；如果λ很小，小到接近于0，那这个方法跟之前的最基础的Jacobian Inverse算法也没有什么两样了。在实际使用，λ的大小往往需要仔细选择。</p>
+<p>求解上面那个式子的最小值，还是用我们伟大的<strong>导数求极值法</strong>：
 $$
-dx = x_d - x \\<br>
-dq = J^{-1}dx \\<br>
-q_d = dq + q_c
+\begin{align}
+\frac{d{\Vert {J\dot{q}} - \dot{x} \Vert}^2 + \lambda^2{\Vert{\dot{q}} \Vert}^2}{d\dot{q}} 
+&amp;= \frac{d({J\dot{q}} - \dot{x})^T({J\dot{q}} - \dot{x}) + \lambda^2 \dot{q}^T \dot{q}}{d\dot{q}} \\<br>
+&amp;= \frac{d\dot{q}^TJ^TJ\dot{q} - \dot{x}^TJ\dot{q} - \dot{q}^TJ^T\dot{x}+\dot{x}^T\dot{x}+\lambda^2\dot{q}^T\dot{q}}{d\dot{q}} \\<br>
+&amp;= 2J^TJ\dot{q} - 2J^T\dot{x} + 2\lambda^2I\dot{q} = 0
+\end{align}
 $$
-Joint control则是你把你计算出来的$q_d$送到每一个关节的控制器中（比如最简单的舵机）；这些控制器最终把各个关节控制到位置q（好的控制器，大部分情况q和$q_d$应当非常接近）</p>
-<p>这个图的下边一行说的是，我们又从这个关节位置q用正运动学求出了此时的end effector位置x，反馈到前面再给上面第一个式子运算求dx。</p>
-<p>通常你设置一个$x_d$，控制器需要走几遍这个控制回路才能将dx降到接近0（让x逼近$x_d$），因此这个方法也被称为迭代法。</p>
-<h3 id="3-冗余雅可比矩阵求逆">3 冗余雅可比矩阵求逆</h3>
-<p>你一定想问，当雅可比矩阵不可求逆的时候怎么办呢？不可求逆的情况有很多种，我们这里先讨论一种：即当雅可比矩阵是矮胖型，机械臂具有冗余自由度的情况。</p>
-<p>这个时候要用到一个数学概念，叫<strong>伪逆矩阵（pseudoinverse）</strong>。伪逆矩阵也有很多种，在机器人逆运动学中用得较多的是<strong>右伪逆矩阵（right-inverse）</strong>。如果把伪逆矩阵记为A+，left-inverse是说(A+)A = I；而right-inverse就是说A(A+) = I。</p>
-<p>Right-inverse是通过求解下面这个问题得到的：
+（这么详细的求导过程就算看不懂也要记住啊！极其重要，随处可见）</p>
+<p>于是我们得到一个等效方程：
 $$
-\min_{\dot{q}} {\Vert{\dot{q}} \Vert}^2 \\<br>
-subject \ to  \ \dot{x} = J\dot{q}
+(J^TJ+\lambda^2I)\dot{q} = J^T\dot{x}
 $$
-在机器人中，我们会希望每一次迭代的关节运动量尽可能小（从多种可能的运动方式中选出运动最少的一种），所以上面说的是**求一个尽可能小的能满足方程的dq**</p>
-<p>用<strong>拉格朗日乘数法（Lagrange Multiplier）</strong>,这个问题可以变成：
+左边的系数矩阵是可逆的(数学好的人可以尝试证明下)，于是我们就有了解：
 $$
-\min_{\dot{q}} \frac{1}{2}{\Vert{\dot{q}} \Vert}^2 + \lambda^T(\dot{x} - J\dot{q})
+\dot{q} = (J^TJ+\lambda^2I)^{-1}J^T\dot{x}
 $$
-（乘1/2是为了后面求导后不要有个讨厌的2——不影响结果）</p>
-<p>拉格朗日乘数法是一个求约束条件下极值的方法，非常有用，用起来也比较简单，而且我们以后还会用到——如果你不是很了解，我强烈建议你去自学一下。</p>
-<p><strong>要求极值，必先求导</strong>——拉格朗日乘数法是分别对dq和$\lambda$求导，导数为0时可求得极值（我们就不论证这里是极小值了）：
+同时也可得以下等式：
 $$
-\frac{d\frac{1}{2}{\Vert{\dot{q}} \Vert}^2 + \lambda^T(\dot{x} - J\dot{q})}{d\dot{q}} = \dot{q}^T - \lambda^TJ = 0 \\<br>
-\frac{d\frac{1}{2}{\Vert{\dot{q}} \Vert}^2 + \lambda^T(\dot{x} - J\dot{q})}{d\lambda} = \dot{x} - J\dot{q} = 0
+\dot{q} = (J^TJ+\lambda^2I)^{-1}J^T\dot{x} = J^T(JJ^T+\lambda^2I)^{-1}\dot{x}
 $$
-解上面两个方程，即可求出
+知道这个有什么用呢？因为左边需要求逆的矩阵大小为n×n，n为关节数量，要多大有多大；右边需要求逆的矩阵大小为m×m，m为操作空间的自由度大小，最大肯定不超过六。这个小小的转换，就限制了需要求逆运算的矩阵大小，提高了总体的运算速度。</p>
+<h3 id="3-雅可比矩阵转置法">3 雅可比矩阵转置法</h3>
+<p>上次我们简单地讲到说，我们可以用雅可比矩阵的转置代替求逆运算来求逆运动学问题：
 $$
-\dot{q} = J^T \lambda \\<br>
-\dot{x} = J\dot{q} = JJ^T\lambda \stackrel{solve \ \lambda}{\Longrightarrow}  \ \lambda = (JJ^T)^{-1} \dot{x} \\<br>
-\dot{q} = J^T(JJ^T)^{-1}\dot{x} \\<br>
-\therefore J^{+} = J^T(JJ^T)^{-1}
+\dot{q} = J^T\dot{x}
 $$
-不难验证$JJ^+=I$。用这个$J^+$求解出的dq即为满足条件的最小关节运动速度。最后简单地提一下null space，我们可以验证：
+今天我们详细地讲下这个看起来很随便的方法是怎么推导出来的。</p>
+<p>首先明确求解逆运动学问题，我们的终极目标是控制机械臂的各个关节，让机械臂的end effector运动到我们想要它到达的位置及朝向。我们把这个“理想位置”计为$x_d$，我们的目标就是要让当前end effector位置$x_c$与$x_d$的“距离”最短。于是我们又有了一个数学问题：
 $$
-\forall \dot{q},J(I-J^{+}J)\dot{q}_0 = 0
+\min_{q}\frac{1}{2} {\Vert x_d - x_c \Vert}^2
 $$
-这说明矩阵$I-J^+J$可以把任意关节速度投影到“零空间”内，投影后的关节速度将不引起任何end effector的运动。利用这个特性，我们可以在满足了end effector的$x_d$之后，再利用零空间实现其它任务（比如避开障碍物）。</p>
+注意上面式子中我们要求的是q，而不是dq。乘上1/2是为了求导后不要有讨厌的系数2。</p>
+<p>用正运动学的表达式可以把$x_c$用$f(q)$表示：
+$$
+\min_{q}\frac{1}{2} {\Vert x_d - f(q)\Vert}^2
+$$
+（也许你已经发现了这个就是把逆运动学转化为优化问题的**优化法**）。</p>
+<p>由于正运动学的表达式f(q)通常比较复杂，导数极值法在这里不太好用。所以我们祭出求极值的另一个伟大工具：<strong>梯度下降法（Gradient Descent）</strong>。</p>
+<p>梯度下降法说，每一步我都要沿着下降最快的那个方向走，而这个方向可以由梯度的反方向求得，所以我们有：
+$$
+\begin{align}
+\Delta q &amp;= -\alpha \nabla(\frac{1}{2}{\Vert x_d - f(q)\Vert}^2 ) \\<br>
+&amp;= \alpha \Bigg(  (x_d-x)^T \frac{\partial f(q)}{\partial q}  \Bigg)^T \\<br>
+&amp;= \alpha J^T(x_d-x) = \alpha J^T \Delta x
+\end{align}
+$$
+这个推导证明了如果我们用梯度下降大法，每一步都用J的转置乘dx求出dq，那么机械臂迭代几步以后end effector将无限趋近指定的$x_d$。它的迭代框图其实与雅可比矩阵求逆法是一样的，只是$J^{-1}$换成了$J^T$。</p>
+<p><img src="/images/robotics/%E5%B9%B2%E8%B4%A7_09%E9%80%86%E8%BF%90%E5%8A%A8%E5%AD%A6-%E4%BB%8E%E6%93%8D%E4%BD%9C%E7%A9%BA%E9%97%B4%E5%88%B0%E5%85%B3%E8%8A%82%E7%A9%BA%E9%97%B4(%E4%B8%8B)/9_04%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95%E6%B1%82%E9%80%86%E8%BF%90%E5%8A%A8%E5%AD%A6.jpg" alt=""></p>
+<p>上面的α也是梯度下降法的一个系数，叫“步长”（step size）或“学习速率”（learning rate)。这个值太小，则迭代速度可能太慢；这个值太大，则可能“走过头”或要多绕一些弯路，最终还是使迭代速度变慢（甚至无法收敛到最小值）。</p>
+<p>采用雅可比矩阵转置而不是求逆的方法，最大的好处当然是避免了求逆运算；不过与求逆相比，它的迭代收敛速率反而慢些。另外，用这个方法控制的机械臂，离end effector较远的关节常常需要输出更大的扭矩。</p>
 <hr>
-<p>为了不一下子扔太多东西，这篇文章就到此为止吧。下一篇文章我们会讲雅可比矩阵求逆法存在的问题和解决方法、雅可比矩阵转置法、再酌情提一些其它的逆运动学求解算法。说起来，逆运动学这个问题真是麻烦得不行，解法也是五花八门呢……</p>
+<p>关于逆运动学的这两篇文章，可以说讲了机器人学家们与逆运动学问题斗智斗勇的过程；我们简单提到解析法和优化法，讲了雅可比矩阵求逆迭代法、阻尼最小平方法、以及实质上也是优化和迭代方法的雅可比矩阵转置法。然而这只是逆运动学问题求解方法中比较有代表性的一小部分。</p>
+<p>最后我想说，我们用到的<strong>向量求导、导数极值法、拉格朗日乘数法、梯度下降法</strong>等，都是非常重要非常有用的数学工具。相信通过对逆运动学问题解法的学习研究，你的数学水平也得到了提高……</p>
 
     </div>
 
@@ -462,7 +439,7 @@ $$
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-      2021-01-24
+      2021-01-25
       
     </span>
   </p>
@@ -487,22 +464,9 @@ $$
       
       <nav class="post-nav">
         
-          <a class="prev" href="/post/robotics/%E5%B9%B2%E8%B4%A7_09%E9%80%86%E8%BF%90%E5%8A%A8%E5%AD%A6-%E4%BB%8E%E6%93%8D%E4%BD%9C%E7%A9%BA%E9%97%B4%E5%88%B0%E5%85%B3%E8%8A%82%E7%A9%BA%E9%97%B4%E4%B8%8B%E7%AF%87/">
-            
-            <i class="iconfont">
-              <svg  class="icon" viewBox="0 0 1024 1024" version="1.1"
-  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-  width="18" height="18">
-  <path d="M691.908486 949.511495l75.369571-89.491197c10.963703-12.998035 10.285251-32.864502-1.499144-44.378743L479.499795 515.267417 757.434875 204.940602c11.338233-12.190647 11.035334-32.285311-0.638543-44.850487l-80.46666-86.564541c-11.680017-12.583596-30.356378-12.893658-41.662889-0.716314L257.233596 494.235404c-11.332093 12.183484-11.041474 32.266891 0.657986 44.844348l80.46666 86.564541c1.772366 1.910513 3.706415 3.533476 5.750981 4.877077l306.620399 321.703933C662.505829 963.726242 680.945807 962.528973 691.908486 949.511495z"></path>
-</svg>
-
-            </i>
-            <span class="prev-text nav-default">【机器人学基础知识】9、“逆运动学”——从操作空间到关节空间（下篇）</span>
-            <span class="prev-text nav-mobile">上一篇</span>
-          </a>
         
-          <a class="next" href="/post/robotics/%E5%B9%B2%E8%B4%A7_07%E9%9B%85%E5%8F%AF%E6%AF%94%E7%9F%A9%E9%98%B5%E7%BB%88%E7%AF%87/">
-            <span class="next-text nav-default">【机器人学基础知识】7、力的传递关系、奇异、冗余——从雅可比矩阵你还能得到什么？(雅可比矩阵下篇)</span>
+          <a class="next" href="/post/robotics/%E5%B9%B2%E8%B4%A7_08%E9%80%86%E8%BF%90%E5%8A%A8%E5%AD%A6-%E4%BB%8E%E6%93%8D%E4%BD%9C%E7%A9%BA%E9%97%B4%E5%88%B0%E5%85%B3%E8%8A%82%E7%A9%BA%E9%97%B4/">
+            <span class="next-text nav-default">【机器人学基础知识】8、“逆运动学”——从操作空间到关节空间（上篇）</span>
             <span class="prev-text nav-mobile">下一篇</span>
             
             <i class="iconfont">

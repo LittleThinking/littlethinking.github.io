@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>【机器人学基础知识】10、运动学已经够用，为什么还要动力学 - 小虎 - Mechanical student,Robot enthusiast</title>
+  <title> - 小虎 - Mechanical student,Robot enthusiast</title>
   
 
 <meta name="renderer" content="webkit" />
@@ -59,23 +59,21 @@
 
 
 
-<meta property="og:title" content="【机器人学基础知识】10、运动学已经够用，为什么还要动力学" />
+<meta property="og:title" content="" />
 <meta property="og:description" content="本文为承上启下的一篇文章：一方面，我们很有必要把之前讲过的东西串起来过一遍；另一方面，在我们开始啃机械臂的动力学（dynamics）这块硬骨" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_10%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%8A%A8%E5%8A%9B%E5%AD%A6/" />
-<meta property="article:published_time" content="2021-01-26T14:03:23+08:00" />
-<meta property="article:modified_time" content="2021-01-26T14:05:23+08:00" />
-<meta itemprop="name" content="【机器人学基础知识】10、运动学已经够用，为什么还要动力学">
+
+<meta itemprop="name" content="">
 <meta itemprop="description" content="本文为承上启下的一篇文章：一方面，我们很有必要把之前讲过的东西串起来过一遍；另一方面，在我们开始啃机械臂的动力学（dynamics）这块硬骨">
-<meta itemprop="datePublished" content="2021-01-26T14:03:23+08:00" />
-<meta itemprop="dateModified" content="2021-01-26T14:05:23+08:00" />
-<meta itemprop="wordCount" content="2945">
+
+<meta itemprop="wordCount" content="3147">
 
 
 
-<meta itemprop="keywords" content="机器人学,动力学," />
+<meta itemprop="keywords" content="" />
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="【机器人学基础知识】10、运动学已经够用，为什么还要动力学"/>
+<meta name="twitter:title" content=""/>
 <meta name="twitter:description" content="本文为承上启下的一篇文章：一方面，我们很有必要把之前讲过的东西串起来过一遍；另一方面，在我们开始啃机械臂的动力学（dynamics）这块硬骨"/>
 
 <!--[if lte IE 9]>
@@ -298,18 +296,15 @@
           <article class="post bg-white">
     
     <header class="post-header">
-      <h1 class="post-title">【机器人学基础知识】10、运动学已经够用，为什么还要动力学</h1>
+      <h1 class="post-title"></h1>
       
       <div class="post-meta">
-        <time datetime="2021-01-26" class="post-time">
-          2021-01-26
+        <time datetime="0001-01-01" class="post-time">
+          0001-01-01
         </time>
-        <div class="post-category">
-            <a href="https://littlethinking.cn/categories/%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%AD%A6%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/"> 机器人学基础知识 </a>
-            
-          </div>
-        <span class="more-meta"> 约 2945 字 </span>
-          <span class="more-meta"> 预计阅读 6 分钟 </span>
+        
+        <span class="more-meta"> 约 3147 字 </span>
+          <span class="more-meta"> 预计阅读 7 分钟 </span>
 
         
         
@@ -336,27 +331,27 @@
 <p>我们来看一个显示中的机器人，为了赏心悦目的需要，选择机械臂中的颜值担当UR5。</p>
 <p><img src="/images/robotics/%E5%B9%B2%E8%B4%A7_10%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%8A%A8%E5%8A%9B%E5%AD%A6/10_01UR5.jpg" alt=""></p>
 <p>从上图可以看到，UR5一共有六个R（旋转）关节，其中基座两个，肘部一个，腕部三个。现在如果需要写一段程序，完成两个任务：一个是<strong>把位于A点的物体捡起来并移动到B点</strong>；二是<strong>在空中以一定的速度画圆</strong>。假设我们能准确控制每个关节的位置，应当怎么做？</p>
-<p>我们需要做的第一件事情，就是<strong>确定关节零位，求正运动学解</strong>。做该步骤的原因是，这是机械臂<strong>数字化、可编程化</strong>的第一步。这一步，我们可以采用传统的DH参数法。关于采用DH参数法如何确定坐标系（frame attachment），请看文章《》。总之，在确定原点、确定Z轴、确定X轴等一系列步骤之后，我们得到类似下图的关节坐标系。（hint:RGB/红绿蓝对应XYZ）</p>
+<p>我们需要做的第一件事情，就是<strong>确定关节零位，求正运动学解</strong>。做该步骤的原因是，这是机械臂<strong>数字化、可编程化</strong>的第一步。这一步，我们可以采用传统的DH参数法。关于采用DH参数法如何确定坐标系（frame attachment），请看文章<a href="https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_03dh%E5%BB%BA%E6%A8%A1/">【机器人学基础知识】3、机械臂的坐标系与数学模型：传说中的DH参数</a>。总之，在确定原点、确定Z轴、确定X轴等一系列步骤之后，我们得到类似下图的关节坐标系。（hint:RGB/红绿蓝对应XYZ）</p>
 <p><img src="/images/robotics/%E5%B9%B2%E8%B4%A7_10%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%8A%A8%E5%8A%9B%E5%AD%A6/10_02UR5%E5%9D%90%E6%A0%87%E7%B3%BB.jpg" alt=""></p>
 <p>如果我们还记得DH参数定义中关节角度θ的定义，当θ为0时，一个关节的X轴与上一个关节的X轴应该平行——上图正是如此。</p>
 <p>根据DH参数的定义：</p>
-<p><img src="/images/robotics/%E5%B9%B2%E8%B4%A7_10%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%8A%A8%E5%8A%9B%E5%AD%A6/10_03DH%E5%8F%82%E6%95%B0%E5%AE%9A%E4%B9%89.jpg" alt=""></p>
+<p>![](/images/robotics/干货_10为什么需要动力学/10_03 DH参数定义.jpg)</p>
 <p>我们在UR5的结构示意图标注出部分参数：</p>
-<p><img src="/images/robotics/%E5%B9%B2%E8%B4%A7_10%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%8A%A8%E5%8A%9B%E5%AD%A6/10_04UR5DH%E7%A4%BA%E6%84%8F%E5%9B%BE.jpg" alt=""></p>
+<p>![](/images/robotics/干货_10为什么需要动力学/10_04UR5 DH示意图.jpg)</p>
 <p>最后我们得到UR5的DH参数表：</p>
-<p><img src="/images/robotics/%E5%B9%B2%E8%B4%A7_10%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%8A%A8%E5%8A%9B%E5%AD%A6/10_05UR5DH%E5%8F%82%E6%95%B0%E8%A1%A8.jpg" alt=""></p>
+<p>![](/images/robotics/干货_10为什么需要动力学/10_05UR5 DH参数表.jpg)</p>
 <p>a与d怎么来的？通常来讲，它们是机械设计的时候确定的设计参数，机械臂的生产产家会告诉这些数值。当然，我们也可以自行在机械臂上测量出来&hellip;&hellip;</p>
 <p>实际运用中，机械臂的制造厂商通常会将机械臂的DH参数表给我们；实在没有，也可以根据一些算法，根据控制关节运动的同时用外部装置准确测量end effector的位姿解算出DH参数表。有时候，由于制造过程中不可避免的误差、或长时间使用后机械结构的磨损，会导致原有的DH参数表不够准确；这个时候也可以用类似的方法重新标定机械臂的DH参数。对这部分感兴趣的小伙伴，可以查一下机械臂的<strong>Kinematics Model Identification 或 Kinematics Calibration</strong>。</p>
 <p>对于在本文前面提到的第一个任务：将一个物体从A点移动B点。对于这样一个任务，我们只需要机械臂在A点的时候能在对的位置以对的角度拿到物体、在B点以对的位置对的角度放下物体就好了。所以，一个比较合适的思路是：</p>
-<p>Ⅰ.计算A点与B点end effector理想位姿的逆运动学解（可以直接用解析大法几何大法等等）q~a~，q~b~</p>
-<p>Ⅱ.从q~a~到q~b~求出关节的运动轨迹</p>
+<p>Ⅰ.计算A点与B点end effector理想位姿的逆运动学解（可以直接用解析大法几何大法等等）$q_a$，$q_b$</p>
+<p>Ⅱ.从$q_a$到$q_b$求出关节的运动轨迹</p>
 <p>Ⅲ.根据求出的轨迹，控制关节运动</p>
 <p>是不是很简单？这样的简单的“Pick and Place”应用，大概就是机械臂在工业上最早甚至也是最广泛的应用了。</p>
-<!-- raw HTML omitted -->
+<p><img src="https://images.cnblogs.com/cnblogs_com/littlethinking/1924297/o_21012811362010_06%20pick%20and%20place.gif" alt=""></p>
 <p>这里再简单讲解下关节空间的<strong>轨迹生成（Trajectory Generation）</strong>。需要注意的是，trajectory并不仅仅是空间中的一条线，它是<strong>物体位姿相对于时间的函数</strong>，包含了物体每个时刻的位置、速度、加速度等信息。</p>
-<p>假设我们要求机械臂从A点到B点的时间为t'，在A点与B点的时候end effector均为静止，那我们的轨迹*q(t)*应当满足这样的要求:
+<p>假设我们要求机械臂从A点到B点的时间为t'，在A点与B点的时候end effector均为静止，那我们的轨迹q(t)应当满足这样的要求:
 $$
-q(0) = q_a, \ \ q(t') = q_b \<br>
+q(0) = q_a, \ \ q(t') = q_b \\<br>
 q'(0) = 0 , \ \ q(t') = 0
 $$
 这个函数需要满足上面四个等式，则它至少需要有四个未知数；因此最直接的思路就是用一个三阶多项式来拟合：
@@ -365,9 +360,9 @@ q(t) = at^3 + bt^2 +ct +d
 $$</p>
 <p>关节空间的轨迹生成比起操作空间的轨迹生成简单许多，主要是可以方便地避免超出关节可运动范围或奇异状态等问题。以后有机会，我们再仔细讲讲trajectory generation这个话题。</p>
 <p>现在再看第二任务：在空中以一定速度画圆。这个任务本身已经规定了end effector的轨迹，而我们的任务是通过控制关节的运动让end effector能够跟随（track）这条轨迹。这样看来，我们很难再采用类似第一个任务那种方法。</p>
-<p>因为我们的任务是让end effector跟随一个圆形轨迹，也就是说，每一个时刻我们都要知道end effector 位姿x~d~。我们说过，每时每刻都把逆运动学解直接求出来是一个不太现实的——这个时候，雅可比矩阵求逆法应该自然而然地进入我们脑海：</p>
+<p>因为我们的任务是让end effector跟随一个圆形轨迹，也就是说，每一个时刻我们都要知道end effector 位姿$x_d$。我们说过，每时每刻都把逆运动学解直接求出来是一个不太现实的——这个时候，雅可比矩阵求逆法应该自然而然地进入我们脑海：</p>
 <p><img src="/images/robotics/%E5%B9%B2%E8%B4%A7_10%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%8A%A8%E5%8A%9B%E5%AD%A6/10_07%E9%80%86%E8%BF%90%E5%8A%A8%E5%AD%A6%E6%B1%82%E8%A7%A3%E6%80%9D%E8%B7%AF.jpg" alt=""></p>
-<p>对于这个方法不是很清楚的，请回去看《干货 | “逆运动学”——从操作空间到关节空间》一文。</p>
+<p>对于这个方法不是很清楚的，请回去看<a href="https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_08%E9%80%86%E8%BF%90%E5%8A%A8%E5%AD%A6-%E4%BB%8E%E6%93%8D%E4%BD%9C%E7%A9%BA%E9%97%B4%E5%88%B0%E5%85%B3%E8%8A%82%E7%A9%BA%E9%97%B4/">【机器人学基础知识】8、“逆运动学”——从操作空间到关节空间（上篇）</a>一文。</p>
 <p>这个任务相比“Pick and Place”难度提升了一些，但在工业应用中，加工、切割、喷涂等等，类似的应用也非常广泛。</p>
 <p>根据任务的不同，我们需要采用不同的解决方法。那么现在的问题是，什么样的任务只靠运动学无法解决好，而需要动力学加入呢？</p>
 <p>要回答这个问题，首先要明确动力学研究什么。机械臂的运动学，研究的是关节位置或位置变化与末端执行器位姿或位姿变化的关系，这里面只有“运动”，不涉及任何“动力”；由此可以想见，机械臂的动力学研究的必然与“动力”有关。所谓“动力”，指的是机械臂各部分受到的力或扭矩（我们以后统一用“力”指代“力或扭矩”）。机械臂的动力学，则是要研究下面几个问题：</p>
@@ -381,11 +376,12 @@ $$</p>
 <p>对上面所说的第二个任务，如果要求画圆的速度很快，雅可比矩阵求逆法d~x~不能过大的要求马上就不能满足了。即使忽略这个限制，关节位置控制器由于对它所要控制的对象的动力学一无所知，也很难快速地跟上end effector圆形轨迹需要的关节轨迹。结果是什么呢？机械臂可能会抖得很厉害、画出来的圆会比实际的小且不那么圆、甚至end effector只能在原地振动。</p>
 <p>如果看不太明白上面这一段话也没有关系，我们以后会详细讲机械臂的各种控制方法。但是可以理解的一点是，<strong>动力学的引入允许我们更快、更精确地跟随需要的轨迹</strong>。</p>
 <p>给大家看看舵机做的只用逆运动学的机械臂和工业级的用于做精确激光切割的机械臂画圆的区别——</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
+<p><img src="https://images.cnblogs.com/cnblogs_com/littlethinking/1924297/o_21012811363110_08%E5%8F%AA%E7%94%A8%E9%80%86%E8%BF%90%E5%8A%A8%E5%AD%A6.gif" alt=""></p>
+<p><img src="https://images.cnblogs.com/cnblogs_com/littlethinking/1924297/o_21012811364810_09%E5%B7%A5%E4%B8%9A%E7%BA%A7.gif" alt=""></p>
 <p>但工业级械臂更庞大：</p>
 <p><img src="/images/robotics/%E5%B9%B2%E8%B4%A7_10%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%8A%A8%E5%8A%9B%E5%AD%A6/10_10%E7%BA%BF%E5%88%87%E5%89%B2%E5%B7%A5%E4%B8%9A%E6%9C%BA%E6%A2%B0%E8%87%82.jpg" alt=""></p>
 <p>现在，我们有最后一个任务，让end effector去打磨一个零件——拿一把锉刀靠近零件然后来回运动并不足够，你还需要能够控制锉刀对零件施加一定的力。很明显，涉及到接触力，单纯用运动学也是无法解决的。<strong>动力学的引入让我们有可能控制机械臂与外界的相互作用力</strong>。</p>
+<hr>
 <p>这篇文章没有太多新的知识，这可能也是任何课本都不会有的章节；但我觉得它很重要。首先，在学完了逆运动学之后，你已经可以尽情地去用Arduino和舵机等等DIY自己的机械臂，尝试不同的逆运动学算法，让它完成搬东西、画画等各种好玩的任务。然而你也要明白，在Robotics的世界里，这只是入门的一步。没有动力学加入控制回路的机器人能做的事情非常有限，它们速度无法做到很快、负载不能做很重、如果功率很大会非常危险。明白了这些，我们才不会在学习复杂的机械臂动力学时不知所以然。</p>
 
     </div>
@@ -400,14 +396,14 @@ $$</p>
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-      2021-01-26
+      0001-01-01
       
     </span>
   </p>
   
   <p class="copyright-item">
     <span class="item-title">许可协议</span>
-    <span class="item-content">本文转载自微信公众号ROBOTICS，原作者CC</span>
+    <span class="item-content">原创文章，如需转载请注明文章作者和出处。谢谢！</span>
   </p>
 </div>
 
@@ -416,29 +412,25 @@ $$</p>
     
 
     <footer class="post-footer">
-      <div class="post-tags">
-          <a href="https://littlethinking.cn/tags/%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%AD%A6/">机器人学</a>
-          <a href="https://littlethinking.cn/tags/%E5%8A%A8%E5%8A%9B%E5%AD%A6/">动力学</a>
-          
-        </div>
+      
 
       
       <nav class="post-nav">
         
-        
-          <a class="next" href="/post/robotics/%E5%B9%B2%E8%B4%A7_08%E9%80%86%E8%BF%90%E5%8A%A8%E5%AD%A6-%E4%BB%8E%E6%93%8D%E4%BD%9C%E7%A9%BA%E9%97%B4%E5%88%B0%E5%85%B3%E8%8A%82%E7%A9%BA%E9%97%B4/">
-            <span class="next-text nav-default">【机器人学基础知识】8、“逆运动学”——从操作空间到关节空间（上篇）</span>
-            <span class="prev-text nav-mobile">下一篇</span>
+          <a class="prev" href="/post/robotics/b%E6%A0%B7%E6%9D%A1%E6%9B%B2%E7%BA%BF/">
             
             <i class="iconfont">
-              <svg class="icon" viewBox="0 0 1024 1024" version="1.1"
+              <svg  class="icon" viewBox="0 0 1024 1024" version="1.1"
   xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
   width="18" height="18">
-  <path d="M332.091514 74.487481l-75.369571 89.491197c-10.963703 12.998035-10.285251 32.864502 1.499144 44.378743l286.278095 300.375162L266.565125 819.058374c-11.338233 12.190647-11.035334 32.285311 0.638543 44.850487l80.46666 86.564541c11.680017 12.583596 30.356378 12.893658 41.662889 0.716314l377.434212-421.426145c11.332093-12.183484 11.041474-32.266891-0.657986-44.844348l-80.46666-86.564541c-1.772366-1.910513-3.706415-3.533476-5.750981-4.877077L373.270379 71.774697C361.493148 60.273758 343.054193 61.470003 332.091514 74.487481z"></path>
+  <path d="M691.908486 949.511495l75.369571-89.491197c10.963703-12.998035 10.285251-32.864502-1.499144-44.378743L479.499795 515.267417 757.434875 204.940602c11.338233-12.190647 11.035334-32.285311-0.638543-44.850487l-80.46666-86.564541c-11.680017-12.583596-30.356378-12.893658-41.662889-0.716314L257.233596 494.235404c-11.332093 12.183484-11.041474 32.266891 0.657986 44.844348l80.46666 86.564541c1.772366 1.910513 3.706415 3.533476 5.750981 4.877077l306.620399 321.703933C662.505829 963.726242 680.945807 962.528973 691.908486 949.511495z"></path>
 </svg>
 
             </i>
+            <span class="prev-text nav-default">B样条曲线</span>
+            <span class="prev-text nav-mobile">上一篇</span>
           </a>
+        
       </nav>
     </footer>
   </article>
@@ -590,13 +582,6 @@ $$</p>
 
 
 
-  <script type="text/javascript">
-    window.MathJax = {
-      showProcessingMessages: false,
-      messageStyle: 'none'
-    };
-  </script>
-  <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
 
 
 
