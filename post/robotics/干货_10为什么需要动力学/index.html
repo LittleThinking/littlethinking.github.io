@@ -346,7 +346,7 @@
 <p>Ⅱ.从$q_a$到$q_b$求出关节的运动轨迹</p>
 <p>Ⅲ.根据求出的轨迹，控制关节运动</p>
 <p>是不是很简单？这样的简单的“Pick and Place”应用，大概就是机械臂在工业上最早甚至也是最广泛的应用了。</p>
-<p><img src="https://images.cnblogs.com/cnblogs_com/littlethinking/1924297/o_21012811362010_06%20pick%20and%20place.gif" alt=""></p>
+<p><img src="https://littlethinking.cn/images/robotics/%E5%B9%B2%E8%B4%A7_10%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%8A%A8%E5%8A%9B%E5%AD%A6/10_06%20pick%20and%20place.gif" alt="1"></p>
 <p>这里再简单讲解下关节空间的<strong>轨迹生成（Trajectory Generation）</strong>。需要注意的是，trajectory并不仅仅是空间中的一条线，它是<strong>物体位姿相对于时间的函数</strong>，包含了物体每个时刻的位置、速度、加速度等信息。</p>
 <p>假设我们要求机械臂从A点到B点的时间为t'，在A点与B点的时候end effector均为静止，那我们的轨迹q(t)应当满足这样的要求:
 $$
@@ -375,8 +375,8 @@ $$</p>
 <p>对上面所说的第二个任务，如果要求画圆的速度很快，雅可比矩阵求逆法d~x~不能过大的要求马上就不能满足了。即使忽略这个限制，关节位置控制器由于对它所要控制的对象的动力学一无所知，也很难快速地跟上end effector圆形轨迹需要的关节轨迹。结果是什么呢？机械臂可能会抖得很厉害、画出来的圆会比实际的小且不那么圆、甚至end effector只能在原地振动。</p>
 <p>如果看不太明白上面这一段话也没有关系，我们以后会详细讲机械臂的各种控制方法。但是可以理解的一点是，<strong>动力学的引入允许我们更快、更精确地跟随需要的轨迹</strong>。</p>
 <p>给大家看看舵机做的只用逆运动学的机械臂和工业级的用于做精确激光切割的机械臂画圆的区别——</p>
-<p><img src="https://images.cnblogs.com/cnblogs_com/littlethinking/1924297/o_21012811363110_08%E5%8F%AA%E7%94%A8%E9%80%86%E8%BF%90%E5%8A%A8%E5%AD%A6.gif" alt=""></p>
-<p><img src="https://littlethinking.cn/images/robotics/%E5%B9%B2%E8%B4%A7_10%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%8A%A8%E5%8A%9B%E5%AD%A6/10_09%E5%B7%A5%E4%B8%9A%E7%BA%A7.gif" alt=""></p>
+<p><img src="https://littlethinking.cn/images/robotics/%E5%B9%B2%E8%B4%A7_10%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%8A%A8%E5%8A%9B%E5%AD%A6/10_08%E5%8F%AA%E7%94%A8%E9%80%86%E8%BF%90%E5%8A%A8%E5%AD%A6.gif" alt="2"></p>
+<p><img src="https://littlethinking.cn/images/robotics/%E5%B9%B2%E8%B4%A7_10%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%8A%A8%E5%8A%9B%E5%AD%A6/10_09%E5%B7%A5%E4%B8%9A%E7%BA%A7.gif" alt="3"></p>
 <p>但工业级械臂更庞大：</p>
 <p><img src="/images/robotics/%E5%B9%B2%E8%B4%A7_10%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%8A%A8%E5%8A%9B%E5%AD%A6/10_10%E7%BA%BF%E5%88%87%E5%89%B2%E5%B7%A5%E4%B8%9A%E6%9C%BA%E6%A2%B0%E8%87%82.jpg" alt=""></p>
 <p>现在，我们有最后一个任务，让end effector去打磨一个零件——拿一把锉刀靠近零件然后来回运动并不足够，你还需要能够控制锉刀对零件施加一定的力。很明显，涉及到接触力，单纯用运动学也是无法解决的。<strong>动力学的引入让我们有可能控制机械臂与外界的相互作用力</strong>。</p>
