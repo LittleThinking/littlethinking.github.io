@@ -6,10 +6,176 @@
     <description>Recent content on 小虎 - Mechanical student,Robot enthusiast</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Thu, 28 Jan 2021 14:03:23 +0800</lastBuildDate>
+    <lastBuildDate>Mon, 15 Nov 2021 12:01:23 +0800</lastBuildDate>
     
         <atom:link href="https://littlethinking.cn/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>【C&#43;&#43;】UML类图</title>
+      <link>https://littlethinking.cn/post/cpp/uml%E7%B1%BB%E5%9B%BE/</link>
+      <pubDate>Mon, 15 Nov 2021 12:01:23 +0800</pubDate>
+      
+      <guid>https://littlethinking.cn/post/cpp/uml%E7%B1%BB%E5%9B%BE/</guid>
+      
+        <description>&lt;h2 id=&#34;1-什么是uml类图&#34;&gt;1 什么是UML类图&lt;/h2&gt;
+&lt;p&gt;在UML 2.*的13种图形中，类图是使用频率最高的UML图之一。类图是面向对象系统建模中最常用和最重要的图，是定义其它图的基础。类图主要是用来显示系统中的类、接口以及它们之间的静态结构和关系的一种静态模型。&lt;/p&gt;
+&lt;h2 id=&#34;2-怎么画uml类图&#34;&gt;2 怎么画UML类图&lt;/h2&gt;
+&lt;h3 id=&#34;21-类的表示&#34;&gt;2.1 类的表示&lt;/h3&gt;
+&lt;p&gt;在 UML 类图中，一个矩形代表一个类，如图：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/cpp/UML%E7%B1%BB%E5%9B%BE/%E7%B1%BB%E5%9B%BE-01.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;矩形分为三部分：&lt;/p&gt;
+&lt;p&gt;第一部分为类名，如果用&lt;strong&gt;正体&lt;/strong&gt;书写，说明这是可以实例化的普通类；如果用&lt;strong&gt;斜体&lt;/strong&gt;书写，说明这是抽象类。&lt;/p&gt;
+&lt;p&gt;第二部分为该类的属性，书写格式为：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-markdown&#34; data-lang=&#34;markdown&#34;&gt;可见性 属性名 ： 属性类型
+&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;可见性有以下几种：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;可见性&lt;/th&gt;
+&lt;th&gt;说明&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;+&lt;/td&gt;
+&lt;td&gt;public&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;td&gt;private&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;#&lt;/td&gt;
+&lt;td&gt;protected&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;第三部分为该类的方法，书写格式为：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-markdown&#34; data-lang=&#34;markdown&#34;&gt;可见性 方法名（参数名1：参数类型1,...）：方法返回值类型
+&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h3 id=&#34;22-关系&#34;&gt;2.2 关系&lt;/h3&gt;
+&lt;p&gt;类与类间共有常见的几种关系： 泛化（Generalization）, 实现（Realization），关联（Association)，聚合（Aggregation，组合(Composition)，依赖(Dependency)，下面对每种关系进行分析：&lt;/p&gt;
+&lt;h4 id=&#34;221-泛化generalization&#34;&gt;2.2.1 泛化（Generalization)&lt;/h4&gt;
+&lt;p&gt;&lt;strong&gt;【泛化关系】&lt;/strong&gt;：是一种继承关系，表示一般与特殊的关系，它指定了子类如何特化父类的所有特征和行为。例如：老虎是动物的一种，即有老虎的特性也有动物的共性。
+&lt;strong&gt;【箭头指向】&lt;/strong&gt;：带三角箭头的实线，箭头指向父类&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/cpp/UML%E7%B1%BB%E5%9B%BE/%E7%B1%BB%E5%9B%BE-02.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h4 id=&#34;222-实现realization&#34;&gt;2.2.2 实现（Realization）&lt;/h4&gt;
+&lt;p&gt;&lt;strong&gt;【实现关系】&lt;/strong&gt;：是一种类与接口的关系，表示类是接口所有特征和行为的实现.
+&lt;strong&gt;【箭头指向】&lt;/strong&gt;：带三角箭头的虚线，箭头指向接口&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/cpp/UML%E7%B1%BB%E5%9B%BE/%E7%B1%BB%E5%9B%BE-03.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h4 id=&#34;223-关联association&#34;&gt;2.2.3 关联（Association)&lt;/h4&gt;
+&lt;p&gt;&lt;strong&gt;【关联关系】&lt;/strong&gt;：是一种拥有的关系，它使一个类知道另一个类的属性和方法；如：老师与学生，丈夫与妻子关联可以是双向的，也可以是单向的。双向的关联可以有两个箭头或者没有箭头，单向的关联有一个箭头。
+&lt;strong&gt;【代码体现】&lt;/strong&gt;：成员变量
+&lt;strong&gt;【箭头及指向】&lt;/strong&gt;：带普通箭头的实心线，指向被拥有者&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/cpp/UML%E7%B1%BB%E5%9B%BE/%E7%B1%BB%E5%9B%BE-04.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;上图中，老师与学生是双向关联，老师有多名学生，学生也可能有多名老师。但学生与某课程间的关系为单向关联，一名学生可能要上多门课程，课程是个抽象的东西他不拥有学生。&lt;/p&gt;
+&lt;p&gt;下图为自身关联：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/cpp/UML%E7%B1%BB%E5%9B%BE/%E7%B1%BB%E5%9B%BE-05.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h4 id=&#34;224-聚合aggregation&#34;&gt;2.2.4 聚合（Aggregation）&lt;/h4&gt;
+&lt;p&gt;&lt;strong&gt;【聚合关系】&lt;/strong&gt;：是整体与部分的关系，且部分可以离开整体而单独存在。如车和轮胎是整体和部分的关系，轮胎离开车仍然可以存在。&lt;/p&gt;
+&lt;p&gt;聚合关系是关联关系的一种，是强的关联关系；关联和聚合在语法上无法区分，必须考察具体的逻辑关系。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;【代码体现】&lt;/strong&gt;：成员变量
+&lt;strong&gt;【箭头及指向】&lt;/strong&gt;：带空心菱形的实心线，菱形指向整体&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/cpp/UML%E7%B1%BB%E5%9B%BE/%E7%B1%BB%E5%9B%BE-06.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h4 id=&#34;225-组合composition&#34;&gt;2.2.5 组合(Composition)&lt;/h4&gt;
+&lt;p&gt;&lt;strong&gt;【组合关系】&lt;/strong&gt;：是整体与部分的关系，但部分不能离开整体而单独存在。如公司和部门是整体和部分的关系，没有公司就不存在部门。&lt;/p&gt;
+&lt;p&gt;组合关系是关联关系的一种，是比聚合关系还要强的关系，它要求普通的聚合关系中代表整体的对象负责代表部分的对象的生命周期。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;【代码体现】&lt;/strong&gt;：成员变量&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;【箭头及指向】&lt;/strong&gt;：带实心菱形的实线，菱形指向整体&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/cpp/UML%E7%B1%BB%E5%9B%BE/%E7%B1%BB%E5%9B%BE-07.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h4 id=&#34;226-依赖dependency&#34;&gt;2.2.6 依赖(Dependency)&lt;/h4&gt;
+&lt;p&gt;&lt;strong&gt;【依赖关系】&lt;/strong&gt;：是一种使用的关系，即一个类的实现需要另一个类的协助，所以要尽量不使用双向的互相依赖.
+&lt;strong&gt;【代码表现】&lt;/strong&gt;：局部变量、方法的参数或者对静态方法的调用
+&lt;strong&gt;【箭头及指向】&lt;/strong&gt;：带箭头的虚线，指向被使用者&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/cpp/UML%E7%B1%BB%E5%9B%BE/%E7%B1%BB%E5%9B%BE-08.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;各种关系的强弱顺序：
+&lt;strong&gt;泛化 = 实现 &amp;gt; 组合 &amp;gt; 聚合 &amp;gt; 关联 &amp;gt; 依赖&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;下面这张UML图，比较形象地展示了各种类图关系：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/cpp/UML%E7%B1%BB%E5%9B%BE/%E7%B1%BB%E5%9B%BE-09.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;多重性(Multiplicity) :&lt;/strong&gt; 通常在&lt;strong&gt;关联、聚合、组合&lt;/strong&gt;中使用。就是代表有多少个关联对象存在。使用数字…星号（数字）表示。如下图，一个割接通知可以关联0个到N个故障单。&lt;/p&gt;
+&lt;p&gt;重点讲一下聚合和组合的关系：&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;聚合关系图：&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/cpp/UML%E7%B1%BB%E5%9B%BE/%E7%B1%BB%E5%9B%BE-10.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;组合关系图：&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/cpp/UML%E7%B1%BB%E5%9B%BE/%E7%B1%BB%E5%9B%BE-11.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;从代码上看这两种关系的区别在于：&lt;/p&gt;
+&lt;p&gt;构造函数不同&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;雁群类：&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt;  &lt;span class=&#34;kd&#34;&gt;class&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;GooseGroup&lt;/span&gt;  
+&lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;  
+    &lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Goose&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;goose&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;;&lt;/span&gt;  
+
+
+    &lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;GooseGroup&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Goose&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;goose&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;  
+    &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;  
+    	&lt;span class=&#34;k&#34;&gt;this&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;na&#34;&gt;goose&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;goose&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;;&lt;/span&gt;  
+    &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;大雁类：&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;9
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;class&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;Goose&lt;/span&gt;  
+&lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;  
+    &lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Wings&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;wings&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;;&lt;/span&gt;  
+  
+    &lt;span class=&#34;kd&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;Goose&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;()&lt;/span&gt;  
+    &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;  
+        &lt;span class=&#34;n&#34;&gt;wings&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;new&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Wings&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;();&lt;/span&gt;  
+    &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;  
+&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;  
+&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;聚合关系的类里含有另一个类作为参数&lt;/p&gt;
+&lt;p&gt;**雁群类（GooseGroup）**的构造函数中要用到大雁（Goose）作为参数把值传进来 大雁类（Goose）可以脱离雁群类而独立存在&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;组合关系的类里含有另一个类的实例化&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;大雁类（Goose）在实例化之前 一定要先实例化翅膀类（Wings） 两个类紧密耦合在一起 它们有相同的生命周期 翅膀类（Wings）不可以脱离大雁类（Goose）而独立存在
+信息的封装性不同
+在聚合关系中，客户端可以同时了解雁群类和大雁类，因为他们都是独立的
+而在组合关系中，客户端只认识大雁类，根本就不知道翅膀类的存在，因为翅膀类被严密的封装在大雁类中。&lt;/p&gt;
+</description>
+      
+    </item>
     
     <item>
       <title>【机器人学基础知识】10、运动学已经够用，为什么还要动力学</title>

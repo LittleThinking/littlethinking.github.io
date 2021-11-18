@@ -6,7 +6,16 @@
     <description>Recent content in Posts on 小虎 - Mechanical student,Robot enthusiast</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Thu, 28 Jan 2021 14:03:23 +0800</lastBuildDate><atom:link href="https://littlethinking.cn/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 15 Nov 2021 12:01:23 +0800</lastBuildDate><atom:link href="https://littlethinking.cn/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>【C&#43;&#43;】UML类图</title>
+      <link>https://littlethinking.cn/post/cpp/uml%E7%B1%BB%E5%9B%BE/</link>
+      <pubDate>Mon, 15 Nov 2021 12:01:23 +0800</pubDate>
+      
+      <guid>https://littlethinking.cn/post/cpp/uml%E7%B1%BB%E5%9B%BE/</guid>
+      <description>1 什么是UML类图 在UML 2.*的13种图形中，类图是使用频率最高的UML图之一。类图是面向对象系统建模中最常用和最重要的图，是定义其它图的</description>
+    </item>
+    
     <item>
       <title>【机器人学基础知识】10、运动学已经够用，为什么还要动力学</title>
       <link>https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_10%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%8A%A8%E5%8A%9B%E5%AD%A6/</link>
