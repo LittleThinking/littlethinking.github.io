@@ -6,10 +6,267 @@
     <description>Recent content on 小虎 - Mechanical student,Robot enthusiast</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Mon, 15 Nov 2021 12:01:23 +0800</lastBuildDate>
+    <lastBuildDate>Mon, 20 Dec 2021 12:01:23 +0800</lastBuildDate>
     
         <atom:link href="https://littlethinking.cn/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>【CAN总线学习笔记】4、总线仲裁</title>
+      <link>https://littlethinking.cn/post/can%E6%80%BB%E7%BA%BF/can%E6%80%BB%E7%BA%BF%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B04%E6%80%BB%E7%BA%BF%E4%BB%B2%E8%A3%81/</link>
+      <pubDate>Mon, 20 Dec 2021 12:01:23 +0800</pubDate>
+      
+      <guid>https://littlethinking.cn/post/can%E6%80%BB%E7%BA%BF/can%E6%80%BB%E7%BA%BF%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B04%E6%80%BB%E7%BA%BF%E4%BB%B2%E8%A3%81/</guid>
+      
+        <description>&lt;p&gt;在第三篇中将CAN协议帧结构基本介绍完了，下面来分析下具体的总线仲裁。&lt;/p&gt;
+&lt;p&gt;基于上节的仲裁段和控制段，这里主要考虑几种情况的仲裁：&lt;/p&gt;
+&lt;p&gt;假设一条CAN总线上有两个节点Node_A和Node_B。在总线空闲时，总线上为隐性电平，就在这个时候Node_A 和 Node_B 这两个节点同时向总线上发送数据，如下图，其中，Tx表示发送，Rx表示接收，也就是说每个节点都有发送与接收。&lt;/p&gt;
+&lt;p&gt;当作为发送方的节点会去接收自己发送的内容进行检查，即&lt;strong&gt;回读机制&lt;/strong&gt;（节点在向总线上发送报文的过程中，同时也对总线上的二进制位进行“回读”，对比&lt;strong&gt;该节点发出的二进制位&lt;/strong&gt;与&lt;strong&gt;总线上当前的二进制位&lt;/strong&gt;是否一致，就可节点数据是否被正确接收。)&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/CAN%E6%80%BB%E7%BA%BF/4.%E6%80%BB%E7%BA%BF%E4%BB%B2%E8%A3%81/%E4%BB%B2%E8%A3%81%E8%BF%87%E7%A8%8B.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;**情况1：**仲裁在前11位ID就结束 ，如上图。&lt;/p&gt;
+&lt;p&gt;从D28-D18，采用线与机制，逐位进行比较，一旦某位出现不同，上图的ID25，则显性位覆盖隐性位，仲裁结束，显性位的对应节点胜出，上图的Node_A。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/CAN%E6%80%BB%E7%BA%BF/4.%E6%80%BB%E7%BA%BF%E4%BB%B2%E8%A3%81/%E6%83%85%E5%86%B51.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;**情况2：**仲裁在前11位ID未结束，即说明前11位ID相同&lt;/p&gt;
+&lt;p&gt;在这种情况下，我们就需要回顾一下前面的一个表：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/CAN%E6%80%BB%E7%BA%BF/4.%E6%80%BB%E7%BA%BF%E4%BB%B2%E8%A3%81/%E6%83%85%E5%86%B52.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;根据这个表，我们可以进一步分为4种情况：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;标准格式的数据帧与遥控帧&lt;/strong&gt;，看RTR位，数据帧的RTR位恒为显性，遥控帧的RTR位恒为隐性。故前11位ID号相同时，&lt;strong&gt;标准数据帧优先级高于标准遥控帧&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;扩展格式的数据帧与遥控帧&lt;/strong&gt;，在前11位ID和后18位ID全相同的情况，与上条一致。&lt;/li&gt;
+&lt;li&gt;**数据帧的标准格式与扩展格式，**比较标准格式的RTR位与扩展格式的SRR位，标准格式的RTR位恒为显性，扩展格式的SRR位恒为隐性。故前11位ID号相同时，&lt;strong&gt;标准数据帧优先级高于扩展数据帧&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;遥控帧的标准格式与扩展格式&lt;/strong&gt;，看IDE位，扩展格式的IDE位恒为隐性，标准格式的IDE位在控制段，恒为显性。故&lt;strong&gt;前11位ID号相同时，标准遥控帧优先级高于扩展遥控帧&lt;/strong&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;通过上述分析，我们可以知道在前11位ID号相同时，根据协议设定的RTR, SRR, IDE，就可以保证如下：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;RTR：保证数据帧优先级高于遥控帧；&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;SRR ：保证标准数据帧的优先级高于扩展数据帧；&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;IDE ：保证标准遥控帧的优先级高于扩展遥控帧。&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>【CAN总线学习笔记】3、CAN协议帧结构</title>
+      <link>https://littlethinking.cn/post/can%E6%80%BB%E7%BA%BF/can%E6%80%BB%E7%BA%BF%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B03can%E5%8D%8F%E8%AE%AE%E5%B8%A7%E7%BB%93%E6%9E%84/</link>
+      <pubDate>Sun, 19 Dec 2021 12:01:23 +0800</pubDate>
+      
+      <guid>https://littlethinking.cn/post/can%E6%80%BB%E7%BA%BF/can%E6%80%BB%E7%BA%BF%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B03can%E5%8D%8F%E8%AE%AE%E5%B8%A7%E7%BB%93%E6%9E%84/</guid>
+      
+        <description>&lt;p&gt;在第二篇中仲裁机制部分我们提到CAN协议帧，总的来说CAN协议帧有5种类型，下面逐个展开。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/image/CAN%E6%80%BB%E7%BA%BF/3.CAN%E5%8D%8F%E8%AE%AE%E5%B8%A7%E7%BB%93%E6%9E%84/%E5%B8%A7%E7%A7%8D%E7%B1%BB%E5%8F%8A%E7%94%A8%E9%80%94.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;由于数据帧与遥控帧的最大差别在于遥控帧没有数据段，所以将两者放在一起讲述：&lt;/p&gt;
+&lt;h3 id=&#34;1-数据帧和遥控帧&#34;&gt;1 数据帧和遥控帧&lt;/h3&gt;
+&lt;p&gt;数据帧和遥控帧都有&lt;strong&gt;标准格式&lt;/strong&gt;和&lt;strong&gt;扩展格式，&lt;strong&gt;这2种格式都具有&lt;/strong&gt;相同的帧结构&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;数据帧由7个段构成，遥控帧由6个段构成。先看&lt;strong&gt;数据帧&lt;/strong&gt;：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/image/CAN%E6%80%BB%E7%BA%BF/3.CAN%E5%8D%8F%E8%AE%AE%E5%B8%A7%E7%BB%93%E6%9E%84/%E6%95%B0%E6%8D%AE%E5%B8%A7%E7%BB%93%E6%9E%84%E5%8F%8A%E5%85%B6%E4%B8%A4%E7%A7%8D%E6%A0%BC%E5%BC%8F.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/image/CAN%E6%80%BB%E7%BA%BF/3.CAN%E5%8D%8F%E8%AE%AE%E5%B8%A7%E7%BB%93%E6%9E%84/%E6%95%B0%E6%8D%AE%E5%B8%A7%E7%BB%93%E6%9E%84%E5%8F%8A%E5%85%B6%E4%B8%A4%E7%A7%8D%E6%A0%BC%E5%BC%8F-02.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;这里结合实际采集的CAN总线电压信号来看下标准格式的数据帧。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/image/CAN%E6%80%BB%E7%BA%BF/3.CAN%E5%8D%8F%E8%AE%AE%E5%B8%A7%E7%BB%93%E6%9E%84/%E6%A0%87%E5%87%86%EF%BC%88%E6%A0%BC%E5%BC%8F%EF%BC%89%E6%95%B0%E6%8D%AE%E5%B8%A7%E7%9A%84CAN%E6%80%BB%E7%BA%BF%E7%94%B5%E5%8E%8B.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;再看&lt;strong&gt;遥控帧&lt;/strong&gt;（也叫远程帧）：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/image/CAN%E6%80%BB%E7%BA%BF/3.CAN%E5%8D%8F%E8%AE%AE%E5%B8%A7%E7%BB%93%E6%9E%84/%E9%81%A5%E6%8E%A7%E5%B8%A7%E7%BB%93%E6%9E%84%E5%8F%8A%E5%85%B6%E4%B8%A4%E7%A7%8D%E6%A0%BC%E5%BC%8F.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;通过对比&lt;strong&gt;数据帧和遥控帧&lt;/strong&gt;有：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;数据帧与遥控帧的不同&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;遥控帧的RTR位为隐性位，没有数据段。&lt;/li&gt;
+&lt;li&gt;没有数据段的数据帧与遥控帧可通过RTR位区分。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;遥控帧没有数据段，数据长度码如何表示？&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;遥控帧的数据长度以所请求数据帧的数据长度码表示。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;没有数据段的数据帧有何用途？&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;例如，可以用于各单元的定期连接确认/应答、或仲裁段本身带有实质性信息的情况下。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;通过对数据帧和遥控帧有了基本认识，下面我们再具体了解下每个段。&lt;/p&gt;
+&lt;h4 id=&#34;11-帧起始sof-start-of-frame&#34;&gt;1.1 帧起始(SOF, Start of Frame)&lt;/h4&gt;
+&lt;p&gt;表示&lt;strong&gt;帧开始的段&lt;/strong&gt;，&lt;strong&gt;1个位的显性位&lt;/strong&gt;。（总线空闲时为隐性位，故帧起始以显性位非常好识别），对于数据帧和遥控帧的标准/扩展格式均如此。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/image/CAN%E6%80%BB%E7%BA%BF/3.CAN%E5%8D%8F%E8%AE%AE%E5%B8%A7%E7%BB%93%E6%9E%84/%E5%B8%A7%E8%B5%B7%E5%A7%8B.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h4 id=&#34;12-仲裁段arbitration-field&#34;&gt;1.2 仲裁段（Arbitration field）&lt;/h4&gt;
+&lt;p&gt;表示&lt;strong&gt;数据的优先级的段&lt;/strong&gt;，其作用就是根据报文ID来确定其发送优先级。标准格式和扩展格式在此的构成有所不同。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/image/CAN%E6%80%BB%E7%BA%BF/3.CAN%E5%8D%8F%E8%AE%AE%E5%B8%A7%E7%BB%93%E6%9E%84/%E4%BB%B2%E8%A3%81%E6%AE%B5.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;这里对比数据帧与遥控帧各自的两个格式，其不同为：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/image/CAN%E6%80%BB%E7%BA%BF/3.CAN%E5%8D%8F%E8%AE%AE%E5%B8%A7%E7%BB%93%E6%9E%84/%E6%95%B0%E6%8D%AE%E5%B8%A7%E4%B8%8E%E9%81%A5%E6%8E%A7%E5%B8%A7%E7%9A%84%E4%B8%A4%E4%B8%AA%E6%A0%BC%E5%BC%8F.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;针对上表的这种设计，后面会具体分析其在仲裁过程的作用。&lt;/p&gt;
+&lt;h4 id=&#34;13-控制段control-field&#34;&gt;1.3 控制段（Control field）&lt;/h4&gt;
+&lt;p&gt;表述&lt;strong&gt;数据段的字节数&lt;/strong&gt;，由6个位构成，标准格式和扩展格式的构成有所不同。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/image/CAN%E6%80%BB%E7%BA%BF/3.CAN%E5%8D%8F%E8%AE%AE%E5%B8%A7%E7%BB%93%E6%9E%84/%E6%8E%A7%E5%88%B6%E6%AE%B5-1.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/image/CAN%E6%80%BB%E7%BA%BF/3.CAN%E5%8D%8F%E8%AE%AE%E5%B8%A7%E7%BB%93%E6%9E%84/%E6%8E%A7%E5%88%B6%E6%AE%B5-2.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/image/CAN%E6%80%BB%E7%BA%BF/3.CAN%E5%8D%8F%E8%AE%AE%E5%B8%A7%E7%BB%93%E6%9E%84/%E6%8E%A7%E5%88%B6%E6%AE%B5-3.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h4 id=&#34;14-数据段data-field&#34;&gt;1.4 数据段(Data Field)&lt;/h4&gt;
+&lt;p&gt;数据段可包含0-8个字节的数据，从MSB（最高位）开始输出。遥控帧没有此段。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/image/CAN%E6%80%BB%E7%BA%BF/3.CAN%E5%8D%8F%E8%AE%AE%E5%B8%A7%E7%BB%93%E6%9E%84/%E6%95%B0%E6%8D%AE%E6%AE%B5.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h4 id=&#34;15-crc段cyclic-redundancy-check-field&#34;&gt;1.5 CRC段（Cyclic Redundancy Check Field）&lt;/h4&gt;
+&lt;p&gt;&lt;strong&gt;检查帧传输错误的帧&lt;/strong&gt;，由15个位的CRC顺序和1个位的CRC界定符（用于分隔位）构成。CRC界定符恒为隐性。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/image/CAN%E6%80%BB%E7%BA%BF/3.CAN%E5%8D%8F%E8%AE%AE%E5%B8%A7%E7%BB%93%E6%9E%84/CRC%E6%AE%B5.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;这里CRC顺序是根据多项式生成的CRC值，CRC的计算范围包括帧起始，仲裁段，控制段和数据段。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/image/CAN%E6%80%BB%E7%BA%BF/3.CAN%E5%8D%8F%E8%AE%AE%E5%B8%A7%E7%BB%93%E6%9E%84/CRC%E5%BA%8F%E5%88%97%E8%AE%A1%E7%AE%97%E6%96%B9%E6%B3%95.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;附2：&lt;a href=&#34;https://link.zhihu.com/?target=https%3A//en.wikipedia.org/wiki/Cyclic_redundancy_check&#34;&gt;https://en.wikipedia.org/wiki/Cyclic_redundancy_check&lt;/a&gt; , 如何通俗的理解CRC校验并用C语言实现， &lt;a href=&#34;https://zhuanlan.zhihu.com/p/77408094&#34;&gt;https://zhuanlan.zhihu.com/p/77&lt;/a&gt;&lt;/p&gt;
+&lt;h4 id=&#34;16-ack段acknowledge-field&#34;&gt;1.6 ACK段（Acknowledge Field）&lt;/h4&gt;
+&lt;p&gt;&lt;strong&gt;用来确认是否正常接收&lt;/strong&gt;。由ACK槽（ACK Slot）和ACK界定符2个位构成。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/image/CAN%E6%80%BB%E7%BA%BF/3.CAN%E5%8D%8F%E8%AE%AE%E5%B8%A7%E7%BB%93%E6%9E%84/ACK%E6%AE%B5.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/image/CAN%E6%80%BB%E7%BA%BF/3.CAN%E5%8D%8F%E8%AE%AE%E5%B8%A7%E7%BB%93%E6%9E%84/ACK%E6%AE%B5-1.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/image/CAN%E6%80%BB%E7%BA%BF/3.CAN%E5%8D%8F%E8%AE%AE%E5%B8%A7%E7%BB%93%E6%9E%84/ACK%E6%AE%B5-2.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h4 id=&#34;17-帧结束end-of-frame&#34;&gt;1.7 帧结束(End of Frame)&lt;/h4&gt;
+&lt;p&gt;表示&lt;strong&gt;该帧的结束的段&lt;/strong&gt;。由7个位的隐性位构成。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/image/CAN%E6%80%BB%E7%BA%BF/3.CAN%E5%8D%8F%E8%AE%AE%E5%B8%A7%E7%BB%93%E6%9E%84/%E5%B8%A7%E7%BB%93%E6%9D%9F.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h3 id=&#34;2-错误帧&#34;&gt;2 错误帧&lt;/h3&gt;
+&lt;p&gt;用于在接收和发送消息时&lt;strong&gt;检测出错误通知错误的帧&lt;/strong&gt;，错误帧由&lt;strong&gt;错误标志&lt;/strong&gt;和&lt;strong&gt;错误界定符&lt;/strong&gt;构成。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/image/CAN%E6%80%BB%E7%BA%BF/3.CAN%E5%8D%8F%E8%AE%AE%E5%B8%A7%E7%BB%93%E6%9E%84/%E9%94%99%E8%AF%AF%E5%B8%A7.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;上图的错误标志包括&lt;strong&gt;主动错误标志&lt;/strong&gt;（6个位的显性位）和&lt;strong&gt;被动错误标志&lt;/strong&gt;（6个位的隐性位）两种。主动错误标志处于主动错误状态下的单元检测出错误时输出的错误标志。被动错误标志处于被动错误状态的单元检测出错误时输出的错误标志。错误界定符由8个位的隐性位构成。&lt;/p&gt;
+&lt;p&gt;注意上图0~6位的&lt;strong&gt;错误标志重叠&lt;/strong&gt;，这段怎么确定呢？需先介绍2个概念：&lt;strong&gt;位填充&lt;/strong&gt;和&lt;strong&gt;错误类型&lt;/strong&gt;。&lt;/p&gt;
+&lt;h4 id=&#34;21-位填充bit-stuffing&#34;&gt;2.1 位填充(Bit Stuffing)&lt;/h4&gt;
+&lt;p&gt;位填充是为防止突发错误而设定的功能。当同样的电平持续5位则添加一个位的反型数据位：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/image/CAN%E6%80%BB%E7%BA%BF/3.CAN%E5%8D%8F%E8%AE%AE%E5%B8%A7%E7%BB%93%E6%9E%84/%E4%BD%8D%E5%A1%AB%E5%85%85.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/image/CAN%E6%80%BB%E7%BA%BF/3.CAN%E5%8D%8F%E8%AE%AE%E5%B8%A7%E7%BB%93%E6%9E%84/%E4%BD%8D%E5%A1%AB%E5%85%85-1.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h4 id=&#34;22-错误类型&#34;&gt;2.2 错误类型&lt;/h4&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/image/CAN%E6%80%BB%E7%BA%BF/3.CAN%E5%8D%8F%E8%AE%AE%E5%B8%A7%E7%BB%93%E6%9E%84/%E9%94%99%E8%AF%AF%E7%B1%BB%E5%9E%8B.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/image/CAN%E6%80%BB%E7%BA%BF/3.CAN%E5%8D%8F%E8%AE%AE%E5%B8%A7%E7%BB%93%E6%9E%84/CRC%E5%8C%B9%E9%85%8D%E7%A4%BA%E6%84%8F.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/image/CAN%E6%80%BB%E7%BA%BF/3.CAN%E5%8D%8F%E8%AE%AE%E5%B8%A7%E7%BB%93%E6%9E%84/CRC%E9%94%99%E8%AF%AF.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;针对上述&lt;strong&gt;位错误&lt;/strong&gt;再做说明：
+所谓“发出的电平与从总线上回读的电平不一致”，指的就是&lt;strong&gt;节点向总线发出隐性位，却从总线上回读到显性位&lt;/strong&gt;或者&lt;strong&gt;节点向总线发出显性位，却从总线上回读到隐性位&lt;/strong&gt;这两种情况。有三种例外情况不属于位错误：
+在仲裁区，节点向总线发送隐性位却回读到显性位，不认为是位错误，这种情况表示该节点仲裁失败；
+在ACK槽，节点向总线发送隐性位却回读到显性位，不认为是位错误，这种情况表示，该节点当前发送的这一帧报文至少被一个其它节点正确接收；
+一个节点发送被动错误标志，该节点向总线发送连续六个隐性位（被动错误标志）却回读到显性位，不认为是位错误。因为被动错误标志是六个连续的隐性位，所以在总线上按照线与机制，有可能这六个连续隐性位被其它节点发送的显性电平覆盖。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h4 id=&#34;23-错误处理&#34;&gt;2.3 错误处理&lt;/h4&gt;
+&lt;p&gt;错误状态的种类有：&lt;strong&gt;主动错误状态&lt;/strong&gt;，&lt;strong&gt;被动错误状态&lt;/strong&gt;和&lt;strong&gt;总线关闭态&lt;/strong&gt;3种状态。单元始终处于3种状态之一。&lt;/p&gt;
+&lt;p&gt;（1）主动错误状态：可以正常参加总线通信的状态，处于主动错误状态的单元检测出错误时，输出主动错误标志。&lt;/p&gt;
+&lt;p&gt;（2）被动错误状态：是易引起错误的状态。处于被动错误状态的单元虽能参加总线通信，但为不妨碍其他单元通信，接收时不能积极地发送错误通知；处于被动错误状态的单元即使检测出错误，而其它处于主动错误状态的单元如果没发现错误，整个总线也被认为是没有错误的。处于被动错误状态的单元检测出错误时，输出被动错误标志。另外，处于被动错误状态的单元在不能马上再次开始发送。在开始下次发送前，在间隔帧期间内必须插入“延迟传送”（8个位的隐性位）。&lt;/p&gt;
+&lt;p&gt;（3）总线关闭态是不能参加总线上通信的状态。信息的接收和发送均被禁止。&lt;/p&gt;
+&lt;p&gt;以上这些状态依靠发送错误计算和接收错误计数来管理，根据计数值决定进入何种状态。错误状态和计数值的关系如下表：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/image/CAN%E6%80%BB%E7%BA%BF/3.CAN%E5%8D%8F%E8%AE%AE%E5%B8%A7%E7%BB%93%E6%9E%84/%E9%94%99%E8%AF%AF%E7%8A%B6%E6%80%811.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/image/CAN%E6%80%BB%E7%BA%BF/3.CAN%E5%8D%8F%E8%AE%AE%E5%B8%A7%E7%BB%93%E6%9E%84/%E5%8D%95%E5%85%83%E7%9A%84%E9%94%99%E8%AF%AF%E7%8A%B6%E6%80%81.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;发送错误计数值和接收错误计数值根据一定的条件发送变化。错误计数值的变动条件如下表，一次数据的接收和发送可能同时满足多个条件。错误计数器在错误标志的第一个位出现的时间点上开始计数。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/image/CAN%E6%80%BB%E7%BA%BF/3.CAN%E5%8D%8F%E8%AE%AE%E5%B8%A7%E7%BB%93%E6%9E%84/%E9%94%99%E8%AF%AF%E7%8A%B6%E6%80%812.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h4 id=&#34;24-错误帧发送&#34;&gt;2.4 错误帧发送&lt;/h4&gt;
+&lt;p&gt;检查到错误后，什么时候发送错误帧呢？按照CAN协议的规定：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;位错误、填充错误、格式错误、ACK错误。&lt;strong&gt;在错误产生的那一位的下一位开始发送错误帧&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;CRC错误。&lt;strong&gt;紧随ACK界定符后的位发送错误帧&lt;/strong&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;具体来看一个例子：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/image/CAN%E6%80%BB%E7%BA%BF/3.CAN%E5%8D%8F%E8%AE%AE%E5%B8%A7%E7%BB%93%E6%9E%84/%E9%94%99%E8%AF%AF%E5%B8%A7%E4%BE%8B%E5%AD%901.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;1）发送节点Node_A发送一个显性位，但是却从总线上听到一个隐形位，于是Node_A节点就会检测到一个位错误；&lt;/li&gt;
+&lt;li&gt;2）Node_A检测到位错误之后，立即在下一位开始发送主动错误帧：6个连续显性位的主动错误标志+8个连续隐性位的错误界定符；&lt;/li&gt;
+&lt;li&gt;3）对应Node_A发出的主动错误标志，总线上电平为6个连续显性位；&lt;/li&gt;
+&lt;li&gt;4）接收节点Node_B和Node_C从总线上听到连续6个显性位，那么就会检测到一个填充错误，于是这两个节点都会发送主动错误帧；&lt;/li&gt;
+&lt;li&gt;5）对应Node_B和Node_C发出的主动错误标志，总线电平又有6个连续显性电平，对应Node_B和Node_C发出的错误界定符，总线电平有8个连续的隐性电平。&lt;/li&gt;
+&lt;li&gt;6）在间歇场之后，Node_A节点重新发送刚刚出错的报文。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;在了解了错误帧的发送后，回到之前提到**错误标志重叠部分是怎样形成的，**再看一个例子：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/image/CAN%E6%80%BB%E7%BA%BF/3.CAN%E5%8D%8F%E8%AE%AE%E5%B8%A7%E7%BB%93%E6%9E%84/%E9%94%99%E8%AF%AF%E5%B8%A7%E4%BE%8B%E5%AD%902.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;在这个例子，我们知道位错误的错误标志与填充错误的错误标志重叠2位，剩下部分还有4位&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/image/CAN%E6%80%BB%E7%BA%BF/3.CAN%E5%8D%8F%E8%AE%AE%E5%B8%A7%E7%BB%93%E6%9E%84/%E9%94%99%E8%AF%AF%E6%A0%87%E5%BF%97.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h3 id=&#34;3-过载帧&#34;&gt;3 过载帧&lt;/h3&gt;
+&lt;p&gt;过载帧是用于接收单元通知其尚未完成接收准备的帧。过载帧由过载标志（6个位的显性位）和过载界定符(8个位的隐性位)构成。过载界定符的构成与错误界定符的构成相同。过载帧的构成如下图所示。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/image/CAN%E6%80%BB%E7%BA%BF/3.CAN%E5%8D%8F%E8%AE%AE%E5%B8%A7%E7%BB%93%E6%9E%84/%E8%BF%87%E8%BD%BD%E5%B8%A7.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;对于过载帧的帧结构我们可以这样理解：接收节点达到接收极限时，就会发出过载帧到总线上，显然，过载标志的6个连续显性位会屏蔽掉总线上其它节点的发送，也就是说这个时候的接收节点通过发送过载帧的方式来破坏其它节点的发送，这样在接收节点发送过载帧期间，其它节点就不能成功发送报文，于是就相当于把其它节点的发送推迟了，也就是说接收节点在其发送过载帧的这段时间得以“休息”。&lt;/p&gt;
+&lt;p&gt;有3种情况会引起过载帧：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;接收节点自身原因。接收节点由于某种原因需要延迟接收下一个数据帧或者遥控帧。&lt;/li&gt;
+&lt;li&gt;在帧间隔的间歇段的第一位和第二位检测到一个显性位（正常的间歇段都是隐性位）。帧间隔的间隔段本应是三个连续的隐性位，如果接收节点在间隔段检测到显性位，那么就意味着此时有报文发向接收节点，但这个时候是不应该有报文发来的，于是接收节点发送过载帧。&lt;/li&gt;
+&lt;li&gt;CAN节点在错误界定符或过载界定符的第八位(最后一位)听到一个显性位0，节点会发送一个过载帧，且错误计数器不会增加。接收节点在错误界定符和过载界定符的最后一位听到显性位，也意味着有报文发向接收节点，但这个时候是不应该有报文发来的，于是接收节点发送过载帧。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;4-帧间隔&#34;&gt;4 帧间隔&lt;/h3&gt;
+&lt;p&gt;帧间隔是用于分隔数据帧和遥控帧的帧。数据帧和遥控帧可通过插入帧间隔将本帧与前面的任何帧（数据帧、遥控帧、错误帧、过载帧）分开。过载帧和错误帧前不能插入帧间隔。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/image/CAN%E6%80%BB%E7%BA%BF/3.CAN%E5%8D%8F%E8%AE%AE%E5%B8%A7%E7%BB%93%E6%9E%84/%E5%B8%A7%E9%97%B4%E9%9A%94.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;针对上图，间隔为3个位的隐性位；总线空闲为隐性电平，无长度限制（0亦可）；延迟传送为8个位的隐性位，只在处于被动错误状态的单元刚发送一个消息后的帧间隔中包含的段。这里为什么需要延迟传送段呢？&lt;/p&gt;
+&lt;p&gt;首先，考虑主动错误状态的节点A，发送主动错误标志之后，随之就要重新发送刚刚发送失败的报文，但是为了间隔开与前面刚刚发送的错误帧，总线在错误帧之后就会插入３个隐形位的帧间隔，在这３个隐形位期间，其它的节点不足以判定总线空闲（需要连续11个隐性位才能判定），所以节点A仍然占据着总线的控制权，于是在帧间隔之后，节点A能够接着发送报文。现在节点A转入到被动错误状态了，说明它已经不是很可靠了，这个时候如果没有延迟传送段，在节点A发出被动错误标志之后，它仍然能够在3位的帧间隔之后立即重新发送报文，这是不符合我们对被动错误状态的处理要求的当然也是不符合CAN协议的，于是乎对于发送出被动错误标志的节点，总线在帧间隔中加入了８个连续隐性位的延迟传送段，这样的3+8=11个连续隐性位。就能让节点A在这个帧间隔期间失去对总线的控制权，从而优先保证其它正常(处于主动错误状态)节点能够使用总线，而不必等着一个已经不可靠的节点A占据总线。&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>【CAN总线学习笔记】2、CAN总线特性</title>
+      <link>https://littlethinking.cn/post/can%E6%80%BB%E7%BA%BF/can%E6%80%BB%E7%BA%BF%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02can%E6%80%BB%E7%BA%BF%E7%89%B9%E6%80%A7/</link>
+      <pubDate>Sat, 18 Dec 2021 12:01:23 +0800</pubDate>
+      
+      <guid>https://littlethinking.cn/post/can%E6%80%BB%E7%BA%BF/can%E6%80%BB%E7%BA%BF%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02can%E6%80%BB%E7%BA%BF%E7%89%B9%E6%80%A7/</guid>
+      
+        <description>&lt;h3 id=&#34;1-多主工作方式&#34;&gt;1 多主工作方式&lt;/h3&gt;
+&lt;p&gt;CAN总线上的所有节点没有主从之分，反应在数据传输上是：&lt;strong&gt;在总线空闲状态下，任意节点都可以向总线上发送信息&lt;/strong&gt;。另外：最先向总线发送信息的节点获得总线的发送权；当多个节点同时向总线发送消息时，所发送消息的优先权高的那个节点获得总线的发送权。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/CAN%E6%80%BB%E7%BA%BF/2.%E6%80%BB%E7%BA%BF%E7%89%B9%E6%80%A7/%E5%A4%9A%E4%B8%BB%E5%B7%A5%E4%BD%9C%E6%96%B9%E5%BC%8F%E7%A4%BA%E6%84%8F%E5%9B%BE.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;上图说明：0x12优先级高于0x67，所以0x12先于0x67发送；紧接着0x52也要求发送，同样其优先级也高于0x67，所以0x52先于0x67发送，依次类推。这里0x12优先级高于0x67是怎么判断的呢？这就下个特点相关。&lt;/p&gt;
+&lt;h3 id=&#34;2-非破坏性仲裁机制&#34;&gt;2 非破坏性仲裁机制&lt;/h3&gt;
+&lt;p&gt;非破坏性仲裁机制是一种既不会造成已发送数据的延迟，也不会破坏已经发送的数据的仲裁机制，其具体实施需要了解&lt;strong&gt;CAN协议帧结构，线与机制&lt;/strong&gt;等。其中，线与机制简单说就是位与计算，显性电平会覆盖隐性电平（换种方式理解：电路通路情况下，有一个端点接地（GND），那么整个电路电压就接地了）。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/CAN%E6%80%BB%E7%BA%BF/2.%E6%80%BB%E7%BA%BF%E7%89%B9%E6%80%A7/%E7%BA%BF%E4%B8%8E%E6%9C%BA%E5%88%B6%E5%9B%BE%E8%A7%A3.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/CAN%E6%80%BB%E7%BA%BF/2.%E6%80%BB%E7%BA%BF%E7%89%B9%E6%80%A7/%E6%98%BE%E6%80%A7%E4%B8%8E%E9%9A%90%E6%80%A7%E7%94%B5%E5%B9%B3.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;再了解线与机制后，看一个简单的仲裁例子，如下图：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/CAN%E6%80%BB%E7%BA%BF/2.%E6%80%BB%E7%BA%BF%E7%89%B9%E6%80%A7/%E4%BB%B2%E8%A3%81%E6%9C%BA%E5%88%B6.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;上图：假设CAN总线上只有两个节点 A和B，它俩的ID用逻辑电平表示，我们规定：从SOF位开始，从左往右逐位比较，只要出现位不一样，比较就结束，显性电平者胜出，有权发送。&lt;/p&gt;
+&lt;p&gt;当节点A，B都发送请求时，开始逐位比较，直到它俩的ID7位，节点A为显性电平，节点B为隐性电平。根据线与机制，节点A胜出，优先发送。这就是一个大致的非破坏性仲裁过程。为了精准地实施仲裁过程，对CAN协议帧结构有严谨的设计，后续将会详细分析。&lt;/p&gt;
+&lt;h3 id=&#34;3-系统的柔软性&#34;&gt;3 系统的柔软性&lt;/h3&gt;
+&lt;p&gt;与总线相连的节点没有类似于“地址”的信息。因此在总线上增加节点时，连接在总线上的其它节点的软硬件及应用层都不需要改变。&lt;/p&gt;
+&lt;h3 id=&#34;4-通信速度&#34;&gt;4 通信速度&lt;/h3&gt;
+&lt;p&gt;根据整个网络的规模，可设定适合的通信速度。在同一网络中，所有单元必须设定成统一的通信速度。即使有一个单元的通信速度与其它的不一样，此单元也会输出错误信号，妨碍整个网络的通信。不同网络间则可以有不同的通信速度。（简单一句话理解：&lt;strong&gt;双方必须需要在同一频道交流，不然沟通就有障碍&lt;/strong&gt;）&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/CAN%E6%80%BB%E7%BA%BF/2.%E6%80%BB%E7%BA%BF%E7%89%B9%E6%80%A7/%E9%80%9A%E4%BF%A1%E9%80%9F%E5%BA%A6.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h3 id=&#34;5-远程数据请求&#34;&gt;5 远程数据请求&lt;/h3&gt;
+&lt;p&gt;可通过发送“遥控帧” 请求其他单元发送数据。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/CAN%E6%80%BB%E7%BA%BF/2.%E6%80%BB%E7%BA%BF%E7%89%B9%E6%80%A7/%E8%BF%9C%E7%A8%8B%E6%95%B0%E6%8D%AE%E8%AF%B7%E6%B1%82.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h3 id=&#34;6-信息广播&#34;&gt;6 信息广播&lt;/h3&gt;
+&lt;p&gt;信息广播就如：节点A发送一条ID 0x12的信息，然后节点B,C,D都能收到。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/CAN%E6%80%BB%E7%BA%BF/2.%E6%80%BB%E7%BA%BF%E7%89%B9%E6%80%A7/%E4%BF%A1%E6%81%AF%E5%B9%BF%E6%92%AD.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;上图节点B,C,D最终是否会接收这个0x12发送信息，与他们设置相关，如下图只有节点B设置接收，C，D将会丢弃该条信息，这个过程与报文过滤相关。&lt;/p&gt;
+</description>
+      
+    </item>
+    
+    <item>
+      <title>【CAN总线学习笔记】1、CAN概述</title>
+      <link>https://littlethinking.cn/post/can%E6%80%BB%E7%BA%BF/can%E6%80%BB%E7%BA%BF%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01can%E6%A6%82%E8%BF%B0/</link>
+      <pubDate>Wed, 17 Nov 2021 12:01:23 +0800</pubDate>
+      
+      <guid>https://littlethinking.cn/post/can%E6%80%BB%E7%BA%BF/can%E6%80%BB%E7%BA%BF%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01can%E6%A6%82%E8%BF%B0/</guid>
+      
+        <description>&lt;p&gt;控制器局域网CAN( Controller Area Network)属于&lt;a href=&#34;https://link.zhihu.com/?target=https%3A//baike.baidu.com/item/%E7%8E%B0%E5%9C%BA%E6%80%BB%E7%BA%BF&#34;&gt;现场总线&lt;/a&gt;的范畴，是一种有效支持&lt;a href=&#34;https://link.zhihu.com/?target=https%3A//baike.baidu.com/item/%E5%88%86%E5%B8%83%E5%BC%8F%E6%8E%A7%E5%88%B6%E7%B3%BB%E7%BB%9F&#34;&gt;分布式控制系统&lt;/a&gt;的&lt;a href=&#34;https://link.zhihu.com/?target=https%3A//baike.baidu.com/item/%E4%B8%B2%E8%A1%8C%E9%80%9A%E4%BF%A1&#34;&gt;串行通信&lt;/a&gt;网络。是由&lt;strong&gt;德国博世公司在20世纪80年代专门为汽车行业开发的一种&lt;a href=&#34;https://link.zhihu.com/?target=https%3A//baike.baidu.com/item/%E4%B8%B2%E8%A1%8C%E9%80%9A%E4%BF%A1&#34;&gt;串行通信&lt;/a&gt;总线。&lt;strong&gt;由于其高性能、高可靠性以及独特的设计而越来越受到人们的重视，被广泛应用于&lt;/strong&gt;汽车业、航空业、工业控制、安全防护&lt;/strong&gt;等领域。
+随着&lt;a href=&#34;https://baike.baidu.com/item/CAN%E6%80%BB%E7%BA%BF%E5%8D%8F%E8%AE%AE&#34;&gt;CAN总线协议&lt;/a&gt;在各个行业和领域的广泛应用，对其的通信格式标准化也提出了更严格的要求。&lt;strong&gt;1991年CAN总线技术规范（Version2.0）&lt;strong&gt;制定并发布。该技术规范共包括A和B两个部分。其中&lt;/strong&gt;2.0A给出了CAN报文标准格式，而2.0B给出了标准的和扩展的两种格式&lt;/strong&gt;。&lt;/p&gt;
+&lt;h3 id=&#34;1-can总线架构简介&#34;&gt;1 CAN总线架构简介&lt;/h3&gt;
+&lt;p&gt;CAN总线是一种用于在不同的ECU（电子控制单元）之间传输数据的线，CAN总线协议是一种ISO 国际标准化的串行通信协议，有 ISO-11898 和 ISO-11519两个系列。其定义有：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;ISO-11898 定义了通信速率为 125 kbps ~1Mbps 的&lt;strong&gt;高速 CAN 通信标准&lt;/strong&gt;，属于&lt;strong&gt;闭环总线&lt;/strong&gt;，传输速率可达1Mbps，总线长度 ≤ 40米，如图。&lt;/li&gt;
+&lt;li&gt;ISO11519 定义了通信速率为 10～125 kbps 的&lt;strong&gt;低速 CAN 通信标准&lt;/strong&gt;，属于&lt;strong&gt;开环总线&lt;/strong&gt;，传输速率为40kbps时，总线长度可达1000米，如图。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/CAN%E6%80%BB%E7%BA%BF/1.%E6%A6%82%E8%BF%B0/%E4%B8%A4%E7%B1%BBCAN%E6%80%BB%E7%BA%BF.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;高速CAN和低速CAN广泛应用于汽车总线，如下图。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/CAN%E6%80%BB%E7%BA%BF/1.%E6%A6%82%E8%BF%B0/%E4%B8%A4%E7%B1%BBCAN%E6%80%BB%E7%BA%BF%E5%BA%94%E7%94%A8%E5%9C%A8%E6%B1%BD%E8%BD%A6.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://link.zhihu.com/?target=https%3A//blog.csdn.net/toywang123/article/details/108872993&#34;&gt;CAN总线终端电阻的作用？为什么是120Ω？为什么是0.25W？&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;CAN通讯速率(&lt;strong&gt;位速率&lt;/strong&gt;)与CAN总线长度的关系大致如下图。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/CAN%E6%80%BB%E7%BA%BF/1.%E6%A6%82%E8%BF%B0/%E4%BD%8D%E9%80%9F%E7%8E%87%E4%B8%8E%E6%80%BB%E7%BA%BF%E9%95%BF%E5%BA%A6%E5%85%B3%E7%B3%BB.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;以上介绍了高低速CAN两种总线架构的基本概念，接下来具体看看这两种CAN总线。&lt;/p&gt;
+&lt;h3 id=&#34;2-can总线结构信息&#34;&gt;2 CAN总线结构信息&lt;/h3&gt;
+&lt;p&gt;将上图2细化，我们可以看到两种CAN总线结构都有CAN_H，CAN_L两根线和多个节点。其中CAN_H和CAN_L线是以双绞形式缠绕，每个节点都有CAN收发器（transceiver）和CAN控制器（controller），CAN收发器和CAN控制器可能集成在芯片（on-chip），也可能是独立于芯片(off-chip)。（图3列举了两种CAN收发器&amp;ndash;TJA1054和82C250）&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/CAN%E6%80%BB%E7%BA%BF/1.%E6%A6%82%E8%BF%B0/%E4%B8%A4%E7%B1%BBCAN%E6%80%BB%E7%BA%BF_2.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/CAN%E6%80%BB%E7%BA%BF/1.%E6%A6%82%E8%BF%B0/%E5%8F%8C%E7%BB%9E%E7%BA%BF%E5%BD%A2%E5%BC%8F%EF%BC%88%E6%8F%90%E9%AB%98%E6%8A%97%E5%B9%B2%E6%89%B0%E8%83%BD%E5%8A%9B%EF%BC%89.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;附1: &lt;a href=&#34;https://zhuanlan.zhihu.com/p/26544567&#34;&gt;CAN总线抗干扰的6条“军规”&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&#34;3-can总线信号&#34;&gt;3 CAN总线信号&lt;/h3&gt;
+&lt;p&gt;CAN总线上，信号表现为电压形式，通过CAN_H和CAN_L线上的&lt;strong&gt;电位差来表示CAN信号&lt;/strong&gt;，分为**显性电平(dominant)和隐性电平(recessive)**两种类型。其中显性电平规定为逻辑0，隐性电平则为逻辑1。其具体定义可通过下图来理解。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/CAN%E6%80%BB%E7%BA%BF/1.%E6%A6%82%E8%BF%B0/CAN%E4%BF%A1%E5%8F%B7%E5%AE%9A%E4%B9%89.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;具体说，如上图第1幅图：当CAN_H和CAN_L的电压均为2.5v，两者电压差为0，就规定CAN信号为隐性电平；当CAN_H的电压为3.5v，CAN_L的电压为1.5v，两者电压差为2V，就规定CAN信号为显性电平。这里实际的规定是：电压差满足定义的一定范围，就可以认为是显性电平或者隐性电平，比如电压差在1.5-2.5v范围，都认为是显性电平。&lt;/p&gt;
+&lt;p&gt;为了加深理解，看了一段实际采集的电压形式的CAN信号：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/CAN%E6%80%BB%E7%BA%BF/1.%E6%A6%82%E8%BF%B0/%E9%AB%98%E9%80%9FCAN%E6%80%BB%E7%BA%BF%E5%AE%9E%E9%99%85%E7%94%B5%E5%8E%8B%E7%8A%B6%E6%80%81.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h3 id=&#34;4-can信号传输&#34;&gt;4 CAN信号传输&lt;/h3&gt;
+&lt;p&gt;上述的电位差（差分电平）与逻辑电平由CAN收发器实现。在发送过程，CAN控制器将CPU传来的信号转换为逻辑电平。CAN收发器接收逻辑电平之后，再将其转换为差分电平输出到CAN总线上。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/CAN%E6%80%BB%E7%BA%BF/1.%E6%A6%82%E8%BF%B0/CAN%E4%BF%A1%E5%8F%B7%E5%8F%91%E9%80%81.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;在接收过程，CAN收发器将CAN_H 和 CAN_L 线上传来的差分电平转换为逻辑电平输出到CAN控制器，CAN控制器再把该逻辑电平转化为相应的信号发送到CPU上。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://littlethinking.cn/images/CAN%E6%80%BB%E7%BA%BF/1.%E6%A6%82%E8%BF%B0/CAN%E4%BF%A1%E5%8F%B7%E6%8E%A5%E6%94%B6.jpg&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;通俗地讲，就是发送方通过CAN收发器使总线电平发生变化，将其信息传递到CAN总线上。接收方通过监听总线电平，将总线上的消息读入自己的CAN收发器。&lt;/p&gt;
+&lt;h3 id=&#34;5-小结&#34;&gt;5 小结&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;CAN总线有2种架构，CAN信号有2种形式，CAN信号发送和接收2个过程。&lt;/strong&gt;&lt;/p&gt;
+</description>
+      
+    </item>
     
     <item>
       <title>【C&#43;&#43;】UML类图</title>

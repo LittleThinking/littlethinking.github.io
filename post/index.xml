@@ -6,7 +6,43 @@
     <description>Recent content in Posts on 小虎 - Mechanical student,Robot enthusiast</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Mon, 15 Nov 2021 12:01:23 +0800</lastBuildDate><atom:link href="https://littlethinking.cn/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 20 Dec 2021 12:01:23 +0800</lastBuildDate><atom:link href="https://littlethinking.cn/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>【CAN总线学习笔记】4、总线仲裁</title>
+      <link>https://littlethinking.cn/post/can%E6%80%BB%E7%BA%BF/can%E6%80%BB%E7%BA%BF%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B04%E6%80%BB%E7%BA%BF%E4%BB%B2%E8%A3%81/</link>
+      <pubDate>Mon, 20 Dec 2021 12:01:23 +0800</pubDate>
+      
+      <guid>https://littlethinking.cn/post/can%E6%80%BB%E7%BA%BF/can%E6%80%BB%E7%BA%BF%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B04%E6%80%BB%E7%BA%BF%E4%BB%B2%E8%A3%81/</guid>
+      <description>在第三篇中将CAN协议帧结构基本介绍完了，下面来分析下具体的总线仲裁。 基于上节的仲裁段和控制段，这里主要考虑几种情况的仲裁： 假设一条CAN总</description>
+    </item>
+    
+    <item>
+      <title>【CAN总线学习笔记】3、CAN协议帧结构</title>
+      <link>https://littlethinking.cn/post/can%E6%80%BB%E7%BA%BF/can%E6%80%BB%E7%BA%BF%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B03can%E5%8D%8F%E8%AE%AE%E5%B8%A7%E7%BB%93%E6%9E%84/</link>
+      <pubDate>Sun, 19 Dec 2021 12:01:23 +0800</pubDate>
+      
+      <guid>https://littlethinking.cn/post/can%E6%80%BB%E7%BA%BF/can%E6%80%BB%E7%BA%BF%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B03can%E5%8D%8F%E8%AE%AE%E5%B8%A7%E7%BB%93%E6%9E%84/</guid>
+      <description>在第二篇中仲裁机制部分我们提到CAN协议帧，总的来说CAN协议帧有5种类型，下面逐个展开。 由于数据帧与遥控帧的最大差别在于遥控帧没有数据段，</description>
+    </item>
+    
+    <item>
+      <title>【CAN总线学习笔记】2、CAN总线特性</title>
+      <link>https://littlethinking.cn/post/can%E6%80%BB%E7%BA%BF/can%E6%80%BB%E7%BA%BF%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02can%E6%80%BB%E7%BA%BF%E7%89%B9%E6%80%A7/</link>
+      <pubDate>Sat, 18 Dec 2021 12:01:23 +0800</pubDate>
+      
+      <guid>https://littlethinking.cn/post/can%E6%80%BB%E7%BA%BF/can%E6%80%BB%E7%BA%BF%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02can%E6%80%BB%E7%BA%BF%E7%89%B9%E6%80%A7/</guid>
+      <description>1 多主工作方式 CAN总线上的所有节点没有主从之分，反应在数据传输上是：在总线空闲状态下，任意节点都可以向总线上发送信息。另外：最先向总线发送</description>
+    </item>
+    
+    <item>
+      <title>【CAN总线学习笔记】1、CAN概述</title>
+      <link>https://littlethinking.cn/post/can%E6%80%BB%E7%BA%BF/can%E6%80%BB%E7%BA%BF%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01can%E6%A6%82%E8%BF%B0/</link>
+      <pubDate>Wed, 17 Nov 2021 12:01:23 +0800</pubDate>
+      
+      <guid>https://littlethinking.cn/post/can%E6%80%BB%E7%BA%BF/can%E6%80%BB%E7%BA%BF%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01can%E6%A6%82%E8%BF%B0/</guid>
+      <description>控制器局域网CAN( Controller Area Network)属于现场总线的范畴，是一种有效支持分布式控制系统的串行通信网络。是由德国博世公司在20世纪80年代专</description>
+    </item>
+    
     <item>
       <title>【C&#43;&#43;】UML类图</title>
       <link>https://littlethinking.cn/post/cpp/uml%E7%B1%BB%E5%9B%BE/</link>
