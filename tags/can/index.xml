@@ -6,7 +6,34 @@
     <description>Recent content in CAN on 小虎 - Mechanical student,Robot enthusiast</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Mon, 20 Dec 2021 12:01:23 +0800</lastBuildDate><atom:link href="https://littlethinking.cn/tags/can/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 26 Dec 2021 12:01:23 +0800</lastBuildDate><atom:link href="https://littlethinking.cn/tags/can/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>【CAN总线学习笔记】7、位时间实例</title>
+      <link>https://littlethinking.cn/post/can%E6%80%BB%E7%BA%BF/can%E6%80%BB%E7%BA%BF%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B07%E4%BD%8D%E6%97%B6%E9%97%B4%E5%AE%9E%E4%BE%8B/</link>
+      <pubDate>Sun, 26 Dec 2021 12:01:23 +0800</pubDate>
+      
+      <guid>https://littlethinking.cn/post/can%E6%80%BB%E7%BA%BF/can%E6%80%BB%E7%BA%BF%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B07%E4%BD%8D%E6%97%B6%E9%97%B4%E5%AE%9E%E4%BE%8B/</guid>
+      <description>本部分将根据Infineon的芯片手册对位时间如何计算和如何配置位时间的寄存器进行说明。 假设我们有一条需求：设置CAN通讯的波特率为500K</description>
+    </item>
+    
+    <item>
+      <title>【CAN总线学习笔记】6、数据传输同步</title>
+      <link>https://littlethinking.cn/post/can%E6%80%BB%E7%BA%BF/can%E6%80%BB%E7%BA%BF%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B06%E6%95%B0%E6%8D%AE%E4%BC%A0%E8%BE%93%E5%90%8C%E6%AD%A5/</link>
+      <pubDate>Sat, 25 Dec 2021 12:01:23 +0800</pubDate>
+      
+      <guid>https://littlethinking.cn/post/can%E6%80%BB%E7%BA%BF/can%E6%80%BB%E7%BA%BF%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B06%E6%95%B0%E6%8D%AE%E4%BC%A0%E8%BE%93%E5%90%8C%E6%AD%A5/</guid>
+      <description>1 位速率概念 位速率（也叫做比特率）表示的是单位时间内，总线上传输的信息量，即每秒能够传输的二进制位的数量，R=1/T ，单位是bit per seco</description>
+    </item>
+    
+    <item>
+      <title>【CAN总线学习笔记】5、报文过滤</title>
+      <link>https://littlethinking.cn/post/can%E6%80%BB%E7%BA%BF/can%E6%80%BB%E7%BA%BF%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B05%E6%8A%A5%E6%96%87%E8%BF%87%E6%BB%A4/</link>
+      <pubDate>Fri, 24 Dec 2021 12:01:23 +0800</pubDate>
+      
+      <guid>https://littlethinking.cn/post/can%E6%80%BB%E7%BA%BF/can%E6%80%BB%E7%BA%BF%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B05%E6%8A%A5%E6%96%87%E8%BF%87%E6%BB%A4/</guid>
+      <description>在CAN总线中没有地址的概念，CAN总线是通过报文ID来实现收发数据的。CAN节点上都会有一个验收滤波ID表，其位于CAN节点的验收滤波器中</description>
+    </item>
+    
     <item>
       <title>【CAN总线学习笔记】4、总线仲裁</title>
       <link>https://littlethinking.cn/post/can%E6%80%BB%E7%BA%BF/can%E6%80%BB%E7%BA%BF%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B04%E6%80%BB%E7%BA%BF%E4%BB%B2%E8%A3%81/</link>
