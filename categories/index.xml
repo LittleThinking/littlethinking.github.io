@@ -6,7 +6,34 @@
     <description>Recent content in Categories on 小虎 - Mechanical student,Robot enthusiast</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Mon, 20 Dec 2021 12:01:23 +0800</lastBuildDate><atom:link href="https://littlethinking.cn/categories/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 18 Jan 2022 12:01:23 +0800</lastBuildDate><atom:link href="https://littlethinking.cn/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>LeetCode题解</title>
+      <link>https://littlethinking.cn/categories/leetcode%E9%A2%98%E8%A7%A3/</link>
+      <pubDate>Tue, 18 Jan 2022 12:01:23 +0800</pubDate>
+      
+      <guid>https://littlethinking.cn/categories/leetcode%E9%A2%98%E8%A7%A3/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>LeetCode</title>
+      <link>https://littlethinking.cn/categories/leetcode/</link>
+      <pubDate>Tue, 28 Dec 2021 12:01:23 +0800</pubDate>
+      
+      <guid>https://littlethinking.cn/categories/leetcode/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>控制</title>
+      <link>https://littlethinking.cn/categories/%E6%8E%A7%E5%88%B6/</link>
+      <pubDate>Sun, 26 Dec 2021 12:01:23 +0800</pubDate>
+      
+      <guid>https://littlethinking.cn/categories/%E6%8E%A7%E5%88%B6/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>CAN总线学习笔记</title>
       <link>https://littlethinking.cn/categories/can%E6%80%BB%E7%BA%BF%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</link>

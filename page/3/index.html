@@ -62,7 +62,7 @@
 <meta property="og:description" content="个人小天地" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://littlethinking.cn/" />
-<meta property="og:updated_time" content="2021-12-20T12:01:23+08:00" />
+<meta property="og:updated_time" content="2022-01-18T12:01:23+08:00" />
 <meta itemprop="name" content="小虎 - Mechanical student,Robot enthusiast">
 <meta itemprop="description" content="个人小天地">
 <meta name="twitter:card" content="summary"/>
@@ -306,19 +306,19 @@
 
         </span>
       
-      <a class="post-link" href="/post/robotics/%E5%B9%B2%E8%B4%A7_05%E7%9E%AC%E6%97%B6%E8%BF%90%E5%8A%A8%E5%AD%A6/">【机器人学基础知识】5、“瞬时运动学”——还是从关节空间到操作空间</a>
+      <a class="post-link" href="/post/can%E6%80%BB%E7%BA%BF/can%E6%80%BB%E7%BA%BF%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B04%E6%80%BB%E7%BA%BF%E4%BB%B2%E8%A3%81/">【CAN总线学习笔记】4、总线仲裁</a>
     </h1>
     
     <div class="post-meta">
-      <time datetime="2021-01-13" class="post-time">
-        2021-01-13
+      <time datetime="2021-12-20" class="post-time">
+        2021-12-20
       </time>
       <div class="post-category">
-          <a href="https://littlethinking.cn/categories/%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%AD%A6%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/"> 机器人学基础知识 </a>
+          <a href="https://littlethinking.cn/categories/can%E6%80%BB%E7%BA%BF%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"> CAN总线学习笔记 </a>
           
         </div>
-      <span class="more-meta"> 约 2271 字 </span>
-      <span class="more-meta"> 预计阅读 5 分钟 </span>
+      <span class="more-meta"> 约 858 字 </span>
+      <span class="more-meta"> 预计阅读 2 分钟 </span>
       
       
       
@@ -328,10 +328,10 @@
   <div class="post-content">
     
     <div class="post-summary">
-      看懂本文，除了了解矩阵、向量、向量点乘、矩阵向量相乘等内容，以及看明白我们该系列的前四篇文章外，你还需要懂得简单的向量求导运算——其实很简单
+      在第三篇中将CAN协议帧结构基本介绍完了，下面来分析下具体的总线仲裁。 基于上节的仲裁段和控制段，这里主要考虑几种情况的仲裁： 假设一条CAN总
     </div>
     <div class="read-more">
-      <a href="/post/robotics/%E5%B9%B2%E8%B4%A7_05%E7%9E%AC%E6%97%B6%E8%BF%90%E5%8A%A8%E5%AD%A6/" class="read-more-link">阅读全文</a>
+      <a href="/post/can%E6%80%BB%E7%BA%BF/can%E6%80%BB%E7%BA%BF%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B04%E6%80%BB%E7%BA%BF%E4%BB%B2%E8%A3%81/" class="read-more-link">阅读全文</a>
     </div>
     
   </div>
@@ -350,150 +350,18 @@
 
         </span>
       
-      <a class="post-link" href="/post/robotics/%E5%B9%B2%E8%B4%A7_04%E6%AD%A3%E8%BF%90%E5%8A%A8%E5%AD%A6-%E4%BB%8E%E5%85%B3%E8%8A%82%E7%A9%BA%E9%97%B4%E5%88%B0%E6%93%8D%E4%BD%9C%E7%A9%BA%E9%97%B4/">【机器人学基础知识】4、“正运动学”-从关节到操作空间</a>
+      <a class="post-link" href="/post/can%E6%80%BB%E7%BA%BF/can%E6%80%BB%E7%BA%BF%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B03can%E5%8D%8F%E8%AE%AE%E5%B8%A7%E7%BB%93%E6%9E%84/">【CAN总线学习笔记】3、CAN协议帧结构</a>
     </h1>
     
     <div class="post-meta">
-      <time datetime="2021-01-04" class="post-time">
-        2021-01-04
+      <time datetime="2021-12-19" class="post-time">
+        2021-12-19
       </time>
       <div class="post-category">
-          <a href="https://littlethinking.cn/categories/%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%AD%A6%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/"> 机器人学基础知识 </a>
+          <a href="https://littlethinking.cn/categories/can%E6%80%BB%E7%BA%BF%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"> CAN总线学习笔记 </a>
           
         </div>
-      <span class="more-meta"> 约 2041 字 </span>
-      <span class="more-meta"> 预计阅读 5 分钟 </span>
-      
-      
-      
-    </div>
-  </header>
-  
-  <div class="post-content">
-    
-    <div class="post-summary">
-      所谓的正运动学，英文叫Forward Kinematics或Direct Kinematics，简单来说，就是你知道每个关节的位置（关节位置指平
-    </div>
-    <div class="read-more">
-      <a href="/post/robotics/%E5%B9%B2%E8%B4%A7_04%E6%AD%A3%E8%BF%90%E5%8A%A8%E5%AD%A6-%E4%BB%8E%E5%85%B3%E8%8A%82%E7%A9%BA%E9%97%B4%E5%88%B0%E6%93%8D%E4%BD%9C%E7%A9%BA%E9%97%B4/" class="read-more-link">阅读全文</a>
-    </div>
-    
-  </div>
-</article>
-
-  
-    <article class="post bg-white">
-  <header class="post-header">
-    <h1 class="post-title">
-      
-        <span class="post-pinned">
-          <svg class="icon" style="" viewBox="0 0 1024 1024" version="1.1"
-  width="32" height="32">
-  <path d="M682.666667 512V170.666667h42.666666V85.333333H298.666667v85.333334h42.666666v341.333333l-85.333333 85.333333v85.333334h221.866667v256h68.266666v-256H768v-85.333334l-85.333333-85.333333z"></path>
-</svg>
-
-        </span>
-      
-      <a class="post-link" href="/post/robotics/%E5%B9%B2%E8%B4%A7_03dh%E5%BB%BA%E6%A8%A1/">【机器人学基础知识】3、机械臂的坐标系与数学模型：传说中的DH参数</a>
-    </h1>
-    
-    <div class="post-meta">
-      <time datetime="2021-01-03" class="post-time">
-        2021-01-03
-      </time>
-      <div class="post-category">
-          <a href="https://littlethinking.cn/categories/%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%AD%A6%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/"> 机器人学基础知识 </a>
-          
-        </div>
-      <span class="more-meta"> 约 1894 字 </span>
-      <span class="more-meta"> 预计阅读 4 分钟 </span>
-      
-      
-      
-    </div>
-  </header>
-  
-  <div class="post-content">
-    
-    <div class="post-summary">
-      今天，我们要把目光收回到机器人身上，看看我们怎样用一系列坐标系来描述一个链式机械臂，机器人学常说的DH参数（Denavit–Hartenbe
-    </div>
-    <div class="read-more">
-      <a href="/post/robotics/%E5%B9%B2%E8%B4%A7_03dh%E5%BB%BA%E6%A8%A1/" class="read-more-link">阅读全文</a>
-    </div>
-    
-  </div>
-</article>
-
-  
-    <article class="post bg-white">
-  <header class="post-header">
-    <h1 class="post-title">
-      
-        <span class="post-pinned">
-          <svg class="icon" style="" viewBox="0 0 1024 1024" version="1.1"
-  width="32" height="32">
-  <path d="M682.666667 512V170.666667h42.666666V85.333333H298.666667v85.333334h42.666666v341.333333l-85.333333 85.333333v85.333334h221.866667v256h68.266666v-256H768v-85.333334l-85.333333-85.333333z"></path>
-</svg>
-
-        </span>
-      
-      <a class="post-link" href="/post/robotics/%E5%B9%B2%E8%B4%A7_02%E4%BD%8D%E7%BD%AE%E8%A7%92%E5%BA%A6%E5%B9%B3%E7%A7%BB%E6%97%8B%E8%BD%AC%E4%BB%A5%E5%8F%8A%E5%9D%90%E6%A0%87%E5%8F%98%E6%8D%A2/">【机器人学基础知识】2、位置角度平移旋转，“乱七八糟”的坐标变换</a>
-    </h1>
-    
-    <div class="post-meta">
-      <time datetime="2020-01-07" class="post-time">
-        2020-01-07
-      </time>
-      <div class="post-category">
-          <a href="https://littlethinking.cn/categories/%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%AD%A6%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/"> 机器人学基础知识 </a>
-          
-        </div>
-      <span class="more-meta"> 约 2985 字 </span>
-      <span class="more-meta"> 预计阅读 6 分钟 </span>
-      
-      
-      
-    </div>
-  </header>
-  
-  <div class="post-content">
-    
-    <div class="post-summary">
-      今天我们要讲所有学习机器人学的人都需要具备的一项基本技能——坐标变换。看明白这篇文章，你需要一点基础的向量和矩阵知识，不用多，只要知道向量的
-    </div>
-    <div class="read-more">
-      <a href="/post/robotics/%E5%B9%B2%E8%B4%A7_02%E4%BD%8D%E7%BD%AE%E8%A7%92%E5%BA%A6%E5%B9%B3%E7%A7%BB%E6%97%8B%E8%BD%AC%E4%BB%A5%E5%8F%8A%E5%9D%90%E6%A0%87%E5%8F%98%E6%8D%A2/" class="read-more-link">阅读全文</a>
-    </div>
-    
-  </div>
-</article>
-
-  
-    <article class="post bg-white">
-  <header class="post-header">
-    <h1 class="post-title">
-      
-        <span class="post-pinned">
-          <svg class="icon" style="" viewBox="0 0 1024 1024" version="1.1"
-  width="32" height="32">
-  <path d="M682.666667 512V170.666667h42.666666V85.333333H298.666667v85.333334h42.666666v341.333333l-85.333333 85.333333v85.333334h221.866667v256h68.266666v-256H768v-85.333334l-85.333333-85.333333z"></path>
-</svg>
-
-        </span>
-      
-      <a class="post-link" href="/post/robotics/%E5%B9%B2%E8%B4%A7_01%E4%BB%8Erp%E5%85%B3%E8%8A%82%E5%85%A5%E9%97%A8%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%AD%A6/">【机器人学基础知识】1、从RP关节入门机器人学</a>
-    </h1>
-    
-    <div class="post-meta">
-      <time datetime="2020-01-03" class="post-time">
-        2020-01-03
-      </time>
-      <div class="post-category">
-          <a href="https://littlethinking.cn/categories/%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%AD%A6%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/"> 机器人学基础知识 </a>
-          
-        </div>
-      <span class="more-meta"> 约 3596 字 </span>
+      <span class="more-meta"> 约 3733 字 </span>
       <span class="more-meta"> 预计阅读 8 分钟 </span>
       
       
@@ -504,10 +372,142 @@
   <div class="post-content">
     
     <div class="post-summary">
-      本科阶段的机器人竞赛制作的机器人、生活中见到的扫地机器人，它们基本都是轮式的移动机器人；移动机器人本身运动控制比较简单，难点在于对外界的感知
+      在第二篇中仲裁机制部分我们提到CAN协议帧，总的来说CAN协议帧有5种类型，下面逐个展开。 由于数据帧与遥控帧的最大差别在于遥控帧没有数据段，
     </div>
     <div class="read-more">
-      <a href="/post/robotics/%E5%B9%B2%E8%B4%A7_01%E4%BB%8Erp%E5%85%B3%E8%8A%82%E5%85%A5%E9%97%A8%E6%9C%BA%E5%99%A8%E4%BA%BA%E5%AD%A6/" class="read-more-link">阅读全文</a>
+      <a href="/post/can%E6%80%BB%E7%BA%BF/can%E6%80%BB%E7%BA%BF%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B03can%E5%8D%8F%E8%AE%AE%E5%B8%A7%E7%BB%93%E6%9E%84/" class="read-more-link">阅读全文</a>
+    </div>
+    
+  </div>
+</article>
+
+  
+    <article class="post bg-white">
+  <header class="post-header">
+    <h1 class="post-title">
+      
+        <span class="post-pinned">
+          <svg class="icon" style="" viewBox="0 0 1024 1024" version="1.1"
+  width="32" height="32">
+  <path d="M682.666667 512V170.666667h42.666666V85.333333H298.666667v85.333334h42.666666v341.333333l-85.333333 85.333333v85.333334h221.866667v256h68.266666v-256H768v-85.333334l-85.333333-85.333333z"></path>
+</svg>
+
+        </span>
+      
+      <a class="post-link" href="/post/can%E6%80%BB%E7%BA%BF/can%E6%80%BB%E7%BA%BF%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02can%E6%80%BB%E7%BA%BF%E7%89%B9%E6%80%A7/">【CAN总线学习笔记】2、CAN总线特性</a>
+    </h1>
+    
+    <div class="post-meta">
+      <time datetime="2021-12-18" class="post-time">
+        2021-12-18
+      </time>
+      <div class="post-category">
+          <a href="https://littlethinking.cn/categories/can%E6%80%BB%E7%BA%BF%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"> CAN总线学习笔记 </a>
+          
+        </div>
+      <span class="more-meta"> 约 962 字 </span>
+      <span class="more-meta"> 预计阅读 2 分钟 </span>
+      
+      
+      
+    </div>
+  </header>
+  
+  <div class="post-content">
+    
+    <div class="post-summary">
+      1 多主工作方式 CAN总线上的所有节点没有主从之分，反应在数据传输上是：在总线空闲状态下，任意节点都可以向总线上发送信息。另外：最先向总线发送
+    </div>
+    <div class="read-more">
+      <a href="/post/can%E6%80%BB%E7%BA%BF/can%E6%80%BB%E7%BA%BF%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02can%E6%80%BB%E7%BA%BF%E7%89%B9%E6%80%A7/" class="read-more-link">阅读全文</a>
+    </div>
+    
+  </div>
+</article>
+
+  
+    <article class="post bg-white">
+  <header class="post-header">
+    <h1 class="post-title">
+      
+        <span class="post-pinned">
+          <svg class="icon" style="" viewBox="0 0 1024 1024" version="1.1"
+  width="32" height="32">
+  <path d="M682.666667 512V170.666667h42.666666V85.333333H298.666667v85.333334h42.666666v341.333333l-85.333333 85.333333v85.333334h221.866667v256h68.266666v-256H768v-85.333334l-85.333333-85.333333z"></path>
+</svg>
+
+        </span>
+      
+      <a class="post-link" href="/post/can%E6%80%BB%E7%BA%BF/can%E6%80%BB%E7%BA%BF%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01can%E6%A6%82%E8%BF%B0/">【CAN总线学习笔记】1、CAN概述</a>
+    </h1>
+    
+    <div class="post-meta">
+      <time datetime="2021-11-17" class="post-time">
+        2021-11-17
+      </time>
+      <div class="post-category">
+          <a href="https://littlethinking.cn/categories/can%E6%80%BB%E7%BA%BF%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"> CAN总线学习笔记 </a>
+          
+        </div>
+      <span class="more-meta"> 约 1449 字 </span>
+      <span class="more-meta"> 预计阅读 3 分钟 </span>
+      
+      
+      
+    </div>
+  </header>
+  
+  <div class="post-content">
+    
+    <div class="post-summary">
+      控制器局域网CAN( Controller Area Network)属于现场总线的范畴，是一种有效支持分布式控制系统的串行通信网络。是由德国博世公司在20世纪80年代专
+    </div>
+    <div class="read-more">
+      <a href="/post/can%E6%80%BB%E7%BA%BF/can%E6%80%BB%E7%BA%BF%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01can%E6%A6%82%E8%BF%B0/" class="read-more-link">阅读全文</a>
+    </div>
+    
+  </div>
+</article>
+
+  
+    <article class="post bg-white">
+  <header class="post-header">
+    <h1 class="post-title">
+      
+        <span class="post-pinned">
+          <svg class="icon" style="" viewBox="0 0 1024 1024" version="1.1"
+  width="32" height="32">
+  <path d="M682.666667 512V170.666667h42.666666V85.333333H298.666667v85.333334h42.666666v341.333333l-85.333333 85.333333v85.333334h221.866667v256h68.266666v-256H768v-85.333334l-85.333333-85.333333z"></path>
+</svg>
+
+        </span>
+      
+      <a class="post-link" href="/post/cpp/uml%E7%B1%BB%E5%9B%BE/">【C&#43;&#43;】UML类图</a>
+    </h1>
+    
+    <div class="post-meta">
+      <time datetime="2021-11-15" class="post-time">
+        2021-11-15
+      </time>
+      <div class="post-category">
+          <a href="https://littlethinking.cn/categories/cpp/"> cpp </a>
+          
+        </div>
+      <span class="more-meta"> 约 1791 字 </span>
+      <span class="more-meta"> 预计阅读 4 分钟 </span>
+      
+      
+      
+    </div>
+  </header>
+  
+  <div class="post-content">
+    
+    <div class="post-summary">
+      1 什么是UML类图 在UML 2.*的13种图形中，类图是使用频率最高的UML图之一。类图是面向对象系统建模中最常用和最重要的图，是定义其它图的
+    </div>
+    <div class="read-more">
+      <a href="/post/cpp/uml%E7%B1%BB%E5%9B%BE/" class="read-more-link">阅读全文</a>
     </div>
     
   </div>
@@ -553,6 +553,14 @@
       
       <li >
         <a href="/page/4/">4</a>
+      </li>
+      
+      <li >
+        <a href="/page/5/">5</a>
+      </li>
+      
+      <li >
+        <a href="/page/6/">6</a>
       </li>
       
     </ul>
@@ -643,7 +651,7 @@
     &copy;
     
       2019 -
-    2021
+    2022
     <span class="heart">
       
       <i class="iconfont">
