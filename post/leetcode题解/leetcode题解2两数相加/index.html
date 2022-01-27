@@ -69,7 +69,7 @@
 <meta itemprop="description" content="1 题目 给定两个非空链表来表示两个非负整数。位数按照逆序方式存储，它们的每个节点只存储单个数字。将两数相加返回一个新的链表。 你可以假设除了数字">
 <meta itemprop="datePublished" content="2021-12-29T12:01:23+08:00" />
 <meta itemprop="dateModified" content="2021-12-29T12:01:23+08:00" />
-<meta itemprop="wordCount" content="1454">
+<meta itemprop="wordCount" content="1405">
 
 
 
@@ -308,7 +308,7 @@
             <a href="https://littlethinking.cn/categories/leetcode%E9%A2%98%E8%A7%A3/"> LeetCode题解 </a>
             
           </div>
-        <span class="more-meta"> 约 1454 字 </span>
+        <span class="more-meta"> 约 1405 字 </span>
           <span class="more-meta"> 预计阅读 3 分钟 </span>
 
         
@@ -357,15 +357,8 @@
 </div>
 </div><h3 id="2-解题">2 解题</h3>
 <p>使用变量来跟踪进位，并从包含最低有效位的表头开始模拟逐位相加的过程。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">![](../Pictures/LeetCode题解/002.两数之和/逐位相加的过程.png)
-</code></pre></td></tr></table>
-</div>
-</div><p>就像我们在纸上计算两个数字的和那样，首先从最低有效位也就是列表$l1$和 $l2$的表头开始相加。由于每位数字都应当处于$0&hellip;9$的范围内，我们计算两个数字的和时可能会出现 “溢出”。例如，$5+8=13$  。在这种情况下，我们会将当前位的数值设置为$3$，并将进位$carry=1$带入下一次迭代。进位$carry$必定是$0$或$1$，这是因为两个数字相加（考虑到进位）可能出现的最大和为$9+9+1=19$ 。</p>
+<p><img src="/images/LeetCode%E9%A2%98%E8%A7%A3/002.%E4%B8%A4%E6%95%B0%E4%B9%8B%E5%92%8C/%E9%80%90%E4%BD%8D%E7%9B%B8%E5%8A%A0%E7%9A%84%E8%BF%87%E7%A8%8B.png" alt=""></p>
+<p>就像我们在纸上计算两个数字的和那样，首先从最低有效位也就是列表$l1$和 $l2$的表头开始相加。由于每位数字都应当处于$0&hellip;9$的范围内，我们计算两个数字的和时可能会出现 “溢出”。例如，$5+8=13$  。在这种情况下，我们会将当前位的数值设置为$3$，并将进位$carry=1$带入下一次迭代。进位$carry$必定是$0$或$1$，这是因为两个数字相加（考虑到进位）可能出现的最大和为$9+9+1=19$ 。</p>
 <p>基于上述分析，<strong>伪代码如下：</strong></p>
 <ul>
 <li>
