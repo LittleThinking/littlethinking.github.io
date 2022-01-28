@@ -6,7 +6,16 @@
     <description>Recent content in Posts on 小虎 - Mechanical student,Robot enthusiast</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Tue, 18 Jan 2022 12:01:23 +0800</lastBuildDate><atom:link href="https://littlethinking.cn/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 25 Jan 2022 12:01:23 +0800</lastBuildDate><atom:link href="https://littlethinking.cn/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>【LeetCode题解】8、字符串转换整数</title>
+      <link>https://littlethinking.cn/post/leetcode%E9%A2%98%E8%A7%A3/leetcode%E9%A2%98%E8%A7%A38%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%BD%AC%E6%8D%A2%E6%95%B4%E6%95%B0atoi/</link>
+      <pubDate>Tue, 25 Jan 2022 12:01:23 +0800</pubDate>
+      
+      <guid>https://littlethinking.cn/post/leetcode%E9%A2%98%E8%A7%A3/leetcode%E9%A2%98%E8%A7%A38%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%BD%AC%E6%8D%A2%E6%95%B4%E6%95%B0atoi/</guid>
+      <description>1 题目 请你来实现一个 myAtoi(string s) 函数，使其能将字符串转换成一个 32 位有符号整数（类似 C/C++ 中的 atoi 函数）。 函数 myAtoi(string s) 的算法如下： 读入字符串并丢弃无用的前导空格</description>
+    </item>
+    
     <item>
       <title>【LeetCode题解】7、整数反转</title>
       <link>https://littlethinking.cn/post/leetcode%E9%A2%98%E8%A7%A3/leetcode%E9%A2%98%E8%A7%A37%E6%95%B4%E6%95%B0%E5%8F%8D%E8%BD%AC/</link>
@@ -176,15 +185,6 @@
       
       <guid>https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_07%E9%9B%85%E5%8F%AF%E6%AF%94%E7%9F%A9%E9%98%B5%E7%BB%88%E7%AF%87/</guid>
       <description>0 回顾 这是关于雅可比矩阵的第三篇文章。我们回顾下前面的内容，雅可比矩阵从何而来、如何求之。 首先我们在学习正运动学——即如何将关节空间的位置映</description>
-    </item>
-    
-    <item>
-      <title>【机器人学基础知识】6、机械臂的雅可比矩阵这么厉害，怎么把它求出来呢？</title>
-      <link>https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_06%E6%80%8E%E4%B9%88%E6%B1%82%E9%9B%85%E5%8F%AF%E6%AF%94%E7%9F%A9%E9%98%B5/</link>
-      <pubDate>Thu, 14 Jan 2021 16:01:23 +0800</pubDate>
-      
-      <guid>https://littlethinking.cn/post/robotics/%E5%B9%B2%E8%B4%A7_06%E6%80%8E%E4%B9%88%E6%B1%82%E9%9B%85%E5%8F%AF%E6%AF%94%E7%9F%A9%E9%98%B5/</guid>
-      <description>上一篇文章我们从正运动学公式推导出瞬时运动学公式，推出著名的雅可比矩阵，并例举出了一个特别简单的例子以提供直观印象。简单回顾一下—— 瞬时运动</description>
     </item>
     
   </channel>
