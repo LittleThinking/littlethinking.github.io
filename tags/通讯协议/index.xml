@@ -6,7 +6,25 @@
     <description>Recent content in 通讯协议 on 小虎 - Mechanical student,Robot enthusiast</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Sun, 26 Dec 2021 12:01:23 +0800</lastBuildDate><atom:link href="https://littlethinking.cn/tags/%E9%80%9A%E8%AE%AF%E5%8D%8F%E8%AE%AE/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 09 Feb 2022 12:01:23 +0800</lastBuildDate><atom:link href="https://littlethinking.cn/tags/%E9%80%9A%E8%AE%AF%E5%8D%8F%E8%AE%AE/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>【EtherCAT总线学习笔记】1、简介</title>
+      <link>https://littlethinking.cn/post/ethercat%E6%80%BB%E7%BA%BF/ethercat%E6%80%BB%E7%BA%BF%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01%E7%AE%80%E4%BB%8B/</link>
+      <pubDate>Wed, 09 Feb 2022 12:01:23 +0800</pubDate>
+      
+      <guid>https://littlethinking.cn/post/ethercat%E6%80%BB%E7%BA%BF/ethercat%E6%80%BB%E7%BA%BF%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01%E7%AE%80%E4%BB%8B/</guid>
+      <description>1 运动控制 运动控制系统处理机械系统中一个或多个坐标上的运动以及运动之间的协调，实现精确的位置控制、速度和加速度控制、转矩和力的控制等。 单轴的</description>
+    </item>
+    
+    <item>
+      <title>浅析EtherCAT总线</title>
+      <link>https://littlethinking.cn/post/ethercat%E6%80%BB%E7%BA%BF/%E6%B5%85%E6%9E%90ethercat%E6%80%BB%E7%BA%BF/</link>
+      <pubDate>Tue, 08 Feb 2022 12:01:23 +0800</pubDate>
+      
+      <guid>https://littlethinking.cn/post/ethercat%E6%80%BB%E7%BA%BF/%E6%B5%85%E6%9E%90ethercat%E6%80%BB%E7%BA%BF/</guid>
+      <description>1 引言 一项技术发明一定不是为了发明而发明，一定是有需要解决问题的。 以太网用在工业通信中遇到了什么问题呢？ 首先工业通信的要求是： 低延时 高响应 高</description>
+    </item>
+    
     <item>
       <title>【CAN总线学习笔记】7、位时间实例</title>
       <link>https://littlethinking.cn/post/can%E6%80%BB%E7%BA%BF/can%E6%80%BB%E7%BA%BF%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B07%E4%BD%8D%E6%97%B6%E9%97%B4%E5%AE%9E%E4%BE%8B/</link>
